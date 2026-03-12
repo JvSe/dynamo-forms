@@ -18,9 +18,9 @@
       }
     ],
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"],
+      "@dynamo-ui/*": ["../../packages/react/src/*"],
+      "utils": ["../../packages/react/src/lib/utils"]
     },
     "allowJs": true
   },

@@ -17,8 +17,8 @@
   },
   "files": ["dist"],
   "scripts": {
-    "build": "tsup",
-    "dev": "tsup --watch",
+    "build": "pnpm exec tsup",
+    "dev": "pnpm exec tsup --watch",
     "typecheck": "tsc --noEmit",
     "clean": "rimraf dist"
   },

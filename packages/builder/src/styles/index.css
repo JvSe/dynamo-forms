@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@source "../**/*.{ts,tsx}";
+
+@keyframes sheet-slide-in-right {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+@keyframes sheet-slide-out-right {
+  from { transform: translateX(0); }
+  to { transform: translateX(100%); }
+}
+
+[data-sheet-side="right"][data-state="open"] {
+  animation: sheet-slide-in-right 0.25s ease-out;
+}
+[data-sheet-side="right"][data-state="closed"] {
+  animation: sheet-slide-out-right 0.2s ease-in;
+}

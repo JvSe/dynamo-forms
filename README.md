@@ -9,7 +9,8 @@ dynamo-forms/
 ├── packages/
 │   ├── core/           # @jvse/dynamo-core – tipos, condições, schema, validação
 │   ├── react/          # @jvse/dynamo-react – componentes para web
-│   └── react-native/   # @jvse/dynamo-react-native – componentes para React Native
+│   ├── react-native/   # @jvse/dynamo-react-native – componentes para React Native
+│   └── builder/        # @jvse/dynamo-builder – construtor drag-and-drop (paleta | canvas | configurações)
 ├── apps/
 │   └── docs/           # Site de documentação (Next.js)
 ├── package.json
@@ -30,6 +31,7 @@ cd apps/docs && pnpm dev   # só a documentação
 
 - **Web:** `pnpm add @jvse/dynamo-core @jvse/dynamo-react`
 - **React Native:** `pnpm add @jvse/dynamo-core @jvse/dynamo-react-native`
+- **Construtor de formulários (web):** `pnpm add @jvse/dynamo-core @jvse/dynamo-builder` — layout em 3 colunas (componentes arrastáveis | canvas | configurações do campo); saída em `DynamicFieldConfig[]` (JSON).
 
 O código de formulário completo (componentes com UI) que hoje vive na raiz (`components/`, `lib/`) continua disponível para o app existente; a migração para dentro dos pacotes pode ser feita em seguida.
 

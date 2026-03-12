@@ -36,5 +36,7 @@ export type DynamicFieldConfig = {
     expanded?: boolean;
     children?: DynamicFieldConfig[];
     capturas?: Array<{ id: string; label: string }>;
+    /** Layout of options/children: horizontal (row) or vertical (column). Used by radio, checkbox, group. */
+    alignment?: "horizontal" | "vertical";
   };
 };
