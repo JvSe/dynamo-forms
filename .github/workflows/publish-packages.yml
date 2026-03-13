@@ -2,8 +2,8 @@ name: Publish Dynamo Forms packages to GitHub Packages
 
 on:
   push:
-    tags:
-      - "v*"
+    branches:
+      - main
 
 permissions:
   contents: read
