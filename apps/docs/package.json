@@ -12,9 +12,9 @@
     "clean": "rimraf .next"
   },
   "dependencies": {
-    "@jvse/dynamo-core": "workspace:*",
-    "@jvse/dynamo-react": "workspace:*",
-    "@jvse/dynamo-builder": "workspace:*",
+    "@jvse/dynamo-core": "^0.0.1",
+    "@jvse/dynamo-react": "^0.0.1",
+    "@jvse/dynamo-builder": "^0.0.1",
     "next": "^15.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
