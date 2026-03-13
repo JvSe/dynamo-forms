@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useDroppable } from "@dnd-kit/core";
 import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig, FormStep } from "@jvse/dynamo-core";
 import { DynamicField } from "@jvse/dynamo-react";
 import { FieldCard } from "./field-card.js";
 import { getPreviewDefaultValues } from "../lib/preview-default-values.js";
@@ -19,6 +19,14 @@ type FormCanvasProps = {
   onSelectField: (id: string | null) => void;
   onRemoveField?: (id: string) => void;
   onDuplicateField?: (id: string) => void;
+  multiStepEnabled?: boolean;
+  steps?: FormStep[];
+  activeStepIndex?: number;
+  onStepChange?: (index: number) => void;
+  onAddStep?: () => void;
+  onRemoveStep?: (index: number) => void;
+  onRenameStep?: (index: number, title: string) => void;
+  onToggleMultiStep?: () => void;
 };
 
 function DropZone({
@@ -45,7 +53,138 @@ function DropZone({
   );
 }
 
-function FormCanvasInner({ fields, layout, selectedFieldId, onSelectField, onRemoveField, onDuplicateField }: FormCanvasProps) {
+function StepTabs({
+  steps,
+  activeStepIndex,
+  onStepChange,
+  onAddStep,
+  onRemoveStep,
+  onRenameStep,
+  onToggleMultiStep,
+  fieldCount,
+}: {
+  steps: FormStep[];
+  activeStepIndex: number;
+  onStepChange: (index: number) => void;
+  onAddStep: () => void;
+  onRemoveStep: (index: number) => void;
+  onRenameStep: (index: number, title: string) => void;
+  onToggleMultiStep?: () => void;
+  fieldCount: number;
+}) {
+  const [editingIndex, setEditingIndex] = useState<number | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+
+  const startRename = (index: number) => {
+    setEditingIndex(index);
+    setRenameValue(steps[index].title);
+  };
+
+  const commitRename = (index: number) => {
+    if (renameValue.trim()) onRenameStep(index, renameValue.trim());
+    setEditingIndex(null);
+  };
+
+  return (
+    <div className="flex items-center gap-1.5 px-5 py-2 border-b border-gray-200 bg-gray-50/60 overflow-x-auto">
+      {steps.map((step, i) => (
+        <div key={step.id} className="flex items-center">
+          {editingIndex === i ? (
+            <input
+              autoFocus
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              onBlur={() => commitRename(i)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") commitRename(i);
+                if (e.key === "Escape") setEditingIndex(null);
+              }}
+              className="px-2 py-1 rounded-md text-xs font-medium bg-white border border-blue-400 text-gray-900 w-24 outline-none"
+            />
+          ) : (
+            <button
+              type="button"
+              onClick={() => onStepChange(i)}
+              onDoubleClick={() => startRename(i)}
+              className={cn(
+                "group flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border-0",
+                activeStepIndex === i
+                  ? "bg-blue-50 text-blue-600"
+                  : "text-gray-500 hover:text-gray-900 hover:bg-gray-100 bg-transparent"
+              )}
+            >
+              <span className={cn(
+                "flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-semibold",
+                activeStepIndex === i
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-200 text-gray-600"
+              )}>
+                {i + 1}
+              </span>
+              {step.title}
+              {steps.length > 1 && (
+                <span
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onRemoveStep(i);
+                  }}
+                  className="ml-0.5 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-all cursor-pointer"
+                >
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M18 6L6 18M6 6l12 12" />
+                  </svg>
+                </span>
+              )}
+            </button>
+          )}
+        </div>
+      ))}
+
+      <button
+        type="button"
+        onClick={onAddStep}
+        className="flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer border-0 bg-transparent"
+        title="Add step"
+      >
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <path d="M12 5v14M5 12h14" />
+        </svg>
+      </button>
+
+      <div className="ml-auto flex items-center gap-2">
+        <span className="text-[11px] text-gray-400">
+          {fieldCount} field{fieldCount !== 1 ? "s" : ""} · step {activeStepIndex + 1}/{steps.length}
+        </span>
+        {onToggleMultiStep && (
+          <button
+            type="button"
+            onClick={onToggleMultiStep}
+            className="text-[11px] text-gray-400 hover:text-gray-600 cursor-pointer border-0 bg-transparent underline"
+          >
+            Disable steps
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FormCanvasInner({
+  fields,
+  layout,
+  selectedFieldId,
+  onSelectField,
+  onRemoveField,
+  onDuplicateField,
+  multiStepEnabled,
+  steps,
+  activeStepIndex,
+  onStepChange,
+  onAddStep,
+  onRemoveStep,
+  onRenameStep,
+  onToggleMultiStep,
+}: FormCanvasProps) {
   const { setNodeRef: setCanvasRef, isOver } = useDroppable({ id: FORM_CANVAS_ID });
   const { control, getValues, formState } = useFormContext();
   const formValues = useWatch({ control, defaultValue: getValues() }) as Record<string, unknown>;
@@ -76,21 +215,45 @@ function FormCanvasInner({ fields, layout, selectedFieldId, onSelectField, onRem
   }, [byRow]);
 
   return (
-    <div
-      ref={setCanvasRef}
-      className={cn(
-        "flex-1 min-h-[400px] p-5 overflow-auto relative",
-        isOver && "shadow-[inset_0_0_0_2px_rgba(26,115,232,0.3)]"
+    <div className="flex flex-col flex-1 min-h-0">
+      {multiStepEnabled && steps && steps.length > 0 && onStepChange && onAddStep && onRemoveStep && onRenameStep && (
+        <StepTabs
+          steps={steps}
+          activeStepIndex={activeStepIndex ?? 0}
+          onStepChange={onStepChange}
+          onAddStep={onAddStep}
+          onRemoveStep={onRemoveStep}
+          onRenameStep={onRenameStep}
+          onToggleMultiStep={onToggleMultiStep}
+          fieldCount={fields.length}
+        />
       )}
-      style={{
-        backgroundColor: isOver ? "rgba(255,255,255,0.95)" : "#fff",
-        backgroundImage: "radial-gradient(circle, #e0e0e0 1px, transparent 1px)",
-        backgroundSize: "24px 24px",
-      }}
-    >
-      {fields.length === 0 ? (
+      {!multiStepEnabled && onToggleMultiStep && (
+        <div className="flex items-center justify-end px-5 py-1.5 border-b border-gray-100">
+          <button
+            type="button"
+            onClick={onToggleMultiStep}
+            className="text-[11px] text-gray-400 hover:text-blue-600 cursor-pointer border-0 bg-transparent"
+          >
+            + Enable steps
+          </button>
+        </div>
+      )}
+      <div
+        ref={setCanvasRef}
+        className={cn(
+          "flex-1 min-h-[400px] p-5 overflow-auto relative",
+          isOver && "shadow-[inset_0_0_0_2px_rgba(26,115,232,0.3)]"
+        )}
+        style={{
+          backgroundColor: isOver ? "rgba(255,255,255,0.95)" : "#fff",
+          backgroundImage: "radial-gradient(circle, #e0e0e0 1px, transparent 1px)",
+          backgroundSize: "24px 24px",
+        }}
+      >
+        {fields.length === 0 ? (
         <div className="text-gray-500 text-sm p-12 text-center border-2 border-dashed border-gray-300 rounded-xl bg-white relative z-1">
-          Arraste ou clique nos componentes da esquerda para adicioná-los
+          Drag or click components from the left to add them
         </div>
       ) : (
         <>
@@ -135,6 +298,7 @@ function FormCanvasInner({ fields, layout, selectedFieldId, onSelectField, onRem
           ))}
         </>
       )}
+      </div>
     </div>
   );
 }
@@ -184,7 +348,7 @@ function GroupBlock({
         <SortableContext items={children.map((c) => c.id)} strategy={verticalListSortingStrategy}>
           {children.length === 0 ? (
             <div className="text-gray-500 text-[13px] text-center p-4">
-              Arraste campos para dentro do grupo
+              Drag fields into the group
             </div>
           ) : (
               children.map((child) => (

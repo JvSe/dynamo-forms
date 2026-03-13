@@ -1,0 +1,68 @@
+name: Publish Dynamo Forms packages to GitHub Packages
+
+on:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          registry-url: "https://npm.pkg.github.com"
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        working-directory: ./packages/dynamo-forms
+        run: pnpm install --frozen-lockfile || pnpm install
+
+      - name: Build all packages
+        working-directory: ./packages/dynamo-forms
+        run: pnpm run build
+
+      - name: Configure npm for GitHub Packages
+        working-directory: ./packages/dynamo-forms
+        run: |
+          echo "@jvse:registry=https://npm.pkg.github.com" >> .npmrc
+          echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
+
+      - name: Publish core
+        working-directory: ./packages/dynamo-forms/packages/core
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish --access public
+
+      - name: Publish react
+        working-directory: ./packages/dynamo-forms/packages/react
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish --access public
+
+      - name: Publish react-native
+        working-directory: ./packages/dynamo-forms/packages/react-native
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish --access public
+
+      - name: Publish builder
+        working-directory: ./packages/dynamo-forms/packages/builder
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm publish --access public
+

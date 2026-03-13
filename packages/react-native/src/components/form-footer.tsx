@@ -22,7 +22,7 @@ export const FormFooter: React.FC<FormFooterProps> = ({
         {isSubmitting ? (
           <ActivityIndicator color="#ffffff" />
         ) : (
-          <Text className="text-white font-bold md:text-2xl">Enviar</Text>
+          <Text className="text-white font-bold md:text-2xl">Submit</Text>
         )}
       </Pressable>
     </View>

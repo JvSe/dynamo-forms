@@ -97,11 +97,11 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
     }
   };
 
-  const handleRemoverCaptura = (capturaId: string) => {
-    Alert.alert("Remover Captura", "Deseja realmente remover esta localização?", [
-      { text: "Cancelar", style: "cancel" },
+  const handleRemoveCapture = (capturaId: string) => {
+    Alert.alert("Remove Capture", "Are you sure you want to remove this location?", [
+      { text: "Cancel", style: "cancel" },
       {
-        text: "Remover",
+        text: "Remove",
         style: "destructive",
         onPress: () => {
           const novasCapturas = value.filter((c) => c.id !== capturaId);
@@ -175,9 +175,9 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
               {capturaRealizada && !isLoading && (
                 <View className="w-24">
                   <Button
-                    title="Remover"
+                    title="Remove"
                     color="#ef4444"
-                    onPress={() => handleRemoverCaptura(captura.id)}
+                    onPress={() => handleRemoveCapture(captura.id)}
                   />
                 </View>
               )}
@@ -196,7 +196,7 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
       {capturas.length === 0 && (
         <View className="p-4 bg-gray-100 rounded-lg">
           <Text className="text-gray-600 text-center">
-            Nenhuma captura configurada
+            No captures configured
           </Text>
         </View>
       )}

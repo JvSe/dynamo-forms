@@ -18,7 +18,7 @@ export const InputDateTime: React.FC<InputDateTimeProps> = ({
   value,
   onChange,
   dateType = "date",
-  placeholder = "Selecione a data",
+  placeholder = "Select a date",
   mode = dateType === "time" ? "time" : "date",
   error = false,
   success = false,

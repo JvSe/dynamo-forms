@@ -213,7 +213,7 @@ export interface SelectProps {
 export function Select({
   id,
   options,
-  placeholder = "Selecione...",
+  placeholder = "Select...",
   value,
   onChange,
   error,

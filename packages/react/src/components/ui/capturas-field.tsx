@@ -29,7 +29,7 @@ export const CapturasField: React.FC<CapturasFieldProps> = ({
   return (
     <div id={id} className="space-y-2">
       <p className="text-sm text-muted-foreground">
-        Selecione as capturas desejadas.
+        Select the desired captures.
       </p>
       <div className="flex flex-wrap gap-2">
         {capturas.map((captura) => {

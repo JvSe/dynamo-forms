@@ -153,7 +153,7 @@ export const InputUpload: React.FC<InputUploadProps> = ({
       title,
       description,
       [
-        { text: "Cancelar", style: "cancel" },
+        { text: "Cancel", style: "cancel" },
         { text: "Câmera", onPress: takePhoto },
         { text: "Galeria", onPress: pickFromGallery },
       ],
@@ -171,7 +171,7 @@ export const InputUpload: React.FC<InputUploadProps> = ({
       >
         <Text className="text-primary font-semibold md:text-xl">
           {canAddMoreImages
-            ? "Adicionar imagem"
+            ? "Add image"
             : `Máximo ${maxImages} imagens`}
         </Text>
       </Pressable>
@@ -200,7 +200,7 @@ export const InputUpload: React.FC<InputUploadProps> = ({
                     Foto adicionada
                   </Text>
                   <Text className="text-xs md:text-base text-gray-500 mt-1 md:mt-2">
-                    Será salva ao enviar o formulário
+                    Will be saved when the form is submitted
                   </Text>
                 </View>
 
@@ -210,7 +210,7 @@ export const InputUpload: React.FC<InputUploadProps> = ({
                     className="w-6 h-6 md:w-10 md:h-10 items-center justify-center"
                   >
                     <Text className="text-red-500 text-xs md:text-base">
-                      Remover
+                      Remove
                     </Text>
                   </TouchableOpacity>
                 </View>

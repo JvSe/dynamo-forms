@@ -20,7 +20,7 @@ export const FormHeader: React.FC<FormHeaderProps> = ({
     >
       <Text className="text-xl md:text-3xl font-bold pb-2">{formName}</Text>
       <Text className="text-gray-600 text-base md:text-lg">
-        Preencha os campos solicitados para continuar.
+        Fill in the required fields to continue.
       </Text>
     </View>
   );

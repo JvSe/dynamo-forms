@@ -8,7 +8,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig, FormStep } from "@jvse/dynamo-core";
 import { DynamicField } from "@jvse/dynamo-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FieldPalette, getPaletteDragId, type PaletteDragData } from "./field-palette.js";
@@ -81,6 +81,15 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
   );
 }
 
+let _stepIdCounter = 0;
+function createStep(stepNumber: number): FormStep {
+  _stepIdCounter++;
+  return {
+    id: `step_${_stepIdCounter}_${Date.now()}`,
+    title: `Step ${stepNumber}`,
+  };
+}
+
 export type FormBuilderProps = {
   value: DynamicFieldConfig[];
   onChange: (value: DynamicFieldConfig[]) => void;
@@ -94,6 +103,12 @@ export type FormBuilderProps = {
   onBack?: () => void;
   className?: string;
   style?: React.CSSProperties;
+  /** Controlled steps array */
+  steps?: FormStep[];
+  onStepsChange?: (steps: FormStep[]) => void;
+  /** Whether multi-step mode is active */
+  multiStepEnabled?: boolean;
+  onMultiStepChange?: (enabled: boolean) => void;
 };
 
 export function FormBuilder({
@@ -106,15 +121,74 @@ export function FormBuilder({
   onBack,
   className,
   style,
+  steps: stepsProp,
+  onStepsChange,
+  multiStepEnabled: multiStepProp,
+  onMultiStepChange,
 }: FormBuilderProps) {
   const [selectedFieldId, setSelectedFieldId] = useState<string | null>(null);
   const [activeId, setActiveId] = useState<string | null>(null);
   const [activePaletteData, setActivePaletteData] = useState<PaletteDragData | null>(null);
   const [layout, setLayout] = useState<FieldLayout>({});
-  const [internalTitle, setInternalTitle] = useState("Drafts/ Formulário");
+  const [internalTitle, setInternalTitle] = useState("Drafts/ Form");
   const formTitle = formTitleProp ?? internalTitle;
   const setFormTitle = onFormTitleChange ?? setInternalTitle;
   const [isDragging, setIsDragging] = useState(false);
+
+  const [internalSteps, setInternalSteps] = useState<FormStep[]>([createStep(1)]);
+  const [internalMultiStep, setInternalMultiStep] = useState(false);
+  const [activeStepIndex, setActiveStepIndex] = useState(0);
+
+  const steps = stepsProp ?? internalSteps;
+  const setSteps = onStepsChange ?? setInternalSteps;
+  const multiStepEnabled = multiStepProp ?? internalMultiStep;
+  const setMultiStepEnabled = onMultiStepChange ?? setInternalMultiStep;
+
+  const handleToggleMultiStep = useCallback(() => {
+    const next = !multiStepEnabled;
+    setMultiStepEnabled(next);
+    if (next) {
+      if (steps.length === 0) {
+        setSteps([createStep(1)]);
+      }
+      onChange(value.map((f) => ({
+        ...f,
+        config: { ...f.config, step: f.config.step ?? 0 },
+      })));
+    }
+    setActiveStepIndex(0);
+  }, [multiStepEnabled, steps.length, value, onChange, setSteps, setMultiStepEnabled]);
+
+  const handleAddStep = useCallback(() => {
+    const s = createStep(steps.length + 1);
+    setSteps([...steps, s]);
+    setActiveStepIndex(steps.length);
+  }, [steps, setSteps]);
+
+  const handleRemoveStep = useCallback(
+    (index: number) => {
+      if (steps.length <= 1) return;
+      const nextSteps = steps.filter((_, i) => i !== index);
+      const nextFields = value
+        .filter((f) => (f.config.step ?? 0) !== index)
+        .map((f) => {
+          const s = f.config.step ?? 0;
+          if (s > index) return { ...f, config: { ...f.config, step: s - 1 } };
+          return f;
+        });
+      setSteps(nextSteps);
+      onChange(nextFields);
+      setActiveStepIndex((prev) => Math.min(prev, nextSteps.length - 1));
+    },
+    [steps, value, onChange, setSteps]
+  );
+
+  const handleRenameStep = useCallback(
+    (index: number, title: string) => {
+      setSteps(steps.map((s, i) => (i === index ? { ...s, title } : s)));
+    },
+    [steps, setSteps]
+  );
 
   const rootIds = getAllRootFieldIds(value);
   useEffect(() => {
@@ -158,6 +232,9 @@ export function FormBuilder({
             ? { defaultLabel: data?.defaultLabel, defaultPlaceholder: data?.defaultPlaceholder }
             : undefined;
         const newField = createDefaultFieldConfig(fieldType, overrides);
+        if (multiStepEnabled) {
+          newField.config.step = activeStepIndex;
+        }
 
         if (drop?.type === "group" && drop.groupId) {
           const next = addFieldToGroup(value, drop.groupId, newField);
@@ -274,7 +351,7 @@ export function FormBuilder({
         setSelectedFieldId(movedField.id);
       }
     },
-    [value, onChange, layout]
+    [value, onChange, layout, multiStepEnabled, activeStepIndex]
   );
 
   const handleUpdateField = useCallback(
@@ -342,18 +419,27 @@ export function FormBuilder({
         defaultLabel: item.defaultLabel,
         defaultPlaceholder: item.defaultPlaceholder,
       });
+      if (multiStepEnabled) {
+        newField.config.step = activeStepIndex;
+      }
       const rootIds = getAllRootFieldIds(value);
       const { row, col, nextLayout } = getLayoutForNewField(layout, rootIds, "append");
       setLayout({ ...nextLayout, [newField.id]: { row, col } });
       onChange([...value, newField]);
       setSelectedFieldId(newField.id);
     },
-    [value, onChange, layout]
+    [value, onChange, layout, multiStepEnabled, activeStepIndex]
   );
 
   const activeField = activeId && !isPaletteDragId(activeId) ? getFieldById(value, activeId) : undefined;
 
-  const displayFields = useMemo(() => value, [value]);
+  const displayFields = useMemo(
+    () =>
+      multiStepEnabled
+        ? value.filter((f) => (f.config.step ?? 0) === activeStepIndex)
+        : value,
+    [value, multiStepEnabled, activeStepIndex]
+  );
   const displayLayout = useMemo(() => layout, [layout]);
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
@@ -429,6 +515,14 @@ export function FormBuilder({
               onSelectField={setSelectedFieldId}
               onRemoveField={handleRemoveField}
               onDuplicateField={handleDuplicateField}
+              multiStepEnabled={multiStepEnabled}
+              steps={steps}
+              activeStepIndex={activeStepIndex}
+              onStepChange={setActiveStepIndex}
+              onAddStep={handleAddStep}
+              onRemoveStep={handleRemoveStep}
+              onRenameStep={handleRenameStep}
+              onToggleMultiStep={handleToggleMultiStep}
             />
           </div>
 

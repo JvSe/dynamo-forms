@@ -451,7 +451,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
         {fieldStatus?.status === "reprovado" && fieldStatus.mensagem && (
           <div className="w-full rounded-lg bg-red-100 mt-2 md:mt-3 p-2 md:p-3">
             <p className="text-red-600 text-sm md:text-base font-semibold">
-              Observação: {fieldStatus.mensagem}
+              Note: {fieldStatus.mensagem}
             </p>
           </div>
         )}

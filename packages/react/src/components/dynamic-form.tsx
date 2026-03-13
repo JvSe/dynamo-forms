@@ -22,11 +22,13 @@ import {
   processFieldsForSubmission,
   type DynamicFieldConfig,
   type ErrorFieldInfo,
+  type FormStep,
   type FormUpload,
 } from "@jvse/dynamo-core";
 import { DynamicField, type ComponentOverridesMap } from "./dynamic-field";
 import { FormHeader } from "./form-header";
 import { FormFooter } from "./form-footer";
+import { StepIndicator } from "./step-indicator";
 import { ValidationOverlay } from "./validation-overlay";
 
 interface DynamicFormProps {
@@ -45,6 +47,7 @@ interface DynamicFormProps {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
+  steps?: FormStep[];
 }
 
 export const DynamicFormCore: React.FC<DynamicFormProps> = ({
@@ -60,9 +63,28 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onFormDataChange,
   onFormDirtyChange,
   components,
+  steps,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const isMultiStep = !!(steps && steps.length > 1);
+  const isFirstStep = currentStep === 0;
+  const isLastStep = !isMultiStep || currentStep === (steps?.length ?? 1) - 1;
+
+  const visibleFields = useMemo(() => {
+    if (!isMultiStep) return fields;
+    return fields.filter((f) => (f.config.step ?? 0) === currentStep);
+  }, [fields, isMultiStep, currentStep]);
+
+  const getStepFieldIds = useCallback(
+    (stepIndex: number) =>
+      fields
+        .filter((f) => (f.config.step ?? 0) === stepIndex)
+        .map((f) => f.id),
+    [fields]
+  );
 
   const initialSchema = useMemo(
     () => buildZodSchema(fields, initialValues),
@@ -271,7 +293,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
             fieldId: "",
             fieldLabel: "",
             fieldType: "",
-            errorMessage: "Nenhum dado foi preenchido no formulário.",
+            errorMessage: "No data was filled in the form.",
             errorType: "empty_form",
             isConditional: false,
           },
@@ -290,6 +312,41 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
       );
     }
   };
+
+  const handleNextStep = useCallback(async () => {
+    if (!isMultiStep || isLastStep) return;
+    const stepFieldIds = getStepFieldIds(currentStep);
+    const isValid = await methods.trigger(stepFieldIds as any);
+    if (!isValid) {
+      const errors = methods.formState.errors;
+      const errorFieldIds = Object.keys(errors).filter((id) =>
+        stepFieldIds.includes(id)
+      );
+      if (errorFieldIds.length > 0) {
+        const firstErrorFieldId = findFirstErrorFieldId(
+          visibleFields,
+          errorFieldIds
+        );
+        if (firstErrorFieldId) {
+          await ensureScrollToError(firstErrorFieldId, errorFieldIds);
+        }
+      }
+      return;
+    }
+    setCurrentStep((s) => s + 1);
+  }, [
+    isMultiStep,
+    isLastStep,
+    currentStep,
+    getStepFieldIds,
+    methods,
+    visibleFields,
+    ensureScrollToError,
+  ]);
+
+  const handleBackStep = useCallback(() => {
+    if (currentStep > 0) setCurrentStep((s) => s - 1);
+  }, [currentStep]);
 
   const handleSubmitWithValidation = useCallback(async () => {
     setIsValidating(true);
@@ -311,6 +368,13 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
         const firstErrorFieldId = findFirstErrorFieldId(fields, errorFieldIds);
 
         if (firstErrorFieldId) {
+          if (isMultiStep) {
+            const errorField = fields.find((f) => f.id === firstErrorFieldId);
+            if (errorField) {
+              setCurrentStep(errorField.config.step ?? 0);
+            }
+          }
+
           const scrollSuccess = await ensureScrollToError(
             firstErrorFieldId,
             errorFieldIds
@@ -329,7 +393,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
       setIsValidating(false);
       handleSubmit(onFormSubmit)();
     } catch (error) {
-      console.error("Erro na validação:", error);
+      console.error("Validation error:", error);
       setIsValidating(false);
       onSubmitError?.(
         error instanceof Error ? error : new Error(String(error))
@@ -340,6 +404,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
     handleSubmit,
     onFormSubmit,
     fields,
+    isMultiStep,
     ensureScrollToError,
     onValidationError,
     onSubmitError,
@@ -358,12 +423,16 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
       >
         <FormHeader formName={formName} />
 
+        {isMultiStep && steps && (
+          <StepIndicator steps={steps} currentStep={currentStep} />
+        )}
+
         <div
           className={`w-full flex flex-col gap-4 md:gap-6 ${
             scrollEnabled ? "" : "overflow-hidden"
           }`}
         >
-          {fields.map((field) => (
+          {visibleFields.map((field) => (
             <div
               key={field.id}
               ref={(el) => registerFieldRef(field.id, el)}
@@ -385,7 +454,14 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
           ))}
         </div>
 
-        <FormFooter isSubmitting={isSubmitting} />
+        <FormFooter
+          isSubmitting={isSubmitting}
+          multiStep={isMultiStep}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          onNext={handleNextStep}
+          onBack={handleBackStep}
+        />
 
         <ValidationOverlay
           visible={isValidating}

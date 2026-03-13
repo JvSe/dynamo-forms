@@ -53,7 +53,7 @@ export const InputSelectNew: React.FC<InputSelectProps> = ({
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={!isFocus ? placeholder || "Selecione uma opção" : "..."}
+        placeholder={!isFocus ? placeholder || "Select an option" : "..."}
         searchPlaceholder="Pesquisar..."
         value={_value}
         onFocus={() => setIsFocus(true)}

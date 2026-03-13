@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import type {
   DynamicFieldConfig,
+  FormStep,
   FormUpload,
   ErrorFieldInfo,
 } from "@jvse/dynamo-core";
@@ -36,6 +37,7 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
+  steps?: FormStep[];
 };
 
 export const DynamicForm = React.memo(
@@ -51,6 +53,7 @@ export const DynamicForm = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
+    steps,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -69,7 +72,7 @@ export const DynamicForm = React.memo(
 
     if (!fields || !Array.isArray(fields)) {
       console.error(
-        "Campos do formulário não encontrados ou formato inválido:",
+        "Form fields not found or invalid format:",
         fields
       );
       return null;
@@ -91,6 +94,7 @@ export const DynamicForm = React.memo(
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
             components={components}
+            steps={steps}
           />
         </div>
       </FormContext.Provider>

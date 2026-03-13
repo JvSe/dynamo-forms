@@ -88,7 +88,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
   return (
     <div className="p-6 flex flex-col gap-5 bg-white">
-      <div className="text-sm font-semibold text-gray-900">Configurações do campo</div>
+      <div className="text-sm font-semibold text-gray-900">Field settings</div>
 
       <div>
         <label className="block text-xs font-medium mb-1.5 text-gray-500">
@@ -227,7 +227,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
             Opções
           </label>
           {(field.config.options ?? []).length === 0 ? (
-            <p className="text-xs text-gray-500 mb-2">Nenhuma opção. Adicione uma abaixo.</p>
+            <p className="text-xs text-gray-500 mb-2">No options. Add one below.</p>
           ) : null}
           {((field.config.options ?? []) as Array<{ label: string; value: string }>).map((opt, i) => (
             <div key={i} className="flex flex-col gap-1.5 mb-3 p-3 rounded-lg border border-gray-200 bg-gray-50 relative">
@@ -269,7 +269,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                   }}
                   className="absolute top-2 right-2 py-1 px-2 text-xs text-red-500 hover:bg-red-50 rounded border border-transparent hover:border-red-200 transition-colors"
                 >
-                  Remover
+                  Remove
                 </button>
               )}
             </div>
@@ -284,7 +284,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
             }}
             className="py-2 px-3 text-xs font-medium rounded-lg border border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >
-            + Adicionar opção
+            + Add option
           </button>
         </div>
       )}
@@ -365,7 +365,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
         onClick={onRemove}
         className="mt-2 py-2.5 px-4 text-[13px] cursor-pointer text-red-600 border border-red-100 rounded-lg bg-red-100 font-medium"
       >
-        Remover campo
+        Remove field
       </button>
     </div>
   );

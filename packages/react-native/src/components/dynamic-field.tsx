@@ -330,7 +330,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
         {fieldStatus?.status === "reprovado" && fieldStatus.mensagem && (
           <View className="w-full rounded-lg bg-red-100 mt-2 md:mt-3 p-2 md:p-3">
             <Text className="text-red-500 text-sm md:text-base font-semibold">
-              Observação: {fieldStatus.mensagem}
+              Note: {fieldStatus.mensagem}
             </Text>
           </View>
         )}

@@ -33,7 +33,7 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
         <View className="bg-white rounded-lg md:rounded-xl p-6 md:p-10 items-center gap-4 md:gap-6">
           <ActivityIndicator size="large" color="#2563eb" />
           <Text className="text-base md:text-xl text-gray-700">
-            Verificando campos...
+            Checking fields...
           </Text>
         </View>
       </View>

@@ -64,7 +64,7 @@ export const DynamicForm = React.memo(
 
     if (!fields || !Array.isArray(fields)) {
       console.error(
-        "Campos do formulário não encontrados ou formato inválido:",
+        "Form fields not found or invalid format:",
         fields
       );
       return null;

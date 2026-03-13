@@ -431,7 +431,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
             fieldId: "",
             fieldLabel: "",
             fieldType: "",
-            errorMessage: "Nenhum dado foi preenchido no formulário.",
+            errorMessage: "No data was filled in the form.",
             errorType: "empty_form",
             isConditional: false,
           },
@@ -661,7 +661,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
                         animated: true,
                       });
                     } catch {
-                      console.warn("Falha ao scrollar para campo com erro");
+                      console.warn("Failed to scroll to error field");
                     }
                   }
                 }

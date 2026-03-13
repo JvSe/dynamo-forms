@@ -11,3 +11,9 @@ export type FormSubmissionData = {
   dados: FormFieldData;
   uploads: FormUpload[];
 };
+
+export type FormStep = {
+  id: string;
+  title: string;
+  description?: string;
+};

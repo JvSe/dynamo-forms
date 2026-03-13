@@ -29,7 +29,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
 
     if (Platform.OS === "ios") {
       Alert.alert(
-        placeholder || "Selecione uma opção",
+        placeholder || "Select an option",
         "",
         labels.map((opt) => ({
           text: opt.label,
@@ -38,7 +38,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
       );
     } else {
       Alert.alert(
-        placeholder || "Selecione uma opção",
+        placeholder || "Select an option",
         "",
         labels.map((opt) => ({
           text: opt.label,
@@ -64,7 +64,7 @@ export const InputSelect: React.FC<InputSelectProps> = ({
         className="h-14 px-5 border border-gray-300 rounded-md justify-center"
       >
         <Text className="text-base text-gray-800">
-          {selectedLabel || "Selecione uma opção"}
+          {selectedLabel || "Select an option"}
         </Text>
       </Pressable>
     </View>

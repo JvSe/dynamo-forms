@@ -11,7 +11,7 @@ export const FormHeader: React.FC<FormHeaderProps> = ({ formName }) => {
         {formName}
       </h1>
       <p className="mt-1 text-sm md:text-base text-muted-foreground">
-        Preencha os campos solicitados para continuar.
+        Fill in the required fields to continue.
       </p>
     </header>
   );
