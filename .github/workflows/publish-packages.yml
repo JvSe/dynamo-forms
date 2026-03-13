@@ -29,39 +29,36 @@ jobs:
           version: 9
 
       - name: Install dependencies
-        working-directory: ./packages/dynamo-forms
         run: pnpm install --frozen-lockfile || pnpm install
 
       - name: Build all packages
-        working-directory: ./packages/dynamo-forms
         run: pnpm run build
 
       - name: Configure npm for GitHub Packages
-        working-directory: ./packages/dynamo-forms
         run: |
           echo "@jvse:registry=https://npm.pkg.github.com" >> .npmrc
           echo "//npm.pkg.github.com/:_authToken=\${NODE_AUTH_TOKEN}" >> .npmrc
 
       - name: Publish core
-        working-directory: ./packages/dynamo-forms/packages/core
+        working-directory: ./packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish --access public
 
       - name: Publish react
-        working-directory: ./packages/dynamo-forms/packages/react
+        working-directory: ./packages/react
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish --access public
 
       - name: Publish react-native
-        working-directory: ./packages/dynamo-forms/packages/react-native
+        working-directory: ./packages/react-native
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish --access public
 
       - name: Publish builder
-        working-directory: ./packages/dynamo-forms/packages/builder
+        working-directory: ./packages/builder
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish --access public
