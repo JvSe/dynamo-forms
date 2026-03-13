@@ -27,7 +27,7 @@ export default function DocsPage() {
             fontWeight: 500,
           }}
         >
-          Testar construtor de formulários →
+          Testar builder de formulários →
         </Link>
       </p>
     </main>
