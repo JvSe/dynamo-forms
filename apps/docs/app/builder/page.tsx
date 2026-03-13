@@ -3,9 +3,9 @@
 import { useState, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormBuilder } from "@jvse/dynamo-builder";
-import type { DynamicFieldConfig } from "@jvse/dynamo-builder";
-import { DynamicForm } from "@jvse/dynamo-react";
+import { FormBuilder } from "@jvseen/dynamo-builder";
+import type { DynamicFieldConfig } from "@jvseen/dynamo-builder";
+import { DynamicForm } from "@jvseen/dynamo-react";
 
 export default function BuilderTestPage() {
   const router = useRouter();

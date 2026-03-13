@@ -19,7 +19,7 @@ import {
   type FormUpload,
   buildZodSchema,
   clearConditionCacheForField,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
 import { scrollToFirstError as scrollToFirstErrorUtil } from "../form-scroll.js";
 import { DynamicField } from "./dynamic-field.js";
 import { FormFooter } from "./form-footer.js";

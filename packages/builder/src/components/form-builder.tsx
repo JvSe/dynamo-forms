@@ -8,8 +8,8 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
-import type { DynamicFieldConfig, FormStep } from "@jvse/dynamo-core";
-import { DynamicField } from "@jvse/dynamo-react";
+import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-core";
+import { DynamicField } from "@jvseen/dynamo-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FieldPalette, getPaletteDragId, type PaletteDragData } from "./field-palette.js";
 import { InlineSheetRoot, InlineSheetPortal, InlineSheetContent } from "./inline-sheet.js";

@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  transpilePackages: ["@jvse/dynamo-core", "@jvse/dynamo-react"],
+  transpilePackages: ["@jvseen/dynamo-core", "@jvseen/dynamo-react"],
 };
 
 module.exports = nextConfig;

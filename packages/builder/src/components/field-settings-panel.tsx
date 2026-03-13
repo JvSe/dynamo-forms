@@ -1,5 +1,5 @@
 import React from "react";
-import type { Condition, DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { Condition, DynamicFieldConfig } from "@jvseen/dynamo-core";
 import { FIELD_TYPES } from "../constants/field-types.js";
 import { ConditionEditor } from "./condition-editor.js";
 import { cn } from "../lib/utils.js";

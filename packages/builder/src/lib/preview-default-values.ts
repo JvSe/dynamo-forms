@@ -1,4 +1,4 @@
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
 
 function collectFields(fields: DynamicFieldConfig[]): DynamicFieldConfig[] {
   const out: DynamicFieldConfig[] = [];

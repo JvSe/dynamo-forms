@@ -1,5 +1,5 @@
 import React from "react";
-import type { Condition, ConditionRule, Operator } from "@jvse/dynamo-core";
+import type { Condition, ConditionRule, Operator } from "@jvseen/dynamo-core";
 
 const OPERATORS: Array<{ value: Operator; label: string }> = [
   { value: "equals", label: "Equals" },

@@ -1,4 +1,4 @@
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
 
 export function getGroupById(fields: DynamicFieldConfig[], groupId: string): DynamicFieldConfig | undefined {
   return fields.find((f) => f.id === groupId && f.type === "group");

@@ -24,7 +24,7 @@ import {
   type ErrorFieldInfo,
   type FormStep,
   type FormUpload,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
 import { DynamicField, type ComponentOverridesMap } from "./dynamic-field";
 import { FormHeader } from "./form-header";
 import { FormFooter } from "./form-footer";

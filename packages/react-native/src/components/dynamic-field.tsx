@@ -6,7 +6,7 @@ import {
   useOptimizedConditions,
   registerFieldDependency,
   type DynamicFieldConfig,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
 
 import {
   InputCapturas,

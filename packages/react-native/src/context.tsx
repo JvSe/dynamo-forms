@@ -6,8 +6,8 @@ import React, {
   useState,
 } from "react";
 import { View } from "react-native";
-import type { DynamicFieldConfig, FormUpload } from "@jvse/dynamo-core";
-import type { ErrorFieldInfo } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig, FormUpload } from "@jvseen/dynamo-core";
+import type { ErrorFieldInfo } from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form.js";
 
 interface FormContextType {

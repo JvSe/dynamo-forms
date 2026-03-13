@@ -9,10 +9,10 @@ export default function DocsPage() {
       </p>
       <h2>Pacotes</h2>
       <ul>
-        <li><code>@jvse/dynamo-core</code> – lógica compartilhada (condições, schema, validação)</li>
-        <li><code>@jvse/dynamo-react</code> – componentes para React (web)</li>
-        <li><code>@jvse/dynamo-react-native</code> – componentes para React Native</li>
-        <li><code>@jvse/dynamo-builder</code> – construtor drag-and-drop de formulários</li>
+        <li><code>@jvseen/dynamo-core</code> – lógica compartilhada (condições, schema, validação)</li>
+        <li><code>@jvseen/dynamo-react</code> – componentes para React (web)</li>
+        <li><code>@jvseen/dynamo-react-native</code> – componentes para React Native</li>
+        <li><code>@jvseen/dynamo-builder</code> – construtor drag-and-drop de formulários</li>
       </ul>
       <p style={{ marginTop: 24 }}>
         <Link

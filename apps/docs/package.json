@@ -1,5 +1,5 @@
 {
-  "name": "@jvse/dynamo-docs",
+  "name": "@jvseen/dynamo-docs",
   "version": "0.0.0",
   "private": true,
   "license": "MIT",
@@ -12,9 +12,9 @@
     "clean": "rimraf .next"
   },
   "dependencies": {
-    "@jvse/dynamo-core": "workspace:*",
-    "@jvse/dynamo-react": "workspace:*",
-    "@jvse/dynamo-builder": "workspace:*",
+    "@jvseen/dynamo-core": "workspace:*",
+    "@jvseen/dynamo-react": "workspace:*",
+    "@jvseen/dynamo-builder": "workspace:*",
     "next": "^15.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

@@ -7,4 +7,4 @@ export { ConditionEditor } from "./components/condition-editor.js";
 export { createDefaultFieldConfig } from "./lib/default-field-config.js";
 export { FIELD_TYPES } from "./constants/field-types.js";
 export type { FieldType } from "./constants/field-types.js";
-export type { DynamicFieldConfig, Condition, FormStep } from "@jvse/dynamo-core";
+export type { DynamicFieldConfig, Condition, FormStep } from "@jvseen/dynamo-core";

@@ -1,5 +1,5 @@
 {
-  "name": "@jvse/dynamo-react",
+  "name": "@jvseen/dynamo-react",
   "version": "0.0.1",
   "description": "Dynamic forms for React (web) - Dynamo Forms",
   "private": false,
@@ -30,7 +30,7 @@
   "dependencies": {
     "@base-ui/react": "^1.2.0",
     "@hookform/resolvers": "^3.3.0",
-    "@jvse/dynamo-core": "workspace:*",
+    "@jvseen/dynamo-core": "workspace:*",
     "clsx": "^2.1.1",
     "date-fns": "^3.6.0",
     "lucide-react": "^0.460.0",

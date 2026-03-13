@@ -1,5 +1,5 @@
 {
-  "name": "@jvse/dynamo-core",
+  "name": "@jvseen/dynamo-core",
   "version": "0.0.1",
   "description": "Core logic and types for Dynamo Forms - conditions, schema, validation",
   "private": false,

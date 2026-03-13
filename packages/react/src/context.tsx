@@ -10,7 +10,7 @@ import type {
   FormStep,
   FormUpload,
   ErrorFieldInfo,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form";
 import type { ComponentOverridesMap } from "./components/dynamic-field";
 

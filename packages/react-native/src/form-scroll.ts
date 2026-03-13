@@ -1,7 +1,7 @@
 import type { RefObject } from "react";
 import { FlatList } from "react-native";
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
-import { findFirstErrorFieldId } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
+import { findFirstErrorFieldId } from "@jvseen/dynamo-core";
 
 export const scrollToFirstError = (
   flatListRef: RefObject<FlatList<DynamicFieldConfig> | null>,

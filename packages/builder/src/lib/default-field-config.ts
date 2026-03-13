@@ -1,4 +1,4 @@
-import type { DynamicFieldConfig } from "@jvse/dynamo-core";
+import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
 import type { FieldType } from "../constants/field-types.js";
 
 export type CreateFieldOverrides = {

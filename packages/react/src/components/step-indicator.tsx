@@ -1,5 +1,5 @@
 import React from "react";
-import type { FormStep } from "@jvse/dynamo-core";
+import type { FormStep } from "@jvseen/dynamo-core";
 
 interface StepIndicatorProps {
   steps: FormStep[];

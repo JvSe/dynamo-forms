@@ -17,7 +17,7 @@ export type {
   FormSubmissionData,
   FieldStatus,
   ErrorFieldInfo,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
 
 export {
   buildZodSchema,
@@ -33,4 +33,4 @@ export {
   processFieldsForSubmission,
   useDebounce,
   useOptimizedConditions,
-} from "@jvse/dynamo-core";
+} from "@jvseen/dynamo-core";
