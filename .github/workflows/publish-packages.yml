@@ -12,6 +12,8 @@ permissions:
 jobs:
   publish:
     runs-on: ubuntu-latest
+    env:
+      TAILWIND_DISABLE_OXIDE: "1"
 
     steps:
       - name: Checkout repository
