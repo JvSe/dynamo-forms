@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-builder",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Drag-and-drop form builder for Dynamo Forms - outputs DynamicFieldConfig[]",
   "private": false,
   "license": "MIT",
@@ -31,7 +31,7 @@
     "@dnd-kit/core": "^6.3.0",
     "@dnd-kit/sortable": "^9.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@jvseen/dynamo-core": "workspace:*",
+    "@jvseen/dynamo-core": "^0.0.4",
     "@radix-ui/react-dialog": "^1.1.2",
     "clsx": "^2.1.1",
     "lucide-react": "^0.460.0",
@@ -39,7 +39,7 @@
     "tailwind-merge": "^3.5.0"
   },
   "peerDependencies": {
-    "@jvseen/dynamo-react": "workspace:*",
+    "@jvseen/dynamo-react": "^0.0.4",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0"
   },

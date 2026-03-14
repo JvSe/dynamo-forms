@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-react-native",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Dynamic forms for React Native - Dynamo Forms",
   "private": false,
   "license": "MIT",
@@ -23,7 +23,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jvseen/dynamo-core": "workspace:*",
+    "@jvseen/dynamo-core": "^0.0.4",
     "@hookform/resolvers": "^3.3.0",
     "date-fns": "^3.6.0",
     "react-hook-form": "^7.53.0",
