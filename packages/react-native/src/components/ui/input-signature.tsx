@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type InputSignatureProps = {
   value: string | null;
@@ -29,33 +29,35 @@ export const InputSignature: React.FC<InputSignatureProps> = ({
   }, [onChange]);
 
   return (
-    <View className="w-full">
+    <View style={styles.wrapper}>
       <Pressable
         onPress={handleCapture}
-        className={`mt-2 border h-[150px] md:h-[250px] rounded-lg overflow-hidden items-center justify-center ${
-          hasSignature ? "border-green-400 bg-green-50" : "border-gray-200 bg-white"
-        }`}
+        style={[
+          styles.captureArea,
+          hasSignature ? styles.captureAreaFilled : styles.captureAreaEmpty,
+        ]}
       >
-        <Text className="text-gray-700 text-base md:text-lg">
+        <Text style={styles.captureText}>
           {hasSignature ? "Assinatura registrada" : "Toque para capturar assinatura"}
         </Text>
       </Pressable>
 
-      <View className="flex-row gap-2 md:gap-4 mt-3 md:mt-5">
+      <View style={styles.actions}>
         <Pressable
           onPress={handleClear}
           disabled={!hasSignature}
-          className={`w-1/2 max-w-[200px] md:max-w-[300px] h-10 md:h-14 items-center justify-center rounded-md ${
-            hasSignature ? "bg-gray-100" : "bg-gray-200"
-          }`}
+          style={[
+            styles.clearButton,
+            hasSignature ? styles.clearButtonEnabled : styles.clearButtonDisabled,
+          ]}
         >
-          <Text className="text-gray-700 font-semibold md:text-lg">Limpar</Text>
+          <Text style={styles.clearText}>Limpar</Text>
         </Pressable>
       </View>
 
       {hasSignature && (
-        <View className="mt-2 md:mt-4 p-2 md:p-4 bg-green-50 rounded-lg">
-          <Text className="text-green-700 text-sm md:text-lg font-medium">
+        <View style={styles.successBox}>
+          <Text style={styles.successText}>
             ✓ Assinatura capturada (placeholder)
           </Text>
         </View>
@@ -63,4 +65,39 @@ export const InputSignature: React.FC<InputSignatureProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { width: "100%" },
+  captureArea: {
+    marginTop: 8,
+    borderWidth: 1,
+    height: 180,
+    borderRadius: 8,
+    overflow: "hidden",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  captureAreaEmpty: { borderColor: "#e5e7eb", backgroundColor: "#ffffff" },
+  captureAreaFilled: { borderColor: "#4ade80", backgroundColor: "#f0fdf4" },
+  captureText: { color: "#374151", fontSize: 16 },
+  actions: { flexDirection: "row", gap: 16, marginTop: 20 },
+  clearButton: {
+    width: "50%",
+    maxWidth: 200,
+    height: 44,
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 6,
+  },
+  clearButtonEnabled: { backgroundColor: "#f3f4f6" },
+  clearButtonDisabled: { backgroundColor: "#e5e7eb" },
+  clearText: { color: "#374151", fontWeight: "600", fontSize: 16 },
+  successBox: {
+    marginTop: 16,
+    padding: 16,
+    backgroundColor: "#f0fdf4",
+    borderRadius: 8,
+  },
+  successText: { color: "#15803d", fontSize: 14, fontWeight: "500" },
+});
 

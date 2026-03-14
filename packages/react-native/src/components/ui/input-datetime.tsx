@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Text, View, Pressable } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
@@ -49,19 +49,19 @@ export const InputDateTime: React.FC<InputDateTimeProps> = ({
     }
   };
 
-  const getBorderClass = () => {
-    if (error) return "border-red-500 bg-red-50";
-    if (success) return "border-green-500 bg-green-50";
-    return "border-gray-300";
+  const getBorderStyle = () => {
+    if (error) return styles.containerError;
+    if (success) return styles.containerSuccess;
+    return styles.containerDefault;
   };
 
   return (
-    <View className="w-full">
+    <View style={styles.wrapper}>
       <Pressable
         onPress={() => setShowPicker(true)}
-        className={`border px-3 py-2 rounded-md ${getBorderClass()}`}
+        style={[styles.container, getBorderStyle()]}
       >
-        <Text className="text-base text-gray-800">{formatDisplayValue()}</Text>
+        <Text style={styles.text}>{formatDisplayValue()}</Text>
       </Pressable>
 
       {showPicker && (
@@ -75,4 +75,18 @@ export const InputDateTime: React.FC<InputDateTimeProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { width: "100%" },
+  container: {
+    borderWidth: 1,
+    paddingHorizontal: 12,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  containerDefault: { borderColor: "#d1d5db" },
+  containerError: { borderColor: "#ef4444", backgroundColor: "#fef2f2" },
+  containerSuccess: { borderColor: "#22c55e", backgroundColor: "#f0fdf4" },
+  text: { fontSize: 16, color: "#1f2937" },
+});
 

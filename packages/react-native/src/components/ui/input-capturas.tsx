@@ -3,6 +3,7 @@ import {
   ActivityIndicator,
   Alert,
   Button,
+  StyleSheet,
   Text,
   View,
 } from "react-native";
@@ -116,7 +117,7 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
   };
 
   return (
-    <View className="w-full gap-3">
+    <View style={styles.wrapper}>
       {capturas.map((captura) => {
         const capturaRealizada = getCapturaStatus(captura.id);
         const isLoading = loadingCaptura === captura.id;
@@ -124,41 +125,34 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
         return (
           <View
             key={captura.id}
-            className={`border rounded-lg p-4 ${
-              capturaRealizada
-                ? "bg-green-50 border-green-300"
-                : "bg-gray-50 border-gray-300"
-            }`}
+            style={[
+              styles.card,
+              capturaRealizada ? styles.cardDone : styles.cardPending,
+            ]}
           >
-            <View className="flex-row items-center justify-between mb-3">
-              <Text className="text-base font-semibold text-gray-800">
-                {captura.label}
-              </Text>
+            <View style={styles.cardHeader}>
+              <Text style={styles.cardLabel}>{captura.label}</Text>
               {capturaRealizada && (
-                <View className="bg-green-500 px-2 py-1 rounded-full">
-                  <Text className="text-white text-xs font-semibold">
-                    Capturada
-                  </Text>
+                <View style={styles.badge}>
+                  <Text style={styles.badgeText}>Capturada</Text>
                 </View>
               )}
             </View>
 
             {capturaRealizada && (
-              <View className="mb-3 bg-white p-3 rounded-lg border border-green-200">
-                <Text className="text-sm text-gray-600 font-medium">
-                  Coordenadas:
-                </Text>
-                <Text className="text-sm text-gray-800">
+              <View style={styles.coordsBox}>
+                <Text style={styles.coordsTitle}>Coordenadas:</Text>
+                <Text style={styles.coordsText}>
                   Lat: {capturaRealizada.latitude.toFixed(6)}
                 </Text>
-                <Text className="text-sm text-gray-800">
+                <Text style={styles.coordsText}>
                   Long: {capturaRealizada.longitude.toFixed(6)}
                 </Text>
               </View>
             )}
 
-            <View className="flex-row gap-2">
-              <View className="flex-1">
+            <View style={styles.actions}>
+              <View style={styles.actionsMain}>
                 <Button
                   title={
                     isLoading
@@ -173,7 +167,7 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
               </View>
 
               {capturaRealizada && !isLoading && (
-                <View className="w-24">
+                <View style={styles.removeWrap}>
                   <Button
                     title="Remove"
                     color="#ef4444"
@@ -184,9 +178,9 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
             </View>
 
             {isLoading && (
-              <View className="mt-2 flex-row items-center gap-2">
+              <View style={styles.loadingRow}>
                 <ActivityIndicator size="small" color="#2563eb" />
-                <Text className="text-sm text-gray-600">Obtendo posição...</Text>
+                <Text style={styles.loadingText}>Obtendo posição...</Text>
               </View>
             )}
           </View>
@@ -194,13 +188,48 @@ export const InputCapturas: React.FC<InputCapturasProps> = ({
       })}
 
       {capturas.length === 0 && (
-        <View className="p-4 bg-gray-100 rounded-lg">
-          <Text className="text-gray-600 text-center">
-            No captures configured
-          </Text>
+        <View style={styles.empty}>
+          <Text style={styles.emptyText}>No captures configured</Text>
         </View>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { width: "100%", gap: 12 },
+  card: {
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: 16,
+  },
+  cardPending: { backgroundColor: "#f9fafb", borderColor: "#d1d5db" },
+  cardDone: { backgroundColor: "#f0fdf4", borderColor: "#86efac" },
+  cardHeader: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 12,
+  },
+  cardLabel: { fontSize: 16, fontWeight: "600", color: "#1f2937" },
+  badge: { backgroundColor: "#22c55e", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 9999 },
+  badgeText: { color: "#ffffff", fontSize: 12, fontWeight: "600" },
+  coordsBox: {
+    marginBottom: 12,
+    backgroundColor: "#ffffff",
+    padding: 12,
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#bbf7d0",
+  },
+  coordsTitle: { fontSize: 14, color: "#4b5563", fontWeight: "500" },
+  coordsText: { fontSize: 14, color: "#1f2937" },
+  actions: { flexDirection: "row", gap: 8 },
+  actionsMain: { flex: 1 },
+  removeWrap: { width: 96 },
+  loadingRow: { marginTop: 8, flexDirection: "row", alignItems: "center", gap: 8 },
+  loadingText: { fontSize: 14, color: "#4b5563" },
+  empty: { padding: 16, backgroundColor: "#f3f4f6", borderRadius: 8 },
+  emptyText: { color: "#4b5563", textAlign: "center" },
+});
 

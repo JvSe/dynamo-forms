@@ -1,5 +1,12 @@
 import React, { useState } from "react";
-import { Alert, Platform, Pressable, Text, View } from "react-native";
+import {
+  Alert,
+  Platform,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type InputSelectProps = {
@@ -59,15 +66,24 @@ export const InputSelect: React.FC<InputSelectProps> = ({
           Platform.OS === "ios" ? insets.bottom : insets.bottom + 12,
       }}
     >
-      <Pressable
-        onPress={openSelect}
-        className="h-14 px-5 border border-gray-300 rounded-md justify-center"
-      >
-        <Text className="text-base text-gray-800">
+      <Pressable onPress={openSelect} style={styles.trigger}>
+        <Text style={styles.triggerText}>
           {selectedLabel || "Select an option"}
         </Text>
       </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  trigger: {
+    height: 56,
+    paddingHorizontal: 20,
+    borderWidth: 1,
+    borderColor: "#d1d5db",
+    borderRadius: 6,
+    justifyContent: "center",
+  },
+  triggerText: { fontSize: 16, color: "#1f2937" },
+});
 

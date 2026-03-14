@@ -1,5 +1,5 @@
 import React from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Option = {
   label: string;
@@ -35,16 +35,14 @@ export const InputCheckbox: React.FC<InputCheckboxProps> = ({
     }
   };
 
-  const getBorderClass = () => {
-    if (error) return "border-red-500 bg-red-50";
-    if (success) return "border-green-500 bg-green-50";
-    return "border-transparent";
+  const getContainerStyle = () => {
+    if (error) return styles.containerError;
+    if (success) return styles.containerSuccess;
+    return styles.containerDefault;
   };
 
   return (
-    <View
-      className={`w-full gap-3 md:gap-4 rounded-lg border-2 p-2 md:p-3 ${getBorderClass()}`}
-    >
+    <View style={[styles.container, getContainerStyle()]}>
       {options.map((option) => {
         const isSelected = value.includes(option.value);
         const isDisabled =
@@ -54,22 +52,53 @@ export const InputCheckbox: React.FC<InputCheckboxProps> = ({
           <Pressable
             key={option.value}
             onPress={() => !isDisabled && handleToggle(option.value)}
-            className="flex-row items-center gap-2"
+            style={styles.optionRow}
           >
             <View
-              className={`w-5 h-5 rounded border mr-2 items-center justify-center ${
-                isSelected ? "bg-blue-600 border-blue-600" : "border-gray-400"
-              }`}
+              style={[
+                styles.checkbox,
+                isSelected ? styles.checkboxSelected : styles.checkboxUnselected,
+              ]}
             >
               {isSelected && (
-                <Text className="text-white text-xs font-bold">✓</Text>
+                <Text style={styles.checkmark}>✓</Text>
               )}
             </View>
-            <Text className="text-base text-gray-800">{option.label}</Text>
+            <Text style={styles.label}>{option.label}</Text>
           </Pressable>
         );
       })}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    gap: 12,
+    borderRadius: 8,
+    borderWidth: 2,
+    padding: 12,
+  },
+  containerDefault: { borderColor: "transparent" },
+  containerError: { borderColor: "#ef4444", backgroundColor: "#fef2f2" },
+  containerSuccess: { borderColor: "#22c55e", backgroundColor: "#f0fdf4" },
+  optionRow: { flexDirection: "row", alignItems: "center", gap: 8 },
+  checkbox: {
+    width: 20,
+    height: 20,
+    borderRadius: 4,
+    borderWidth: 1,
+    marginRight: 8,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  checkboxUnselected: { borderColor: "#9ca3af" },
+  checkboxSelected: {
+    backgroundColor: "#2563eb",
+    borderColor: "#2563eb",
+  },
+  checkmark: { color: "#ffffff", fontSize: 12, fontWeight: "bold" },
+  label: { fontSize: 16, color: "#1f2937" },
+});
 

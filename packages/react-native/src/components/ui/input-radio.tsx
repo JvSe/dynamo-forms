@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Pressable, Text, View } from "react-native";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 
 type Option = {
   label: string;
@@ -32,32 +32,59 @@ export const InputRadio: React.FC<InputRadioProps> = ({
     setValue(v);
   };
 
-  const getBorderClass = () => {
-    if (error) return "border-red-500 bg-red-50";
-    if (success) return "border-green-500 bg-green-50";
-    return "border-transparent";
+  const getContainerStyle = () => {
+    if (error) return styles.containerError;
+    if (success) return styles.containerSuccess;
+    return styles.containerDefault;
   };
 
   return (
-    <View className={`rounded-lg border-2 p-2 md:p-3 ${getBorderClass()}`}>
+    <View style={[styles.container, getContainerStyle()]}>
       {options.map((option) => {
         const checked = _value === option.value;
         return (
           <Pressable
             key={option.value}
             onPress={() => onOptionPress(option.value)}
-            className="flex-row items-center py-1"
+            style={styles.optionRow}
           >
-            <View className="w-5 h-5 mr-2 rounded-full border border-gray-400 items-center justify-center">
-              {checked && (
-                <View className="w-3 h-3 rounded-full bg-blue-600" />
-              )}
+            <View style={styles.radioOuter}>
+              {checked && <View style={styles.radioInner} />}
             </View>
-            <Text className="text-base text-gray-800">{option.label}</Text>
+            <Text style={styles.label}>{option.label}</Text>
           </Pressable>
         );
       })}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 8,
+    borderWidth: 2,
+    padding: 12,
+  },
+  containerDefault: { borderColor: "transparent" },
+  containerError: { borderColor: "#ef4444", backgroundColor: "#fef2f2" },
+  containerSuccess: { borderColor: "#22c55e", backgroundColor: "#f0fdf4" },
+  optionRow: { flexDirection: "row", alignItems: "center", paddingVertical: 4 },
+  radioOuter: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: "#9ca3af",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  radioInner: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#2563eb",
+  },
+  label: { fontSize: 16, color: "#1f2937" },
+});
 

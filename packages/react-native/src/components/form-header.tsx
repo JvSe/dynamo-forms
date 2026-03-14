@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 interface FormHeaderProps {
   formName: string;
@@ -12,14 +12,29 @@ export const FormHeader: React.FC<FormHeaderProps> = ({
 }) => {
   return (
     <View
-      className="w-full pb-4 mb-4 border-b border-gray-300"
+      style={styles.container}
       onLayout={(event) => {
         const { height } = event.nativeEvent.layout;
         onLayout?.(height);
       }}
     >
-      <Text className="text-xl md:text-3xl font-bold pb-2">{formName}</Text>
+      <Text style={styles.title}>{formName}</Text>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    paddingBottom: 16,
+    marginBottom: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: "#d1d5db",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    paddingBottom: 8,
+  },
+});
 

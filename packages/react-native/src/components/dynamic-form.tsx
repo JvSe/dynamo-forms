@@ -7,7 +7,7 @@ import React, {
   useState,
 } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { FlatList, Keyboard, View } from "react-native";
+import { FlatList, Keyboard, StyleSheet, View } from "react-native";
 import {
   findFirstErrorFieldId,
   getFieldStatus,
@@ -547,7 +547,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       };
 
       return (
-        <View className="w-full mb-4 md:mb-6" onLayout={handleContainerLayout}>
+        <View style={styles.fieldWrapper} onLayout={handleContainerLayout}>
           <DynamicField
             field={field}
             control={control}
@@ -611,7 +611,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
         renderItem={renderField}
         ListHeaderComponent={renderHeader}
         ListFooterComponent={renderFooter}
-        className="w-full flex-1"
+        style={styles.list}
         contentContainerStyle={{
           gap: 16,
           paddingBottom: 20,
@@ -687,6 +687,11 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
     </FormProvider>
   );
 };
+
+const styles = StyleSheet.create({
+  list: { width: "100%", flex: 1 },
+  fieldWrapper: { width: "100%", marginBottom: 24 },
+});
 
 export { DynamicFormCore };
 

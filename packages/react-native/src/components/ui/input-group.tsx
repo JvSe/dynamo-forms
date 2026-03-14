@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type InputGroupProps = {
   label?: string;
@@ -8,16 +8,25 @@ type InputGroupProps = {
 
 export const InputGroup: React.FC<InputGroupProps> = ({ label, children }) => {
   return (
-    <View className="mt-2 md:mt-3">
-      <View className="p-3 md:p-4 bg-gray-50 rounded-lg border-b border-gray-200">
-        {label && (
-          <Text className="text-lg md:text-2xl font-semibold text-gray-800">
-            {label}
-          </Text>
-        )}
+    <View style={styles.wrapper}>
+      <View style={styles.header}>
+        {label && <Text style={styles.label}>{label}</Text>}
       </View>
-      <View className="mt-2 md:mt-3 gap-4 md:gap-6">{children}</View>
+      <View style={styles.children}>{children}</View>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { marginTop: 12 },
+  header: {
+    padding: 16,
+    backgroundColor: "#f9fafb",
+    borderRadius: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#e5e7eb",
+  },
+  label: { fontSize: 18, fontWeight: "600", color: "#1f2937" },
+  children: { marginTop: 12, gap: 16 },
+});
 

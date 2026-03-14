@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 type InputTitleProps = {
   titleText?: string;
@@ -11,18 +11,27 @@ export const InputTitle: React.FC<InputTitleProps> = ({
   description,
 }) => {
   return (
-    <View className="w-full mb-6 md:mb-8">
-      {titleText && (
-        <Text className="text-2xl md:text-4xl font-bold text-gray-900 mb-2 md:mb-3">
-          {titleText}
-        </Text>
-      )}
+    <View style={styles.container}>
+      {titleText && <Text style={styles.title}>{titleText}</Text>}
       {description && (
-        <Text className="text-base md:text-lg text-gray-600 leading-6 md:leading-7">
-          {description}
-        </Text>
+        <Text style={styles.description}>{description}</Text>
       )}
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: { width: "100%", marginBottom: 24 },
+  title: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#111827",
+    marginBottom: 12,
+  },
+  description: {
+    fontSize: 16,
+    color: "#4b5563",
+    lineHeight: 24,
+  },
+});
 

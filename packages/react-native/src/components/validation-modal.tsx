@@ -1,5 +1,11 @@
 import React, { useEffect } from "react";
-import { ActivityIndicator, Modal, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Modal,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 interface ValidationModalProps {
   visible: boolean;
@@ -29,15 +35,30 @@ export const ValidationModal: React.FC<ValidationModalProps> = ({
         onTimeout?.();
       }}
     >
-      <View className="flex-1 items-center justify-center bg-black/50">
-        <View className="bg-white rounded-lg md:rounded-xl p-6 md:p-10 items-center gap-4 md:gap-6">
+      <View style={styles.overlay}>
+        <View style={styles.box}>
           <ActivityIndicator size="large" color="#2563eb" />
-          <Text className="text-base md:text-xl text-gray-700">
-            Checking fields...
-          </Text>
+          <Text style={styles.text}>Checking fields...</Text>
         </View>
       </View>
     </Modal>
   );
 };
+
+const styles = StyleSheet.create({
+  overlay: {
+    flex: 1,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "rgba(0,0,0,0.5)",
+  },
+  box: {
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 24,
+    alignItems: "center",
+    gap: 16,
+  },
+  text: { fontSize: 16, color: "#374151" },
+});
 

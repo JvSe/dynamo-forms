@@ -4,6 +4,7 @@ import {
   Image,
   Platform,
   Pressable,
+  StyleSheet,
   Text,
   TouchableOpacity,
   View,
@@ -61,11 +62,11 @@ export const InputUpload: React.FC<InputUploadProps> = ({
 
   const canAddMoreImages = images.length < maxImages;
 
-  const getBorderClass = () => {
-    if (error) return "border-red-500 bg-red-50";
-    if (success) return "border-green-500 bg-green-50";
-    if (canAddMoreImages) return "bg-gray-100 border-gray-300";
-    return "bg-gray-50 border-gray-200 opacity-60";
+  const getDropzoneStyle = () => {
+    if (error) return styles.dropzoneError;
+    if (success) return styles.dropzoneSuccess;
+    if (canAddMoreImages) return styles.dropzoneDefault;
+    return styles.dropzoneDisabled;
   };
 
   const requestPermissions = async () => {
@@ -162,14 +163,14 @@ export const InputUpload: React.FC<InputUploadProps> = ({
   };
 
   return (
-    <View className="w-full">
-      <Text className="mb-2 text-base text-gray-800">{fieldLabel}</Text>
+    <View style={styles.wrapper}>
+      <Text style={styles.label}>{fieldLabel}</Text>
 
       <Pressable
-        className={`w-full p-4 md:p-6 border-2 border-dashed rounded-md flex gap-2 md:gap-3 items-center justify-center ${getBorderClass()}`}
+        style={[styles.dropzone, getDropzoneStyle()]}
         onPress={handleAddImagePress}
       >
-        <Text className="text-primary font-semibold md:text-xl">
+        <Text style={styles.dropzoneText}>
           {canAddMoreImages
             ? "Add image"
             : `Máximo ${maxImages} imagens`}
@@ -177,41 +178,32 @@ export const InputUpload: React.FC<InputUploadProps> = ({
       </Pressable>
 
       {images.length > 0 && (
-        <View className="mt-4 md:mt-6">
-          <Text className="text-sm md:text-lg font-medium text-gray-700 mb-3 md:mb-4">
-            Arquivos enviados:
-          </Text>
-          <View className="gap-3 md:gap-4">
+        <View style={styles.list}>
+          <Text style={styles.listTitle}>Arquivos enviados:</Text>
+          <View style={styles.listInner}>
             {images.map((image) => (
-              <View
-                key={image.id}
-                className="flex-row items-center p-3 md:p-5 bg-white rounded-lg border border-gray-200 shadow-sm"
-              >
-                <View className="w-12 h-12 md:w-20 md:h-20 rounded-lg overflow-hidden mr-3 md:mr-5 bg-gray-100 relative">
+              <View key={image.id} style={styles.item}>
+                <View style={styles.itemThumb}>
                   <Image
                     source={{ uri: image.uri }}
-                    className="w-full h-full"
+                    style={styles.thumbImage}
                     resizeMode="cover"
                   />
                 </View>
 
-                <View className="flex-1">
-                  <Text className="text-sm md:text-lg font-medium text-gray-800">
-                    Foto adicionada
-                  </Text>
-                  <Text className="text-xs md:text-base text-gray-500 mt-1 md:mt-2">
+                <View style={styles.itemBody}>
+                  <Text style={styles.itemTitle}>Foto adicionada</Text>
+                  <Text style={styles.itemSub}>
                     Will be saved when the form is submitted
                   </Text>
                 </View>
 
-                <View className="mr-2 md:mr-3">
+                <View style={styles.itemAction}>
                   <TouchableOpacity
                     onPress={() => removeImage(image.id)}
-                    className="w-6 h-6 md:w-10 md:h-10 items-center justify-center"
+                    style={styles.removeButton}
                   >
-                    <Text className="text-red-500 text-xs md:text-base">
-                      Remove
-                    </Text>
+                    <Text style={styles.removeText}>Remove</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -222,4 +214,55 @@ export const InputUpload: React.FC<InputUploadProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  wrapper: { width: "100%" },
+  label: { marginBottom: 8, fontSize: 16, color: "#1f2937" },
+  dropzone: {
+    width: "100%",
+    padding: 24,
+    borderWidth: 2,
+    borderStyle: "dashed",
+    borderRadius: 6,
+    gap: 12,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  dropzoneDefault: { backgroundColor: "#f3f4f6", borderColor: "#d1d5db" },
+  dropzoneError: { backgroundColor: "#fef2f2", borderColor: "#ef4444" },
+  dropzoneSuccess: { backgroundColor: "#f0fdf4", borderColor: "#22c55e" },
+  dropzoneDisabled: {
+    backgroundColor: "#f9fafb",
+    borderColor: "#e5e7eb",
+    opacity: 0.6,
+  },
+  dropzoneText: { fontWeight: "600", fontSize: 18 },
+  list: { marginTop: 24 },
+  listTitle: { fontSize: 16, fontWeight: "500", color: "#374151", marginBottom: 12 },
+  listInner: { gap: 16 },
+  item: {
+    flexDirection: "row",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#ffffff",
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
+  },
+  itemThumb: {
+    width: 48,
+    height: 48,
+    borderRadius: 8,
+    overflow: "hidden",
+    marginRight: 16,
+    backgroundColor: "#f3f4f6",
+  },
+  thumbImage: { width: "100%", height: "100%" },
+  itemBody: { flex: 1 },
+  itemTitle: { fontSize: 16, fontWeight: "500", color: "#1f2937" },
+  itemSub: { fontSize: 12, color: "#6b7280", marginTop: 4 },
+  itemAction: { marginRight: 12 },
+  removeButton: { padding: 8, alignItems: "center", justifyContent: "center" },
+  removeText: { color: "#ef4444", fontSize: 14 },
+});
 

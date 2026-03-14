@@ -1,5 +1,11 @@
 import React from "react";
-import { ActivityIndicator, Pressable, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
 
 export type SubmitButtonProps = {
   isSubmitting: boolean;
@@ -20,28 +26,52 @@ export const FormFooter: React.FC<FormFooterProps> = ({
 }) => {
   if (SubmitButton) {
     return (
-      <View className="w-full pt-4 mt-2 border-t border-gray-200">
+      <View style={styles.container}>
         <SubmitButton isSubmitting={isSubmitting} onSubmit={onSubmit} />
       </View>
     );
   }
 
   return (
-    <View className="w-full pt-4 mt-2 border-t border-gray-200">
+    <View style={styles.container}>
       <Pressable
         disabled={isSubmitting}
         onPress={onSubmit}
-        className={`h-14 md:h-16 w-full rounded-md items-center justify-center ${
-          isSubmitting ? "bg-gray-400" : "bg-blue-600"
-        }`}
+        style={[styles.button, isSubmitting && styles.buttonDisabled]}
       >
         {isSubmitting ? (
           <ActivityIndicator color="#ffffff" />
         ) : (
-          <Text className="text-white font-bold md:text-2xl">Submit</Text>
+          <Text style={styles.buttonText}>Submit</Text>
         )}
       </Pressable>
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    width: "100%",
+    paddingTop: 16,
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: "#e5e7eb",
+  },
+  button: {
+    height: 56,
+    width: "100%",
+    borderRadius: 6,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#2563eb",
+  },
+  buttonDisabled: {
+    backgroundColor: "#9ca3af",
+  },
+  buttonText: {
+    color: "#ffffff",
+    fontWeight: "bold",
+    fontSize: 18,
+  },
+});
 
