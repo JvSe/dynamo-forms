@@ -5,6 +5,7 @@ import {
   useDebounce,
   useOptimizedConditions,
   registerFieldDependency,
+  getOptionValue,
   type DynamicFieldConfig,
 } from "@jvseen/dynamo-core";
 
@@ -64,6 +65,11 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
   getParentY,
 }) => {
   const { type, config, id } = useMemo(() => field, [field]);
+
+  const optionsWithValue = useMemo(() => {
+    const opts = config.options ?? [];
+    return opts.map((opt) => ({ label: opt.label, value: getOptionValue(opt) }));
+  }, [config.options]);
 
   useEffect(() => {
     registerFieldDependency(id, config.conditions);
@@ -181,7 +187,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
               case "select":
                 return (
                   <InputSelectNew
-                    options={config.options || []}
+                    options={optionsWithValue}
                     placeholder={config.placeholder}
                     onChange={(newValue) => {
                       onChange(newValue);
@@ -209,7 +215,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
               case "radio":
                 return (
                   <InputRadio
-                    options={config.options || []}
+                    options={optionsWithValue}
                     value={safeValue}
                     onChange={(newValue) => {
                       onChange(newValue);
@@ -222,7 +228,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
               case "checkbox":
                 return (
                   <InputCheckbox
-                    options={config.options || []}
+                    options={optionsWithValue}
                     value={Array.isArray(safeValue) ? safeValue : []}
                     maxSelect={config.maxSelect || 0}
                     onChange={(newValue) => {

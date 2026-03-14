@@ -60,7 +60,12 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
   const otherFields = allFields
     .filter((f) => f.id !== field.id)
-    .map((f) => ({ id: f.id, label: f.config.label || f.id }));
+    .map((f) => ({
+      id: f.id,
+      label: f.config.label || f.id,
+      type: f.type,
+      options: f.config.options,
+    }));
 
   const showConditions = [
     "text",
@@ -76,7 +81,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
     "upload",
     "group",
   ].includes(field.type);
-  const showOptions = ["select", "radio"].includes(field.type);
+  const showOptions = ["select", "radio", "checkbox"].includes(field.type);
   const showPlaceholder = ["text", "number", "textarea"].includes(field.type);
   const showRows = field.type === "textarea";
   const showTitleText = field.type === "title";
@@ -227,33 +232,19 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
             Opções
           </label>
           {(field.config.options ?? []).length === 0 ? (
-            <p className="text-xs text-gray-500 mb-2">No options. Add one below.</p>
+            <p className="text-xs text-gray-500 mb-2">Adicione opções abaixo. O valor será gerado automaticamente a partir do texto.</p>
           ) : null}
-          {((field.config.options ?? []) as Array<{ label: string; value: string }>).map((opt, i) => (
+          {((field.config.options ?? []) as Array<{ label: string; value?: string }>).map((opt, i) => (
             <div key={i} className="flex flex-col gap-1.5 mb-3 p-3 rounded-lg border border-gray-200 bg-gray-50 relative">
               <div className="flex flex-col gap-1">
                 <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">Label</span>
                 <input
                   type="text"
-                  placeholder="Label"
+                  placeholder="Ex: Sim, Não"
                   value={opt.label}
                   onChange={(e) => {
-                    const options = [...(field.config.options ?? [])] as Array<{ label: string; value: string }>;
-                    options[i] = { ...options[i], label: e.target.value };
-                    updateConfig({ options });
-                  }}
-                  className="w-full py-2 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white"
-                />
-              </div>
-              <div className="flex flex-col gap-1">
-                <span className="text-[11px] font-medium text-gray-400 uppercase tracking-wide">Value</span>
-                <input
-                  type="text"
-                  placeholder="Value"
-                  value={opt.value}
-                  onChange={(e) => {
-                    const options = [...(field.config.options ?? [])] as Array<{ label: string; value: string }>;
-                    options[i] = { ...options[i], value: e.target.value };
+                    const options = [...(field.config.options ?? [])] as Array<{ label: string; value?: string }>;
+                    options[i] = { label: e.target.value };
                     updateConfig({ options });
                   }}
                   className="w-full py-2 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white"
@@ -263,13 +254,13 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                 <button
                   type="button"
                   onClick={() => {
-                    const options = (field.config.options ?? []) as Array<{ label: string; value: string }>;
+                    const options = (field.config.options ?? []) as Array<{ label: string; value?: string }>;
                     const next = options.filter((_, idx) => idx !== i);
                     updateConfig({ options: next });
                   }}
                   className="absolute top-2 right-2 py-1 px-2 text-xs text-red-500 hover:bg-red-50 rounded border border-transparent hover:border-red-200 transition-colors"
                 >
-                  Remove
+                  Remover
                 </button>
               )}
             </div>
@@ -277,14 +268,13 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
           <button
             type="button"
             onClick={() => {
-              const options = (field.config.options ?? []) as Array<{ label: string; value: string }>;
+              const options = (field.config.options ?? []) as Array<{ label: string; value?: string }>;
               const count = options.length + 1;
-              const newOption = { label: `Opção ${count}`, value: `opcao_${count}` };
-              updateConfig({ options: [...options, newOption] });
+              updateConfig({ options: [...options, { label: `Opção ${count}` }] });
             }}
             className="py-2 px-3 text-xs font-medium rounded-lg border border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >
-            + Add option
+            + Adicionar opção
           </button>
         </div>
       )}

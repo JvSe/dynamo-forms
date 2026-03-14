@@ -1,22 +1,32 @@
 "use client";
 
-import { useState, useRef } from "react";
+import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-builder";
+import { FormBuilder } from "@jvseen/dynamo-builder";
+import { getStepsWithFieldIds } from "@jvseen/dynamo-core";
+import { DynamicForm } from "@jvseen/dynamo-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormBuilder } from "@jvseen/dynamo-builder";
-import type { DynamicFieldConfig } from "@jvseen/dynamo-builder";
-import { DynamicForm } from "@jvseen/dynamo-react";
+import { useRef, useState } from "react";
+
+const initialSteps: FormStep[] = [{ id: "step_1", title: "Step 1" }];
 
 export default function BuilderTestPage() {
   const router = useRouter();
   const [fields, setFields] = useState<DynamicFieldConfig[]>([]);
   const [formTitle, setFormTitle] = useState("Drafts/ Resignation form");
+  const [steps, setSteps] = useState<FormStep[]>(initialSteps);
   const [finishedJson, setFinishedJson] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
 
   const handleFinish = (value: DynamicFieldConfig[]) => {
-    setFinishedJson(JSON.stringify(value, null, 2));
+    const schema = {
+      id: `form_${Date.now()}`,
+      name: formTitle,
+      fields: value,
+      steps: getStepsWithFieldIds(steps, value),
+    };
+    setFinishedJson(JSON.stringify(schema, null, 2));
     setShowPreview(true);
   };
 
@@ -51,13 +61,20 @@ export default function BuilderTestPage() {
           onFormTitleChange={setFormTitle}
           onPreview={handlePreview}
           onBack={() => router.back()}
+          steps={steps}
+          onStepsChange={setSteps}
+          multiStepEnabled={steps.length > 1}
+          onMultiStepChange={(enabled) => {
+            if (enabled && steps.length <= 1) setSteps([...steps, { id: `step_2_${Date.now()}`, title: "Step 2" }]);
+            if (!enabled) setSteps(initialSteps);
+          }}
         />
       </div>
 
       {finishedJson !== null && (
         <div ref={previewRef} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
           <section>
-            <h2 style={{ fontSize: 18, marginBottom: 12 }}>JSON gerado (DynamicFieldConfig[])</h2>
+            <h2 style={{ fontSize: 18, marginBottom: 12 }}>JSON gerado (schema: id, name, fields, steps)</h2>
             <textarea
               readOnly
               value={finishedJson}
@@ -91,6 +108,7 @@ export default function BuilderTestPage() {
                   fields={fields}
                   formId="preview-form"
                   formName="Preview"
+                  steps={steps.length > 1 ? steps : undefined}
                   onSubmit={({ dados, uploads }) => {
                     console.log("Submit preview:", { dados, uploads });
                     alert("Dados do preview:\n" + JSON.stringify(dados, null, 2));

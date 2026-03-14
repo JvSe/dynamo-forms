@@ -1,4 +1,4 @@
-import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
+import { slugFromLabel, type DynamicFieldConfig } from "@jvseen/dynamo-core";
 import type { FieldType } from "../constants/field-types.js";
 
 export type CreateFieldOverrides = {
@@ -8,15 +8,6 @@ export type CreateFieldOverrides = {
 
 function generateFieldId(type: FieldType): string {
   return `field-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-}
-
-function slugFromLabel(label: string): string {
-  return label
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/\p{Diacritic}/gu, "")
-    .replace(/\s+/g, "_")
-    .replace(/[^a-z0-9_]/g, "");
 }
 
 export function createDefaultFieldConfig(
@@ -47,10 +38,7 @@ export function createDefaultFieldConfig(
         ...base,
         config: {
           ...base.config,
-          options: [
-            { label: "Opção 1", value: "opcao_1" },
-            { label: "Opção 2", value: "opcao_2" },
-          ],
+          options: [{ label: "Opção 1" }, { label: "Opção 2" }],
         },
       };
     case "textarea":

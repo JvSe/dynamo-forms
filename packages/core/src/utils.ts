@@ -1,5 +1,22 @@
 import type { Condition } from "./types/condition.js";
 
+/** Generates a URL-safe slug from a label (used as option value when not provided). */
+export function slugFromLabel(label: string): string {
+  return label
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/\p{Diacritic}/gu, "")
+    .replace(/\s+/g, "_")
+    .replace(/[^a-z0-9_]/g, "");
+}
+
+export type OptionLike = { label: string; value?: string };
+
+/** Returns the value for an option: explicit value or slug derived from label. */
+export function getOptionValue(opt: OptionLike): string {
+  return opt.value != null && opt.value !== "" ? opt.value : slugFromLabel(opt.label);
+}
+
 const conditionCache = new Map<string, Map<string, boolean>>();
 const reverseDependencies = new Map<string, Set<string>>();
 

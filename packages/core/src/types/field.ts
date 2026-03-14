@@ -25,7 +25,7 @@ export type DynamicFieldConfig = {
     required: boolean;
     reference?: string;
     placeholder?: string;
-    options?: Array<{ label: string; value: string }>;
+    options?: Array<{ label: string; value?: string }>;
     conditions?: Condition;
     rows?: number;
     maxSelect?: number;

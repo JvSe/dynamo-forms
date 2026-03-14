@@ -1,5 +1,6 @@
 import React from "react";
 import type { Condition, ConditionRule, Operator } from "@jvseen/dynamo-core";
+import { getOptionValue } from "@jvseen/dynamo-core";
 
 const OPERATORS: Array<{ value: Operator; label: string }> = [
   { value: "equals", label: "Equals" },
@@ -10,10 +11,17 @@ const OPERATORS: Array<{ value: Operator; label: string }> = [
   { value: "isNotEmpty", label: "Is not empty" },
 ];
 
+export type ConditionEditorField = {
+  id: string;
+  label: string;
+  type?: string;
+  options?: Array<{ label: string; value?: string }>;
+};
+
 type ConditionEditorProps = {
   value: Condition | undefined;
   onChange: (condition: Condition | undefined) => void;
-  fields: Array<{ id: string; label: string }>;
+  fields: ConditionEditorField[];
 };
 
 export function ConditionEditor({ value, onChange, fields }: ConditionEditorProps) {
@@ -88,20 +96,43 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
             </select>
           </div>
 
-          {rule.operador !== "isEmpty" && rule.operador !== "isNotEmpty" && (
-            <div className="flex flex-col gap-1.5">
-              <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
-                Value
-              </label>
-              <input
-                type="text"
-                value={rule.valor ?? ""}
-                onChange={(e) => setRule(index, { valor: e.target.value })}
-                placeholder="Enter value..."
-                className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white text-gray-900"
-              />
-            </div>
-          )}
+          {rule.operador !== "isEmpty" && rule.operador !== "isNotEmpty" && (() => {
+            const selectedField = fields.find((f) => f.id === rule.campo);
+            const isOptionField = selectedField && ["radio", "checkbox"].includes(selectedField.type ?? "");
+            const optionValues = isOptionField && selectedField.options?.length
+              ? selectedField.options.map((opt) => ({ value: getOptionValue(opt), label: opt.label }))
+              : [];
+
+            return (
+              <div className="flex flex-col gap-1.5">
+                <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
+                  Value
+                </label>
+                {optionValues.length > 0 ? (
+                  <select
+                    value={rule.valor ?? ""}
+                    onChange={(e) => setRule(index, { valor: e.target.value })}
+                    className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer bg-white text-gray-900"
+                  >
+                    <option value="">Selecione uma opção...</option>
+                    {optionValues.map((o) => (
+                      <option key={o.value} value={o.value}>
+                        {o.label}
+                      </option>
+                    ))}
+                  </select>
+                ) : (
+                  <input
+                    type="text"
+                    value={rule.valor ?? ""}
+                    onChange={(e) => setRule(index, { valor: e.target.value })}
+                    placeholder="Enter value..."
+                    className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white text-gray-900"
+                  />
+                )}
+              </div>
+            );
+          })()}
 
           {(condition.regras?.length ?? 0) > 1 && (
             <button

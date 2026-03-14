@@ -41,22 +41,22 @@ jobs:
         working-directory: ./packages/core
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --access public --no-git-checks
 
       - name: Publish react
         working-directory: ./packages/react
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --access public --no-git-checks
 
       - name: Publish react-native
         working-directory: ./packages/react-native
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --access public --no-git-checks
 
       - name: Publish builder
         working-directory: ./packages/builder
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-        run: npm publish --access public
+        run: pnpm publish --access public --no-git-checks

@@ -4,6 +4,7 @@ import {
   useDebounce,
   useOptimizedConditions,
   registerFieldDependency,
+  getOptionValue,
   type DynamicFieldConfig,
 } from "@jvseen/dynamo-core";
 
@@ -85,6 +86,11 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
   components,
 }) => {
   const { type, config, id } = useMemo(() => field, [field]);
+
+  const optionsWithValue = useMemo(() => {
+    const opts = config.options ?? [];
+    return opts.map((opt) => ({ label: opt.label, value: getOptionValue(opt) }));
+  }, [config.options]);
 
   useEffect(() => {
     registerFieldDependency(id, config.conditions);
@@ -208,7 +214,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                   return (
                     <Select
                       id={id}
-                      options={config.options || []}
+                      options={optionsWithValue}
                       placeholder={config.placeholder}
                       value={safeValue}
                       onChange={(newValue) => {
@@ -251,7 +257,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       }}
                       aria-label={id}
                     >
-                      {config.options?.map((option) => (
+                      {optionsWithValue.map((option) => (
                         <RadioGroup.Item
                           key={option.value}
                           value={option.value}
@@ -271,7 +277,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                           : "flex flex-col gap-2"
                       }
                     >
-                      {(config.options || []).map((option) => {
+                      {optionsWithValue.map((option) => {
                         const current = Array.isArray(safeValue)
                           ? safeValue
                           : [];

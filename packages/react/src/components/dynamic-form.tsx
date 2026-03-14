@@ -48,6 +48,8 @@ interface DynamicFormProps {
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
   steps?: FormStep[];
+  /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
+  showSteps?: boolean;
 }
 
 export const DynamicFormCore: React.FC<DynamicFormProps> = ({
@@ -64,6 +66,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onFormDirtyChange,
   components,
   steps,
+  showSteps = true,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -423,14 +426,15 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
       >
         <FormHeader formName={formName} />
 
-        {isMultiStep && steps && (
+        {isMultiStep && steps && showSteps && (
           <StepIndicator steps={steps} currentStep={currentStep} />
         )}
 
         <div
-          className={`w-full flex flex-col gap-4 md:gap-6 ${
+          className={`w-full flex flex-col overflow-hidden ${
             scrollEnabled ? "" : "overflow-hidden"
           }`}
+          style={{ gap: 30 }}
         >
           {visibleFields.map((field) => (
             <div

@@ -13,6 +13,7 @@ import { DynamicField } from "@jvseen/dynamo-react";
 import { FormProvider, useForm } from "react-hook-form";
 import { FieldPalette, getPaletteDragId, type PaletteDragData } from "./field-palette.js";
 import { InlineSheetRoot, InlineSheetPortal, InlineSheetContent } from "./inline-sheet.js";
+import { ImportTemplateModal } from "./import-template-modal.js";
 import { FormCanvas } from "./form-canvas.js";
 import { FieldSettingsPanel } from "./field-settings-panel.js";
 import { createDefaultFieldConfig } from "../lib/default-field-config.js";
@@ -138,6 +139,7 @@ export function FormBuilder({
   const [internalSteps, setInternalSteps] = useState<FormStep[]>([createStep(1)]);
   const [internalMultiStep, setInternalMultiStep] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
+  const [importModalOpen, setImportModalOpen] = useState(false);
 
   const steps = stepsProp ?? internalSteps;
   const setSteps = onStepsChange ?? setInternalSteps;
@@ -202,6 +204,20 @@ export function FormBuilder({
   );
 
   const selectedField = selectedFieldId ? getFieldById(value, selectedFieldId) : undefined;
+
+  const handleImportTemplate = useCallback(
+    (fields: DynamicFieldConfig[], title?: string, steps?: FormStep[]) => {
+      onChange(fields);
+      setSelectedFieldId(null);
+      if (title != null && title !== "") setFormTitle(title);
+      if (steps != null && steps.length > 0) {
+        setSteps(steps);
+        // Do not call setMultiStepEnabled here: parent derives multiStepEnabled from steps.length > 1.
+        // Calling it would trigger onMultiStepChange(true) which can overwrite steps with [step1, step2] when the parent still had 1 step (batched state).
+      }
+    },
+    [onChange, setFormTitle, setSteps]
+  );
 
   const handleDragStart = useCallback((event: DragStartEvent) => {
     const idStr = String(event.active.id);
@@ -447,20 +463,20 @@ export function FormBuilder({
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
         className={cn(
-          "grid grid-cols-[280px_1fr] min-h-screen rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
+          "grid grid-cols-[280px_1fr] h-screen max-h-screen rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
           className
         )}
         style={style}
       >
-        <div className="bg-white border-r border-gray-200 overflow-auto">
+        <div className="bg-white border-r border-gray-200 overflow-y-auto flex flex-col min-h-0 shrink-0 w-[280px]">
           <FieldPalette onAddField={handleAddFromPalette} />
         </div>
 
         <div
           ref={canvasContainerRef}
-          className="relative flex flex-col min-w-0 min-h-0 bg-white overflow-hidden"
+          className="relative flex flex-col min-w-0 min-h-0 h-full bg-white overflow-hidden"
         >
-          <div className="flex items-center justify-between py-4 px-6 bg-white border-b border-gray-200">
+          <div className="flex items-center justify-between py-4 px-6 bg-white border-b border-gray-200 shrink-0">
             <div className="flex items-center gap-3">
               {onBack && (
                 <button
@@ -481,6 +497,13 @@ export function FormBuilder({
               />
             </div>
             <div className="flex gap-3">
+              <button
+                type="button"
+                onClick={() => setImportModalOpen(true)}
+                className="py-2.5 px-4 text-sm font-medium cursor-pointer bg-white border border-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-50"
+              >
+                Importar JSON
+              </button>
               {onPreview && (
                 <button
                   type="button"
@@ -504,7 +527,7 @@ export function FormBuilder({
 
           <div
             className={cn(
-              "relative flex-1 min-h-0 flex transition-[margin-right] duration-200 ease-out",
+              "relative flex-1 min-h-0 flex flex-col overflow-hidden transition-[margin-right] duration-200 ease-out",
               selectedField ? "mr-[320px]" : "mr-0"
             )}
           >
@@ -561,6 +584,12 @@ export function FormBuilder({
           </InlineSheetRoot>
         </div>
       </div>
+
+      <ImportTemplateModal
+        open={importModalOpen}
+        onClose={() => setImportModalOpen(false)}
+        onImport={handleImportTemplate}
+      />
 
       <DragOverlay>
         {activeField ? (

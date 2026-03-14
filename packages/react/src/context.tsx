@@ -38,6 +38,8 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
   steps?: FormStep[];
+  /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
+  showSteps?: boolean;
 };
 
 export const DynamicForm = React.memo(
@@ -54,6 +56,7 @@ export const DynamicForm = React.memo(
     onFormDirtyChange,
     components,
     steps,
+    showSteps,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -95,6 +98,7 @@ export const DynamicForm = React.memo(
             onFormDirtyChange={onFormDirtyChange}
             components={components}
             steps={steps}
+            showSteps={showSteps}
           />
         </div>
       </FormContext.Provider>

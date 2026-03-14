@@ -13,7 +13,7 @@ export const FieldGroup: React.FC<FieldGroupProps> = ({ label, children, alignme
     <fieldset
       className={cn(
         "w-full rounded-lg border bg-card p-4 md:p-5",
-        !isHorizontal && "space-y-3 md:space-y-4"
+        !isHorizontal && "space-y-4 md:space-y-5"
       )}
     >
       {label && (
@@ -23,7 +23,7 @@ export const FieldGroup: React.FC<FieldGroupProps> = ({ label, children, alignme
       )}
       <div
         className={cn(
-          isHorizontal ? "flex flex-row flex-wrap gap-3 md:gap-4" : "space-y-3 md:space-y-4"
+          isHorizontal ? "flex flex-row flex-wrap gap-4 md:gap-5" : "space-y-4 md:space-y-5"
         )}
       >
         {children}

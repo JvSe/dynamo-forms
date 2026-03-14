@@ -1,4 +1,5 @@
 import type { DynamicFieldConfig } from "./types/field.js";
+import type { FormStep } from "./types/form.js";
 
 export const findFieldInGroups = (
   fieldsToSearch: DynamicFieldConfig[],
@@ -41,3 +42,19 @@ export const findFirstErrorFieldId = (
   }
   return null;
 };
+
+/**
+ * Returns a copy of steps with fieldIds filled from fields (FormKit-style schema).
+ * For each step index i, fieldIds = root field ids where config.step === i.
+ */
+export function getStepsWithFieldIds(
+  steps: FormStep[],
+  fields: DynamicFieldConfig[]
+): FormStep[] {
+  return steps.map((step, index) => {
+    const fieldIds = fields
+      .filter((f) => (f.config.step ?? 0) === index)
+      .map((f) => f.id);
+    return { ...step, fieldIds };
+  });
+}
