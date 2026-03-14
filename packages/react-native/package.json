@@ -23,7 +23,7 @@
     "clean": "rimraf dist"
   },
   "dependencies": {
-    "@jvseen/dynamo-core": "^0.0.4",
+    "@jvseen/dynamo-core": "workspace:*",
     "@hookform/resolvers": "^3.3.0",
     "date-fns": "^3.6.0",
     "react-hook-form": "^7.53.0",
