@@ -45,6 +45,8 @@ interface DynamicFormProps {
   components?: ComponentOverridesMap;
   /** Custom component to replace the default submit button. */
   SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** When true (default), renders the form header with the form name. Set to false to hide it. */
+  showHeader?: boolean;
 }
 
 const DynamicFormCore: React.FC<DynamicFormProps> = ({
@@ -61,6 +63,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onFormDirtyChange,
   components,
   SubmitButton,
+  showHeader = true,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -582,6 +585,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
   );
 
   const renderHeader = useCallback(() => {
+    if (!showHeader) return null;
     return (
       <FormHeader
         formName={formName}
@@ -590,7 +594,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
         }}
       />
     );
-  }, [formName]);
+  }, [formName, showHeader]);
 
   const renderFooter = useCallback(() => {
     return (
@@ -609,7 +613,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
         data={fields}
         keyExtractor={(item) => item.id}
         renderItem={renderField}
-        ListHeaderComponent={renderHeader}
+        ListHeaderComponent={showHeader ? renderHeader : null}
         ListFooterComponent={renderFooter}
         style={styles.list}
         contentContainerStyle={{

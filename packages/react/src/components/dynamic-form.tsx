@@ -52,6 +52,8 @@ interface DynamicFormProps {
   steps?: FormStep[];
   /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
   showSteps?: boolean;
+  /** When true (default), renders the form header with the form name. Set to false to hide it. */
+  showHeader?: boolean;
 }
 
 export const DynamicFormCore: React.FC<DynamicFormProps> = ({
@@ -70,6 +72,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   SubmitButton,
   steps,
   showSteps = true,
+  showHeader = true,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -427,7 +430,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
         }}
         noValidate
       >
-        <FormHeader formName={formName} />
+        {showHeader && <FormHeader formName={formName} />}
 
         {isMultiStep && steps && showSteps && (
           <StepIndicator steps={steps} currentStep={currentStep} />
