@@ -1,4 +1,8 @@
-import { slugFromLabel, type DynamicFieldConfig } from "@jvseen/dynamo-core";
+import {
+  slugFromLabel,
+  optionValueFromLabel,
+  type DynamicFieldConfig,
+} from "@jvseen/dynamo-core";
 import type { FieldType } from "../constants/field-types.js";
 
 export type CreateFieldOverrides = {
@@ -38,7 +42,10 @@ export function createDefaultFieldConfig(
         ...base,
         config: {
           ...base.config,
-          options: [{ label: "Opção 1" }, { label: "Opção 2" }],
+          options: [
+            { label: "Opção 1", value: optionValueFromLabel("Opção 1") },
+            { label: "Opção 2", value: optionValueFromLabel("Opção 2", ["opcao_1"]) },
+          ],
         },
       };
     case "textarea":

@@ -1,4 +1,8 @@
-import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-core";
+import {
+  optionValueFromLabel,
+  type DynamicFieldConfig,
+  type FormStep,
+} from "@jvseen/dynamo-core";
 import { FIELD_TYPES } from "../constants/field-types.js";
 
 const VALID_TYPES = new Set(FIELD_TYPES.map((t) => t.type));
@@ -64,12 +68,18 @@ function normalizeField(raw: unknown, usedIds: Set<string>): DynamicFieldConfig 
   if (configObj.conditions != null && isPlainObject(configObj.conditions)) config.conditions = configObj.conditions as any;
 
   if (Array.isArray(configObj.options)) {
+    const usedValues = new Set<string>();
     config.options = configObj.options
       .filter((o: unknown) => o !== null && typeof o === "object")
-      .map((o: any) => ({
-        label: typeof o.label === "string" ? o.label : String(o.value ?? "Option"),
-        value: typeof o.value === "string" ? o.value : undefined,
-      }));
+      .map((o: any) => {
+        const label = typeof o.label === "string" ? o.label : String(o.value ?? "Option");
+        const value =
+          typeof o.value === "string" && o.value.trim()
+            ? o.value
+            : optionValueFromLabel(label, [...usedValues]);
+        usedValues.add(value);
+        return { label, value };
+      });
   }
 
   if (type === "group" && Array.isArray(configObj.children)) {

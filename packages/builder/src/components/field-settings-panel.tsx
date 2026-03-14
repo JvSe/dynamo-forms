@@ -1,5 +1,10 @@
 import React from "react";
-import type { Condition, DynamicFieldConfig } from "@jvseen/dynamo-core";
+import {
+  type Condition,
+  type DynamicFieldConfig,
+  getOptionValue,
+  optionValueFromLabel,
+} from "@jvseen/dynamo-core";
 import { FIELD_TYPES } from "../constants/field-types.js";
 import { ConditionEditor } from "./condition-editor.js";
 import { cn } from "../lib/utils.js";
@@ -244,7 +249,14 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                   value={opt.label}
                   onChange={(e) => {
                     const options = [...(field.config.options ?? [])] as Array<{ label: string; value?: string }>;
-                    options[i] = { label: e.target.value };
+                    const newLabel = e.target.value;
+                    const otherValues = options
+                      .map((o, idx) => (idx !== i ? getOptionValue(o) : null))
+                      .filter((v): v is string => v != null);
+                    options[i] = {
+                      label: newLabel,
+                      value: optionValueFromLabel(newLabel, otherValues),
+                    };
                     updateConfig({ options });
                   }}
                   className="w-full py-2 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white"
@@ -270,7 +282,14 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
             onClick={() => {
               const options = (field.config.options ?? []) as Array<{ label: string; value?: string }>;
               const count = options.length + 1;
-              updateConfig({ options: [...options, { label: `Opção ${count}` }] });
+              const newLabel = `Opção ${count}`;
+              const existingValues = options.map((o) => getOptionValue(o));
+              updateConfig({
+                options: [
+                  ...options,
+                  { label: newLabel, value: optionValueFromLabel(newLabel, existingValues) },
+                ],
+              });
             }}
             className="py-2 px-3 text-xs font-medium rounded-lg border border-dashed border-gray-300 text-gray-600 hover:bg-gray-50 hover:border-gray-400 transition-colors"
           >

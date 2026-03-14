@@ -17,6 +17,27 @@ export function getOptionValue(opt: OptionLike): string {
   return opt.value != null && opt.value !== "" ? opt.value : slugFromLabel(opt.label);
 }
 
+/**
+ * Generates a unique value (slug) for an option from its label.
+ * Used when persisting options so user code can reliably use opt.value.
+ * @param label - The option label
+ * @param excludeValues - Values already in use (e.g. other options) to avoid duplicates
+ */
+export function optionValueFromLabel(
+  label: string,
+  excludeValues: string[] = []
+): string {
+  const used = new Set(excludeValues);
+  const base = slugFromLabel(label) || "opcao";
+  let v = base;
+  let n = 1;
+  while (used.has(v)) {
+    v = `${base}_${n}`;
+    n += 1;
+  }
+  return v;
+}
+
 const conditionCache = new Map<string, Map<string, boolean>>();
 const reverseDependencies = new Map<string, Set<string>>();
 
