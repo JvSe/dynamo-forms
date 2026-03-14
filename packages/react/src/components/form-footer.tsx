@@ -9,6 +9,18 @@ export type SubmitButtonProps = {
   onBack: () => void;
 };
 
+export type BackButtonProps = {
+  onBack: () => void;
+  disabled: boolean;
+};
+
+export type ActionsButtonProps = {
+  /** Custom component for the primary action (Submit or Next in multi-step). */
+  submit?: React.ComponentType<SubmitButtonProps>;
+  /** Custom component for the Back button (multi-step only). */
+  back?: React.ComponentType<BackButtonProps>;
+};
+
 interface FormFooterProps {
   isSubmitting: boolean;
   multiStep?: boolean;
@@ -16,9 +28,18 @@ interface FormFooterProps {
   isLastStep?: boolean;
   onNext?: () => void;
   onBack?: () => void;
-  /** Custom component to replace the default submit/back/next buttons. Must render button(s) with type="submit" for submit and type="button" with onClick for Back/Next. */
-  SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  actionsButton?: ActionsButtonProps;
 }
+
+const defaultBackButtonClass =
+  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-secondary text-secondary-foreground hover:bg-secondary/80";
+
+const defaultPrimaryButtonClass =
+  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-primary text-primary-foreground hover:bg-primary/90";
+
+const defaultPrimaryButtonDisabledClass =
+  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-muted text-muted-foreground";
 
 export const FormFooter: React.FC<FormFooterProps> = ({
   isSubmitting,
@@ -27,59 +48,86 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   isLastStep = true,
   onNext,
   onBack,
-  SubmitButton,
+  actionsButton,
 }) => {
-  if (SubmitButton) {
+  const handleBack = onBack ?? (() => {});
+  const handleNext = onNext ?? (() => {});
+
+  const renderBack = () => {
+    if (actionsButton?.back) {
+      const Back = actionsButton.back;
+      return <Back onBack={handleBack} disabled={isSubmitting} />;
+    }
     return (
-      <footer className="w-full pt-4 mt-2 border-t border-border">
-        <SubmitButton
+      <button
+        type="button"
+        onClick={handleBack}
+        disabled={isSubmitting}
+        className={defaultBackButtonClass}
+      >
+        Back
+      </button>
+    );
+  };
+
+  const renderSubmit = () => {
+    if (actionsButton?.submit) {
+      const Submit = actionsButton.submit;
+      return (
+        <Submit
           isSubmitting={isSubmitting}
           multiStep={multiStep}
           isFirstStep={isFirstStep}
           isLastStep={isLastStep}
-          onNext={onNext ?? (() => {})}
-          onBack={onBack ?? (() => {})}
+          onNext={handleNext}
+          onBack={handleBack}
         />
-      </footer>
+      );
+    }
+    const widthClass = multiStep ? "flex-1" : "w-full";
+    return (
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className={`${widthClass} ${isSubmitting ? defaultPrimaryButtonDisabledClass : defaultPrimaryButtonClass}`}
+      >
+        {isSubmitting ? "Submitting..." : "Submit"}
+      </button>
     );
-  }
+  };
+
+  const renderNext = () => {
+    if (actionsButton?.submit) {
+      const Submit = actionsButton.submit;
+      return (
+        <Submit
+          isSubmitting={isSubmitting}
+          multiStep={multiStep}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          onNext={handleNext}
+          onBack={handleBack}
+        />
+      );
+    }
+    return (
+      <button
+        type="button"
+        onClick={handleNext}
+        disabled={isSubmitting}
+        className={defaultPrimaryButtonClass}
+      >
+        Next
+      </button>
+    );
+  };
 
   if (multiStep) {
     return (
       <footer className="w-full pt-4 mt-2 border-t border-border">
         <div className="flex gap-3">
-          {!isFirstStep && (
-            <button
-              type="button"
-              onClick={onBack}
-              disabled={isSubmitting}
-              className="inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-secondary text-secondary-foreground hover:bg-secondary/80"
-            >
-              Back
-            </button>
-          )}
-          {isLastStep ? (
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none ${
-                isSubmitting
-                  ? "bg-muted text-muted-foreground"
-                  : "bg-primary text-primary-foreground hover:bg-primary/90"
-              }`}
-            >
-              {isSubmitting ? "Submitting..." : "Submit"}
-            </button>
-          ) : (
-            <button
-              type="button"
-              onClick={onNext}
-              disabled={isSubmitting}
-              className="inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-primary text-primary-foreground hover:bg-primary/90"
-            >
-              Next
-            </button>
-          )}
+          {!isFirstStep && renderBack()}
+          {isLastStep ? renderSubmit() : renderNext()}
         </div>
       </footer>
     );
@@ -87,17 +135,7 @@ export const FormFooter: React.FC<FormFooterProps> = ({
 
   return (
     <footer className="w-full pt-4 mt-2 border-t border-border">
-      <button
-        type="submit"
-        disabled={isSubmitting}
-        className={`inline-flex h-11 md:h-12 w-full items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none ${
-          isSubmitting
-            ? "bg-muted text-muted-foreground"
-            : "bg-primary text-primary-foreground hover:bg-primary/90"
-        }`}
-      >
-        {isSubmitting ? "Submitting..." : "Submit"}
-      </button>
+      {renderSubmit()}
     </footer>
   );
 };

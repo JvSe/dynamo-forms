@@ -12,22 +12,35 @@ export type SubmitButtonProps = {
   onSubmit: () => void;
 };
 
+export type BackButtonProps = {
+  onBack: () => void;
+  disabled: boolean;
+};
+
+export type ActionsButtonProps = {
+  /** Custom component for the primary action (Submit). */
+  submit?: React.ComponentType<SubmitButtonProps>;
+  /** Custom component for the Back button (e.g. in multi-step flows). */
+  back?: React.ComponentType<BackButtonProps>;
+};
+
 interface FormFooterProps {
   isSubmitting: boolean;
   onSubmit: () => void;
-  /** Custom component to replace the default submit button. */
-  SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  actionsButton?: ActionsButtonProps;
 }
 
 export const FormFooter: React.FC<FormFooterProps> = ({
   isSubmitting,
   onSubmit,
-  SubmitButton,
+  actionsButton,
 }) => {
-  if (SubmitButton) {
+  if (actionsButton?.submit) {
+    const Submit = actionsButton.submit;
     return (
       <View style={styles.container}>
-        <SubmitButton isSubmitting={isSubmitting} onSubmit={onSubmit} />
+        <Submit isSubmitting={isSubmitting} onSubmit={onSubmit} />
       </View>
     );
   }

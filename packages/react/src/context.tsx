@@ -13,7 +13,7 @@ import type {
 } from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form";
 import type { ComponentOverridesMap } from "./components/dynamic-field";
-import type { SubmitButtonProps } from "./components/form-footer";
+import type { ActionsButtonProps } from "./components/form-footer";
 
 interface FormContextType {
   handleToggleScroll: (v: boolean) => void;
@@ -38,11 +38,13 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
-  /** Custom component to replace the default submit/back/next buttons. */
-  SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  actionsButton?: ActionsButtonProps;
   steps?: FormStep[];
   /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
   showSteps?: boolean;
+  /** When true (default), renders the form header with the form name. Set to false to hide it. */
+  showHeader?: boolean;
 };
 
 export const DynamicForm = React.memo(
@@ -58,9 +60,10 @@ export const DynamicForm = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
-    SubmitButton,
+    actionsButton,
     steps,
     showSteps,
+    showHeader,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -87,7 +90,7 @@ export const DynamicForm = React.memo(
 
     return (
       <FormContext.Provider value={contextValue}>
-        <div style={{ width: "100%" }}>
+        <div style={{ width: "100%", minHeight: "100%", display: "flex", flexDirection: "column" }}>
           <DynamicFormCore
             fields={fields}
             formId={formId}
@@ -101,9 +104,10 @@ export const DynamicForm = React.memo(
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
             components={components}
-            SubmitButton={SubmitButton}
+            actionsButton={actionsButton}
             steps={steps}
             showSteps={showSteps}
+            showHeader={showHeader}
           />
         </div>
       </FormContext.Provider>

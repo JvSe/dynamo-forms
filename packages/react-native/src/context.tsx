@@ -10,7 +10,7 @@ import type { DynamicFieldConfig, FormUpload } from "@jvseen/dynamo-core";
 import type { ErrorFieldInfo } from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form.js";
 import type { ComponentOverridesMap } from "./components/dynamic-field.js";
-import type { SubmitButtonProps } from "./components/form-footer.js";
+import type { ActionsButtonProps } from "./components/form-footer.js";
 
 interface FormContextType {
   handleToggleScroll: (v: boolean) => void;
@@ -35,8 +35,10 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
-  /** Custom component to replace the default submit button. */
-  SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  actionsButton?: ActionsButtonProps;
+  /** When true (default), renders the form header with the form name. Set to false to hide it. */
+  showHeader?: boolean;
 };
 
 export const DynamicForm = React.memo(
@@ -52,7 +54,8 @@ export const DynamicForm = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
-    SubmitButton,
+    actionsButton,
+    showHeader,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -93,7 +96,8 @@ export const DynamicForm = React.memo(
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
             components={components}
-            SubmitButton={SubmitButton}
+            actionsButton={actionsButton}
+            showHeader={showHeader}
           />
         </View>
       </FormContext.Provider>

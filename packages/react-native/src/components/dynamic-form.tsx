@@ -22,7 +22,7 @@ import {
 } from "@jvseen/dynamo-core";
 import { scrollToFirstError as scrollToFirstErrorUtil } from "../form-scroll.js";
 import { DynamicField, type ComponentOverridesMap } from "./dynamic-field.js";
-import type { SubmitButtonProps } from "./form-footer.js";
+import type { ActionsButtonProps } from "./form-footer.js";
 import { FormFooter } from "./form-footer.js";
 import { FormHeader } from "./form-header.js";
 import { ValidationModal } from "./validation-modal.js";
@@ -43,8 +43,8 @@ interface DynamicFormProps {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
-  /** Custom component to replace the default submit button. */
-  SubmitButton?: React.ComponentType<SubmitButtonProps>;
+  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  actionsButton?: ActionsButtonProps;
   /** When true (default), renders the form header with the form name. Set to false to hide it. */
   showHeader?: boolean;
 }
@@ -62,7 +62,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onFormDataChange,
   onFormDirtyChange,
   components,
-  SubmitButton,
+  actionsButton,
   showHeader = true,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -601,26 +601,26 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       <FormFooter
         isSubmitting={isSubmitting}
         onSubmit={handleSubmitWithValidation}
-        SubmitButton={SubmitButton}
+        actionsButton={actionsButton}
       />
     );
-  }, [isSubmitting, handleSubmitWithValidation, SubmitButton]);
+  }, [isSubmitting, handleSubmitWithValidation, actionsButton]);
 
   return (
     <FormProvider {...methods}>
-      <FlatList
-        ref={flatListRef}
-        data={fields}
-        keyExtractor={(item) => item.id}
-        renderItem={renderField}
-        ListHeaderComponent={showHeader ? renderHeader : null}
-        ListFooterComponent={renderFooter}
-        style={styles.list}
-        contentContainerStyle={{
-          gap: 16,
-          paddingBottom: 20,
-          paddingHorizontal: 16,
-        }}
+      <View style={styles.container}>
+        <FlatList
+          ref={flatListRef}
+          data={fields}
+          keyExtractor={(item) => item.id}
+          renderItem={renderField}
+          ListHeaderComponent={showHeader ? renderHeader : null}
+          style={styles.list}
+          contentContainerStyle={{
+            gap: 16,
+            paddingBottom: 24,
+            paddingHorizontal: 16,
+          }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}
@@ -682,7 +682,11 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
             }
           }, wait);
         }}
-      />
+        />
+        <View style={styles.footerWrapper}>
+          {renderFooter()}
+        </View>
+      </View>
 
       <ValidationModal
         visible={isValidating}
@@ -693,7 +697,9 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
 };
 
 const styles = StyleSheet.create({
-  list: { width: "100%", flex: 1 },
+  container: { flex: 1, width: "100%" },
+  list: { flex: 1, width: "100%" },
+  footerWrapper: { width: "100%", paddingHorizontal: 16 },
   fieldWrapper: { width: "100%", marginBottom: 24 },
 });
 
