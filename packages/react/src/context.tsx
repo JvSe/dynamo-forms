@@ -13,6 +13,7 @@ import type {
 } from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form";
 import type { ComponentOverridesMap } from "./components/dynamic-field";
+import type { SubmitButtonProps } from "./components/form-footer";
 
 interface FormContextType {
   handleToggleScroll: (v: boolean) => void;
@@ -37,6 +38,8 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
+  /** Custom component to replace the default submit/back/next buttons. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
   steps?: FormStep[];
   /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
   showSteps?: boolean;
@@ -55,6 +58,7 @@ export const DynamicForm = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
+    SubmitButton,
     steps,
     showSteps,
   }: DynamicFormProviderProps) => {
@@ -97,6 +101,7 @@ export const DynamicForm = React.memo(
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
             components={components}
+            SubmitButton={SubmitButton}
             steps={steps}
             showSteps={showSteps}
           />

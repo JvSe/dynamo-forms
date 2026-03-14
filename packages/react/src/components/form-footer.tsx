@@ -1,5 +1,14 @@
 import React from "react";
 
+export type SubmitButtonProps = {
+  isSubmitting: boolean;
+  multiStep: boolean;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+  onNext: () => void;
+  onBack: () => void;
+};
+
 interface FormFooterProps {
   isSubmitting: boolean;
   multiStep?: boolean;
@@ -7,6 +16,8 @@ interface FormFooterProps {
   isLastStep?: boolean;
   onNext?: () => void;
   onBack?: () => void;
+  /** Custom component to replace the default submit/back/next buttons. Must render button(s) with type="submit" for submit and type="button" with onClick for Back/Next. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
 }
 
 export const FormFooter: React.FC<FormFooterProps> = ({
@@ -16,7 +27,23 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   isLastStep = true,
   onNext,
   onBack,
+  SubmitButton,
 }) => {
+  if (SubmitButton) {
+    return (
+      <footer className="w-full pt-4 mt-2 border-t border-border">
+        <SubmitButton
+          isSubmitting={isSubmitting}
+          multiStep={multiStep}
+          isFirstStep={isFirstStep}
+          isLastStep={isLastStep}
+          onNext={onNext ?? (() => {})}
+          onBack={onBack ?? (() => {})}
+        />
+      </footer>
+    );
+  }
+
   if (multiStep) {
     return (
       <footer className="w-full pt-4 mt-2 border-t border-border">

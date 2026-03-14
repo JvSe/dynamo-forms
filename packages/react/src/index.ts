@@ -8,6 +8,7 @@ export {
   type ComponentOverrideProps,
   type ComponentOverridesMap,
 } from "./components/dynamic-field";
+export type { SubmitButtonProps } from "./components/form-footer";
 
 export type {
   DynamicFieldConfig,

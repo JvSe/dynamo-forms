@@ -21,7 +21,8 @@ import {
   clearConditionCacheForField,
 } from "@jvseen/dynamo-core";
 import { scrollToFirstError as scrollToFirstErrorUtil } from "../form-scroll.js";
-import { DynamicField } from "./dynamic-field.js";
+import { DynamicField, type ComponentOverridesMap } from "./dynamic-field.js";
+import type { SubmitButtonProps } from "./form-footer.js";
 import { FormFooter } from "./form-footer.js";
 import { FormHeader } from "./form-header.js";
 import { ValidationModal } from "./validation-modal.js";
@@ -41,6 +42,9 @@ interface DynamicFormProps {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
+  components?: ComponentOverridesMap;
+  /** Custom component to replace the default submit button. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
 }
 
 const DynamicFormCore: React.FC<DynamicFormProps> = ({
@@ -55,6 +59,8 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onValidationError,
   onFormDataChange,
   onFormDirtyChange,
+  components,
+  SubmitButton,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -555,6 +561,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
             onFieldLayout={registerFieldPosition}
             parentY={0}
             getParentY={getParentYPosition}
+            components={components}
           />
         </View>
       );
@@ -570,6 +577,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       registerFieldPosition,
       getParentYPosition,
       fields,
+      components,
     ]
   );
 
@@ -589,9 +597,10 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       <FormFooter
         isSubmitting={isSubmitting}
         onSubmit={handleSubmitWithValidation}
+        SubmitButton={SubmitButton}
       />
     );
-  }, [isSubmitting, handleSubmitWithValidation]);
+  }, [isSubmitting, handleSubmitWithValidation, SubmitButton]);
 
   return (
     <FormProvider {...methods}>

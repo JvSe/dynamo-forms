@@ -26,6 +26,22 @@ import {
 } from "./ui/index.js";
 import { InputSelectNew } from "./ui/input-select.js";
 
+export type ComponentOverrideProps = {
+  id: string;
+  field: DynamicFieldConfig;
+  value: any;
+  onChange: (value: any) => void;
+  onBlur: () => void;
+  error: boolean;
+  errorMessage?: string;
+  success: boolean;
+  disabled?: boolean;
+};
+
+export type ComponentOverridesMap = Partial<
+  Record<DynamicFieldConfig["type"], React.ComponentType<ComponentOverrideProps>>
+>;
+
 type DynamicFieldProps = {
   field: DynamicFieldConfig;
   control: Control<any>;
@@ -48,6 +64,7 @@ type DynamicFieldProps = {
   onFieldLayout?: (fieldId: string, y: number) => void;
   parentY?: number;
   getParentY?: (fieldId: string) => number | undefined;
+  components?: ComponentOverridesMap;
 };
 
 const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
@@ -63,6 +80,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
   onFieldLayout,
   parentY = 0,
   getParentY,
+  components,
 }) => {
   const { type, config, id } = useMemo(() => field, [field]);
 
@@ -133,7 +151,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
         />
       )}
       <View className="w-full flex-1">
-        {type !== "group" && (
+        {type !== "group" && !components?.[type] && (
           <View className="flex-row items-center justify-between mb-1 md:mb-2">
             <Text className="text-base md:text-xl text-gray-800 font-semibold">
               {config.label}
@@ -145,8 +163,29 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
         <Controller
           control={control}
           name={field.id}
-          render={({ field: { onChange, value } }) => {
+          render={({ field: { onChange, onBlur: rhfOnBlur, value } }) => {
             const safeValue = value ?? "";
+            const errorMessage = formState?.errors[id]?.message as string | undefined;
+
+            const Override = components?.[type];
+            if (Override) {
+              return (
+                <Override
+                  id={id}
+                  field={field}
+                  value={safeValue}
+                  onChange={onChange}
+                  onBlur={() => {
+                    rhfOnBlur();
+                    handleBlur(id);
+                  }}
+                  error={isError}
+                  errorMessage={errorMessage}
+                  success={isSuccess}
+                />
+              );
+            }
+
             switch (type) {
               case "text":
                 return (
@@ -288,6 +327,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         onFieldLayout={onFieldLayout}
                         parentY={groupParentY}
                         getParentY={getParentY}
+                        components={components}
                       />
                     ))}
                   </InputGroup>
@@ -377,6 +417,7 @@ export const DynamicField = memo(
     if (prevProps.blurredFieldId !== nextProps.blurredFieldId) return false;
 
     if (prevProps.formValues !== nextProps.formValues) return false;
+    if (prevProps.components !== nextProps.components) return false;
 
     return true;
   }

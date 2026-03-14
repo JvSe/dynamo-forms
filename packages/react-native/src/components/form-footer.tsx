@@ -1,15 +1,31 @@
 import React from "react";
 import { ActivityIndicator, Pressable, Text, View } from "react-native";
 
+export type SubmitButtonProps = {
+  isSubmitting: boolean;
+  onSubmit: () => void;
+};
+
 interface FormFooterProps {
   isSubmitting: boolean;
   onSubmit: () => void;
+  /** Custom component to replace the default submit button. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
 }
 
 export const FormFooter: React.FC<FormFooterProps> = ({
   isSubmitting,
   onSubmit,
+  SubmitButton,
 }) => {
+  if (SubmitButton) {
+    return (
+      <View className="w-full pt-4 mt-2 border-t border-gray-200">
+        <SubmitButton isSubmitting={isSubmitting} onSubmit={onSubmit} />
+      </View>
+    );
+  }
+
   return (
     <View className="w-full pt-4 mt-2 border-t border-gray-200">
       <Pressable

@@ -429,7 +429,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                 data-invalid={fieldState.invalid || undefined}
                 aria-invalid={fieldState.invalid || undefined}
               >
-                {!hideLabel && (
+                {!hideLabel && !components?.[type] && (
                   <div className="flex items-center justify-between mb-1 md:mb-2">
                     <FieldLabel htmlFor={id}>
                       {config.label}

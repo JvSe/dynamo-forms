@@ -27,7 +27,7 @@ import {
 } from "@jvseen/dynamo-core";
 import { DynamicField, type ComponentOverridesMap } from "./dynamic-field";
 import { FormHeader } from "./form-header";
-import { FormFooter } from "./form-footer";
+import { FormFooter, type SubmitButtonProps } from "./form-footer";
 import { StepIndicator } from "./step-indicator";
 import { ValidationOverlay } from "./validation-overlay";
 
@@ -47,6 +47,8 @@ interface DynamicFormProps {
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
+  /** Custom component to replace the default submit/back/next buttons. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
   steps?: FormStep[];
   /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
   showSteps?: boolean;
@@ -65,6 +67,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onFormDataChange,
   onFormDirtyChange,
   components,
+  SubmitButton,
   steps,
   showSteps = true,
 }) => {
@@ -434,7 +437,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
           className={`w-full flex flex-col overflow-hidden ${
             scrollEnabled ? "" : "overflow-hidden"
           }`}
-          style={{ gap: 30 }}
+          style={{ gap: 15 }}
         >
           {visibleFields.map((field) => (
             <div
@@ -465,6 +468,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
           isLastStep={isLastStep}
           onNext={handleNextStep}
           onBack={handleBackStep}
+          SubmitButton={SubmitButton}
         />
 
         <ValidationOverlay

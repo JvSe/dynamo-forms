@@ -9,6 +9,8 @@ import { View } from "react-native";
 import type { DynamicFieldConfig, FormUpload } from "@jvseen/dynamo-core";
 import type { ErrorFieldInfo } from "@jvseen/dynamo-core";
 import { DynamicFormCore } from "./components/dynamic-form.js";
+import type { ComponentOverridesMap } from "./components/dynamic-field.js";
+import type { SubmitButtonProps } from "./components/form-footer.js";
 
 interface FormContextType {
   handleToggleScroll: (v: boolean) => void;
@@ -32,6 +34,9 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
+  components?: ComponentOverridesMap;
+  /** Custom component to replace the default submit button. */
+  SubmitButton?: React.ComponentType<SubmitButtonProps>;
 };
 
 export const DynamicForm = React.memo(
@@ -46,6 +51,8 @@ export const DynamicForm = React.memo(
     onValidationError,
     onFormDataChange,
     onFormDirtyChange,
+    components,
+    SubmitButton,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -85,6 +92,8 @@ export const DynamicForm = React.memo(
             onValidationError={onValidationError}
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
+            components={components}
+            SubmitButton={SubmitButton}
           />
         </View>
       </FormContext.Provider>

@@ -10,9 +10,6 @@ export const FormHeader: React.FC<FormHeaderProps> = ({ formName }) => {
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
         {formName}
       </h1>
-      <p className="mt-1 text-sm md:text-base text-muted-foreground">
-        Fill in the required fields to continue.
-      </p>
     </header>
   );
 };
