@@ -17,16 +17,16 @@ export const Switch = React.forwardRef<HTMLButtonElement, SwitchProps>(
         ref={ref}
         onClick={() => onCheckedChange?.(!checked)}
         className={cn(
-          "relative inline-flex h-6 w-11 items-center rounded-full border transition-colors",
-          checked ? "bg-primary border-primary" : "bg-input border-input",
+          "dyn:relative dyn:inline-flex dyn:h-6 dyn:w-11 dyn:items-center dyn:rounded-full dyn:border dyn:transition-colors",
+          checked ? "dyn:bg-primary dyn:border-primary" : "dyn:bg-input dyn:border-input",
           className
         )}
         {...props}
       >
         <span
           className={cn(
-            "inline-block h-4 w-4 transform rounded-full bg-background transition-transform",
-            checked ? "translate-x-6" : "translate-x-1"
+            "dyn:inline-block dyn:h-4 dyn:w-4 dyn:transform dyn:rounded-full dyn:bg-background dyn:transition-transform",
+            checked ? "dyn:translate-x-6" : "dyn:translate-x-1"
           )}
         />
       </button>

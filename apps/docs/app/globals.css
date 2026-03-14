@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" prefix(dyn);
 
 @source "../../../packages/react/src/**/*.{ts,tsx}";
 @source "../../../packages/builder/src/**/*.{ts,tsx}";

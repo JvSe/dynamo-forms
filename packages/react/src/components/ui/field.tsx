@@ -13,8 +13,8 @@ export const Field = React.forwardRef<HTMLDivElement, FieldProps>(
         ref={ref}
         data-orientation={orientation}
         className={cn(
-          "grid gap-1.5",
-          orientation === "horizontal" && "md:grid-cols-[1fr_auto] md:items-center md:gap-4",
+          "dyn:grid dyn:gap-1.5",
+          orientation === "horizontal" && "dyn:md:grid-cols-[1fr_auto] dyn:md:items-center dyn:md:gap-4",
           className
         )}
         {...props}
@@ -31,7 +31,7 @@ export const FieldLabel = React.forwardRef<
   <label
     ref={ref}
     className={cn(
-      "text-sm font-medium leading-none text-foreground",
+      "dyn:text-sm dyn:font-medium dyn:leading-none dyn:text-foreground",
       className
     )}
     {...props}
@@ -45,7 +45,7 @@ export const FieldDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <p
     ref={ref}
-    className={cn("text-sm text-muted-foreground", className)}
+    className={cn("dyn:text-sm dyn:text-muted-foreground", className)}
     {...props}
   />
 ));
@@ -65,7 +65,7 @@ export const FieldError = React.forwardRef<
     <p
       ref={ref}
       className={cn(
-        "text-sm font-medium text-destructive mt-1",
+        "dyn:text-sm dyn:font-medium dyn:text-destructive dyn:mt-1",
         className
       )}
       {...props}

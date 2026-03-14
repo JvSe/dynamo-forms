@@ -43,8 +43,8 @@ export function SheetOverlay({
   return (
     <Dialog.Overlay
       className={cn(
-        "z-50 bg-black/40",
-        container ? "absolute inset-0" : "fixed inset-0",
+        "dyn:z-50 dyn:bg-black/40",
+        container ? "dyn:absolute dyn:inset-0" : "dyn:fixed dyn:inset-0",
         className
       )}
       style={style}
@@ -65,11 +65,11 @@ export function SheetContent({
     <Dialog.Content
       data-sheet-side={side}
       className={cn(
-        "z-50 top-0 bottom-0 w-[320px] max-w-full bg-white flex flex-col outline-none",
-        container ? "absolute" : "fixed",
+        "dyn:z-50 dyn:top-0 dyn:bottom-0 dyn:w-[320px] dyn:max-w-full dyn:bg-white dyn:flex dyn:flex-col dyn:outline-none",
+        container ? "dyn:absolute" : "dyn:fixed",
         side === "right"
-          ? "right-0 border-l border-gray-200 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
-          : "left-0 border-r border-gray-200 shadow-[4px_0_24px_rgba(0,0,0,0.08)]",
+          ? "dyn:right-0 dyn:border-l dyn:border-gray-200 dyn:shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
+          : "dyn:left-0 dyn:border-r dyn:border-gray-200 dyn:shadow-[4px_0_24px_rgba(0,0,0,0.08)]",
         className
       )}
       style={style}

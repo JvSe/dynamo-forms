@@ -51,15 +51,15 @@ export function InlineSheetContent({ side = "right", className, style, children 
   return (
     <div
       className={cn(
-        "z-50 top-0 bottom-0 w-[320px] max-w-full bg-white flex flex-col outline-none",
-        "transition-transform duration-[250ms] ease-out",
-        container ? "absolute" : "fixed",
+        "dyn:z-50 dyn:top-0 dyn:bottom-0 dyn:w-[320px] dyn:max-w-full dyn:bg-white dyn:flex dyn:flex-col dyn:outline-none",
+        "dyn:transition-transform dyn:duration-[250ms] dyn:ease-out",
+        container ? "dyn:absolute" : "dyn:fixed",
         side === "right"
-          ? "right-0 border-l border-gray-200 shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
-          : "left-0 border-r border-gray-200 shadow-[4px_0_24px_rgba(0,0,0,0.08)]",
+          ? "dyn:right-0 dyn:border-l dyn:border-gray-200 dyn:shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
+          : "dyn:left-0 dyn:border-r dyn:border-gray-200 dyn:shadow-[4px_0_24px_rgba(0,0,0,0.08)]",
         side === "right"
-          ? entered ? "translate-x-0" : "translate-x-full"
-          : entered ? "translate-x-0" : "-translate-x-full",
+          ? entered ? "dyn:translate-x-0" : "dyn:translate-x-full"
+          : entered ? "dyn:translate-x-0" : "dyn:-translate-x-full",
         className
       )}
       style={style}

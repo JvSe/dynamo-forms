@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" prefix(dyn);
 
 @source "../**/*.{ts,tsx}";
 

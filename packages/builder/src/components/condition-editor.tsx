@@ -56,20 +56,20 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
   };
 
   return (
-    <div className="flex flex-col gap-2.5">
+    <div className="dyn:flex dyn:flex-col dyn:gap-2.5">
       {(condition.regras ?? []).map((rule, index) => (
         <div
           key={index}
-          className="flex flex-col gap-3 rounded-lg border border-gray-200 bg-white p-3"
+          className="dyn:flex dyn:flex-col dyn:gap-3 dyn:rounded-lg dyn:border dyn:border-gray-200 dyn:bg-white dyn:p-3"
         >
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
+          <div className="dyn:flex dyn:flex-col dyn:gap-1.5">
+            <label className="dyn:text-[11px] dyn:font-medium dyn:text-gray-500 dyn:uppercase dyn:tracking-wide">
               When field
             </label>
             <select
               value={rule.campo}
               onChange={(e) => setRule(index, { campo: e.target.value })}
-              className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer bg-white text-gray-900"
+              className="dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none dyn:cursor-pointer dyn:bg-white dyn:text-gray-900"
             >
               {fields.map((f) => (
                 <option key={f.id} value={f.id}>
@@ -79,14 +79,14 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
             </select>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
+          <div className="dyn:flex dyn:flex-col dyn:gap-1.5">
+            <label className="dyn:text-[11px] dyn:font-medium dyn:text-gray-500 dyn:uppercase dyn:tracking-wide">
               Operator
             </label>
             <select
               value={rule.operador}
               onChange={(e) => setRule(index, { operador: e.target.value as Operator })}
-              className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer bg-white text-gray-900"
+              className="dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none dyn:cursor-pointer dyn:bg-white dyn:text-gray-900"
             >
               {OPERATORS.map((op) => (
                 <option key={op.value} value={op.value}>
@@ -104,15 +104,15 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
               : [];
 
             return (
-              <div className="flex flex-col gap-1.5">
-                <label className="text-[11px] font-medium text-gray-500 uppercase tracking-wide">
+              <div className="dyn:flex dyn:flex-col dyn:gap-1.5">
+                <label className="dyn:text-[11px] dyn:font-medium dyn:text-gray-500 dyn:uppercase dyn:tracking-wide">
                   Value
                 </label>
                 {optionValues.length > 0 ? (
                   <select
                     value={rule.valor ?? ""}
                     onChange={(e) => setRule(index, { valor: e.target.value })}
-                    className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none cursor-pointer bg-white text-gray-900"
+                    className="dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none dyn:cursor-pointer dyn:bg-white dyn:text-gray-900"
                   >
                     <option value="">Selecione uma opção...</option>
                     {optionValues.map((o) => (
@@ -127,7 +127,7 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
                     value={rule.valor ?? ""}
                     onChange={(e) => setRule(index, { valor: e.target.value })}
                     placeholder="Enter value..."
-                    className="w-full py-2.5 px-3 rounded-lg border border-gray-300 text-sm outline-none bg-white text-gray-900"
+                    className="dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none dyn:bg-white dyn:text-gray-900"
                   />
                 )}
               </div>
@@ -138,7 +138,7 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
             <button
               type="button"
               onClick={() => removeRule(index)}
-              className="self-end py-1 px-2.5 text-xs cursor-pointer rounded-md border border-red-100 bg-red-50 text-red-600 font-medium"
+              className="dyn:self-end dyn:py-1 dyn:px-2.5 dyn:text-xs dyn:cursor-pointer dyn:rounded-md dyn:border dyn:border-red-100 dyn:bg-red-50 dyn:text-red-600 dyn:font-medium"
             >
               Remove
             </button>
@@ -150,7 +150,7 @@ export function ConditionEditor({ value, onChange, fields }: ConditionEditorProp
         <button
           type="button"
           onClick={addRule}
-          className="self-start py-1.5 px-3 text-xs font-medium cursor-pointer rounded-lg border border-dashed border-gray-300 text-[#1a73e8] bg-white hover:bg-blue-50"
+          className="dyn:self-start dyn:py-1.5 dyn:px-3 dyn:text-xs dyn:font-medium dyn:cursor-pointer dyn:rounded-lg dyn:border dyn:border-dashed dyn:border-gray-300 dyn:text-[#1a73e8] dyn:bg-white dyn:hover:bg-blue-50"
         >
           + Add condition
         </button>

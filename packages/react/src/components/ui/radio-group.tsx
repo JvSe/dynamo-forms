@@ -17,7 +17,7 @@ export const RadioGroupRoot = ({
   return (
     <div
       role="radiogroup"
-      className={cn("flex flex-col gap-2", className)}
+      className={cn("dyn:flex dyn:flex-col dyn:gap-2", className)}
       {...props}
     >
       {React.Children.map(children, (child) => {
@@ -57,21 +57,21 @@ export const RadioItem = ({
       aria-checked={checked}
       onClick={onSelect}
       className={cn(
-        "flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors",
-        "bg-background hover:bg-muted",
-        checked && "bg-primary/5 border-primary",
+        "dyn:flex dyn:items-center dyn:gap-2 dyn:rounded-md dyn:border dyn:px-3 dyn:py-2 dyn:text-sm dyn:cursor-pointer dyn:transition-colors",
+        "dyn:bg-background dyn:hover:bg-muted",
+        checked && "dyn:bg-primary/5 dyn:border-primary",
         className
       )}
       {...props}
     >
       <span
         className={cn(
-          "flex h-4 w-4 items-center justify-center rounded-full border border-input",
-          checked && "border-primary"
+          "dyn:flex dyn:h-4 dyn:w-4 dyn:items-center dyn:justify-center dyn:rounded-full dyn:border dyn:border-input",
+          checked && "dyn:border-primary"
         )}
       >
         {checked && (
-          <span className="h-2 w-2 rounded-full bg-primary" aria-hidden="true" />
+          <span className="dyn:h-2 dyn:w-2 dyn:rounded-full dyn:bg-primary" aria-hidden="true" />
         )}
       </span>
       <span>{children}</span>

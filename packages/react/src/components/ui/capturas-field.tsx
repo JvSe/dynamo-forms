@@ -27,11 +27,11 @@ export const CapturasField: React.FC<CapturasFieldProps> = ({
   };
 
   return (
-    <div id={id} className="space-y-2">
-      <p className="text-sm text-muted-foreground">
+    <div id={id} className="dyn:space-y-2">
+      <p className="dyn:text-sm dyn:text-muted-foreground">
         Select the desired captures.
       </p>
-      <div className="flex flex-wrap gap-2">
+      <div className="dyn:flex dyn:flex-wrap dyn:gap-2">
         {capturas.map((captura) => {
           const selected = value.includes(captura.id);
           return (
@@ -39,10 +39,10 @@ export const CapturasField: React.FC<CapturasFieldProps> = ({
               key={captura.id}
               type="button"
               onClick={() => handleToggle(captura.id)}
-              className={`inline-flex items-center rounded-full border px-3 py-1 text-xs font-medium transition-colors ${
+              className={`dyn:inline-flex dyn:items-center dyn:rounded-full dyn:border dyn:px-3 dyn:py-1 dyn:text-xs dyn:font-medium dyn:transition-colors ${
                 selected
-                  ? "bg-primary text-primary-foreground border-primary"
-                  : "bg-background text-foreground border-input hover:bg-muted"
+                  ? "dyn:bg-primary dyn:text-primary-foreground dyn:border-primary"
+                  : "dyn:bg-background dyn:text-foreground dyn:border-input dyn:hover:bg-muted"
               }`}
             >
               {captura.label}

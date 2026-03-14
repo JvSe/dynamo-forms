@@ -70,7 +70,7 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
 
   return (
     <FormProvider {...methods}>
-      <div className="p-2.5 bg-white rounded-xl border border-gray-200 shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.06)] min-w-[180px]">
+        <div className="dyn:p-2.5 dyn:bg-white dyn:rounded-xl dyn:border dyn:border-gray-200 dyn:shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.06)] dyn:min-w-[180px]">
         <DynamicField
           field={field}
           control={control}
@@ -468,26 +468,26 @@ export function FormBuilder({
     <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
       <div
         className={cn(
-          "grid grid-cols-[280px_1fr] h-screen max-h-screen rounded-2xl overflow-hidden shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
+          "dyn:grid dyn:grid-cols-[280px_1fr] dyn:h-screen dyn:max-h-screen dyn:rounded-2xl dyn:overflow-hidden dyn:shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
           className
         )}
         style={style}
       >
-        <div className="bg-white border-r border-gray-200 overflow-y-auto flex flex-col min-h-0 shrink-0 w-[280px]">
+        <div className="dyn:bg-white dyn:border-r dyn:border-gray-200 dyn:overflow-y-auto dyn:flex dyn:flex-col dyn:min-h-0 dyn:shrink-0 dyn:w-[280px]">
           <FieldPalette onAddField={handleAddFromPalette} />
         </div>
 
         <div
           ref={canvasContainerRef}
-          className="relative flex flex-col min-w-0 min-h-0 h-full bg-white overflow-hidden"
+          className="dyn:relative dyn:flex dyn:flex-col dyn:min-w-0 dyn:min-h-0 dyn:h-full dyn:bg-white dyn:overflow-hidden"
         >
-          <div className="flex items-center justify-between py-4 px-6 bg-white border-b border-gray-200 shrink-0">
-            <div className="flex items-center gap-3">
+          <div className="dyn:flex dyn:items-center dyn:justify-between dyn:py-4 dyn:px-6 dyn:bg-white dyn:border-b dyn:border-gray-200 dyn:shrink-0">
+            <div className="dyn:flex dyn:items-center dyn:gap-3">
               {onBack && (
                 <button
                   type="button"
                   onClick={onBack}
-                  className="flex items-center justify-center p-2 border-0 bg-transparent cursor-pointer rounded-lg text-gray-500"
+                  className="dyn:flex dyn:items-center dyn:justify-center dyn:p-2 dyn:border-0 dyn:bg-transparent dyn:cursor-pointer dyn:rounded-lg dyn:text-gray-500"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -498,14 +498,14 @@ export function FormBuilder({
                 type="text"
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
-                className="text-base font-semibold border-0 bg-transparent py-1.5 px-2.5 rounded-lg min-w-[220px] text-gray-900 outline-none"
+                className="dyn:text-base dyn:font-semibold dyn:border-0 dyn:bg-transparent dyn:py-1.5 dyn:px-2.5 dyn:rounded-lg dyn:min-w-[220px] dyn:text-gray-900 dyn:outline-none"
               />
             </div>
-            <div className="flex gap-3">
+            <div className="dyn:flex dyn:gap-3">
               <button
                 type="button"
                 onClick={() => setImportModalOpen(true)}
-                className="py-2.5 px-4 text-sm font-medium cursor-pointer bg-white border border-gray-300 text-gray-700 rounded-[10px] hover:bg-gray-50"
+                className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-white dyn:border dyn:border-gray-300 dyn:text-gray-700 dyn:rounded-[10px] dyn:hover:bg-gray-50"
               >
                 Importar JSON
               </button>
@@ -513,7 +513,7 @@ export function FormBuilder({
                 <button
                   type="button"
                   onClick={onPreview}
-                  className="py-2.5 px-5 text-sm font-medium cursor-pointer bg-gray-100 text-gray-900 border-0 rounded-[10px]"
+                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-gray-100 dyn:text-gray-900 dyn:border-0 dyn:rounded-[10px]"
                 >
                   Preview
                 </button>
@@ -522,7 +522,7 @@ export function FormBuilder({
                 <button
                   type="button"
                   onClick={() => onFinish(value)}
-                  className="py-2.5 px-5 text-sm font-medium cursor-pointer bg-[#1a73e8] text-white border-0 rounded-[10px]"
+                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-[#1a73e8] dyn:text-white dyn:border-0 dyn:rounded-[10px]"
                 >
                   Publish
                 </button>
@@ -532,8 +532,8 @@ export function FormBuilder({
 
           <div
             className={cn(
-              "relative flex-1 min-h-0 flex flex-col overflow-hidden transition-[margin-right] duration-200 ease-out",
-              selectedField ? "mr-[320px]" : "mr-0"
+              "dyn:relative dyn:flex-1 dyn:min-h-0 dyn:flex dyn:flex-col dyn:overflow-hidden dyn:transition-[margin-right] dyn:duration-200 dyn:ease-out",
+              selectedField ? "dyn:mr-[320px]" : "dyn:mr-0"
             )}
           >
             <FormCanvas
@@ -561,11 +561,11 @@ export function FormBuilder({
             <InlineSheetPortal>
               <InlineSheetContent
                 side="right"
-                className={isDragging ? "pointer-events-none" : undefined}
+                className={isDragging ? "dyn:pointer-events-none" : undefined}
               >
                 {selectedField && (
                   <>
-                    <div className="flex-1 overflow-auto flex flex-col">
+                    <div className="dyn:flex-1 dyn:overflow-auto dyn:flex dyn:flex-col">
                       <FieldSettingsPanel
                         field={selectedField}
                         allFields={getFlattenedFields(value)}
@@ -573,11 +573,11 @@ export function FormBuilder({
                         onRemove={() => selectedFieldId && handleRemoveField(selectedFieldId)}
                       />
                     </div>
-                    <div className="p-4 border-t border-gray-200 shrink-0">
+                    <div className="dyn:p-4 dyn:border-t dyn:border-gray-200 dyn:shrink-0">
                       <button
                         type="button"
                         onClick={() => setSelectedFieldId(null)}
-                        className="w-full py-2.5 px-5 text-sm font-medium cursor-pointer bg-[#1a73e8] text-white border-0 rounded-[10px]"
+                        className="dyn:w-full dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-[#1a73e8] dyn:text-white dyn:border-0 dyn:rounded-[10px]"
                       >
                         Done
                       </button>

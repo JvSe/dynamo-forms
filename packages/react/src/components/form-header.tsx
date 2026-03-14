@@ -6,8 +6,8 @@ interface FormHeaderProps {
 
 export const FormHeader: React.FC<FormHeaderProps> = ({ formName }) => {
   return (
-    <header className="w-full pb-4 mb-4 border-b border-border">
-      <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-foreground">
+    <header className="dyn:w-full dyn:pb-4 dyn:mb-4 dyn:border-b dyn:border-border">
+      <h1 className="dyn:text-2xl dyn:md:text-3xl dyn:font-bold dyn:tracking-tight dyn:text-foreground">
         {formName}
       </h1>
     </header>

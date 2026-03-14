@@ -15,8 +15,8 @@ export const SignatureField: React.FC<SignatureFieldProps> = ({
   ...props
 }) => {
   return (
-    <div className="space-y-2">
-      <p className="text-sm text-muted-foreground">
+    <div className="dyn:space-y-2">
+      <p className="dyn:text-sm dyn:text-muted-foreground">
         Assinatura (digite ou cole a representação da assinatura).
       </p>
       <textarea
@@ -24,7 +24,7 @@ export const SignatureField: React.FC<SignatureFieldProps> = ({
         id={id}
         value={value ?? ""}
         onChange={(e) => onChange?.(e.target.value)}
-        className={`flex w-full min-h-[80px] rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 ${
+        className={`dyn:flex dyn:w-full dyn:min-h-[80px] dyn:rounded-md dyn:border dyn:border-input dyn:bg-background dyn:px-3 dyn:py-2 dyn:text-sm dyn:ring-offset-background dyn:placeholder:text-muted-foreground dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:cursor-not-allowed dyn:disabled:opacity-50 ${
           className ?? ""
         }`}
       />

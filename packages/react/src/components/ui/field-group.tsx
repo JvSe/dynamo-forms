@@ -12,18 +12,18 @@ export const FieldGroup: React.FC<FieldGroupProps> = ({ label, children, alignme
   return (
     <fieldset
       className={cn(
-        "w-full rounded-lg border bg-card p-4 md:p-5",
-        !isHorizontal && "space-y-4 md:space-y-5"
+        "dyn:w-full dyn:rounded-lg dyn:border dyn:bg-card dyn:p-4 dyn:md:p-5",
+        !isHorizontal && "dyn:space-y-4 dyn:md:space-y-5"
       )}
     >
       {label && (
-        <legend className="px-1 text-xs font-medium text-muted-foreground uppercase tracking-wide">
+        <legend className="dyn:px-1 dyn:text-xs dyn:font-medium dyn:text-muted-foreground dyn:uppercase dyn:tracking-wide">
           {label}
         </legend>
       )}
       <div
         className={cn(
-          isHorizontal ? "flex flex-row flex-wrap gap-4 md:gap-5" : "space-y-4 md:space-y-5"
+          isHorizontal ? "dyn:flex dyn:flex-row dyn:flex-wrap dyn:gap-4 dyn:md:gap-5" : "dyn:space-y-4 dyn:md:space-y-5"
         )}
       >
         {children}

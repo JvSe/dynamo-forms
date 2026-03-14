@@ -33,13 +33,13 @@ interface FormFooterProps {
 }
 
 const defaultBackButtonClass =
-  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-secondary text-secondary-foreground hover:bg-secondary/80";
+  "dyn:inline-flex dyn:h-11 dyn:md:h-12 dyn:flex-1 dyn:items-center dyn:justify-center dyn:rounded-md dyn:text-sm dyn:font-medium dyn:transition-colors dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:opacity-70 dyn:disabled:pointer-events-none dyn:bg-secondary dyn:text-secondary-foreground dyn:hover:bg-secondary/80";
 
 const defaultPrimaryButtonClass =
-  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-primary text-primary-foreground hover:bg-primary/90";
+  "dyn:inline-flex dyn:h-11 dyn:md:h-12 dyn:flex-1 dyn:items-center dyn:justify-center dyn:rounded-md dyn:text-sm dyn:font-medium dyn:transition-colors dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:opacity-70 dyn:disabled:pointer-events-none dyn:bg-primary dyn:text-primary-foreground dyn:hover:bg-primary/90";
 
 const defaultPrimaryButtonDisabledClass =
-  "inline-flex h-11 md:h-12 flex-1 items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-70 disabled:pointer-events-none bg-muted text-muted-foreground";
+  "dyn:inline-flex dyn:h-11 dyn:md:h-12 dyn:flex-1 dyn:items-center dyn:justify-center dyn:rounded-md dyn:text-sm dyn:font-medium dyn:transition-colors dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:opacity-70 dyn:disabled:pointer-events-none dyn:bg-muted dyn:text-muted-foreground";
 
 export const FormFooter: React.FC<FormFooterProps> = ({
   isSubmitting,
@@ -84,7 +84,7 @@ export const FormFooter: React.FC<FormFooterProps> = ({
         />
       );
     }
-    const widthClass = multiStep ? "flex-1" : "w-full";
+    const widthClass = multiStep ? "dyn:flex-1" : "dyn:w-full";
     return (
       <button
         type="submit"
@@ -124,8 +124,8 @@ export const FormFooter: React.FC<FormFooterProps> = ({
 
   if (multiStep) {
     return (
-      <footer className="w-full pt-4 mt-2 border-t border-border">
-        <div className="flex gap-3">
+      <footer className="dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border">
+        <div className="dyn:flex dyn:gap-3">
           {!isFirstStep && renderBack()}
           {isLastStep ? renderSubmit() : renderNext()}
         </div>
@@ -134,7 +134,7 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   }
 
   return (
-    <footer className="w-full pt-4 mt-2 border-t border-border">
+    <footer className="dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border">
       {renderSubmit()}
     </footer>
   );

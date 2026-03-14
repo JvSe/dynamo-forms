@@ -14,7 +14,7 @@ function SelectGroup({
   return (
     <SelectPrimitive.Group
       data-slot="select-group"
-      className={cn("scroll-my-1 p-1", className)}
+      className={cn("dyn:scroll-my-1 dyn:p-1", className)}
       {...props}
     />
   );
@@ -27,7 +27,7 @@ function SelectValue({
   return (
     <SelectPrimitive.Value
       data-slot="select-value"
-      className={cn("flex flex-1 text-left", className)}
+      className={cn("dyn:flex dyn:flex-1 dyn:text-left", className)}
       {...props}
     />
   );
@@ -46,7 +46,7 @@ function SelectTrigger({
       data-slot="select-trigger"
       data-size={size}
       className={cn(
-        "flex w-full min-w-0 items-center justify-between gap-1.5 rounded-md border border-input bg-transparent py-2 pr-2 pl-3 text-sm whitespace-nowrap transition-colors outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 data-placeholder:text-muted-foreground data-[size=default]:h-10 data-[size=sm]:h-8 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "dyn:flex dyn:w-full dyn:min-w-0 dyn:items-center dyn:justify-between dyn:gap-1.5 dyn:rounded-md dyn:border dyn:border-input dyn:bg-transparent dyn:py-2 dyn:pr-2 dyn:pl-3 dyn:text-sm dyn:whitespace-nowrap dyn:transition-colors dyn:outline-none dyn:select-none dyn:focus-visible:border-ring dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:cursor-not-allowed dyn:disabled:opacity-50 dyn:aria-invalid:border-destructive dyn:aria-invalid:ring-2 dyn:aria-invalid:ring-destructive/20 dyn:data-placeholder:text-muted-foreground dyn:data-[size=default]:h-10 dyn:data-[size=sm]:h-8 dyn:[&_svg]:pointer-events-none dyn:[&_svg]:shrink-0 dyn:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
@@ -54,7 +54,7 @@ function SelectTrigger({
       {children}
       <SelectPrimitive.Icon
         render={
-          <ChevronDownIcon className="pointer-events-none size-4 text-muted-foreground" />
+          <ChevronDownIcon className="dyn:pointer-events-none dyn:size-4 dyn:text-muted-foreground" />
         }
       />
     </SelectPrimitive.Trigger>
@@ -85,13 +85,13 @@ function SelectContent({
         align={align}
         alignOffset={alignOffset}
         alignItemWithTrigger={alignItemWithTrigger}
-        className="isolate z-50"
+        className="dyn:isolate dyn:z-50"
       >
         <SelectPrimitive.Popup
           data-slot="select-content"
           data-align-trigger={alignItemWithTrigger}
           className={cn(
-            "relative isolate z-50 max-h-[var(--available-height)] w-[var(--anchor-width)] min-w-[8rem] origin-[var(--transform-origin)] overflow-x-hidden overflow-y-auto rounded-md bg-popover text-popover-foreground shadow-md ring-1 ring-border duration-100 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+            "dyn:relative dyn:isolate dyn:z-50 dyn:max-h-[var(--available-height)] dyn:w-[var(--anchor-width)] dyn:min-w-[8rem] dyn:origin-[var(--transform-origin)] dyn:overflow-x-hidden dyn:overflow-y-auto dyn:rounded-md dyn:bg-popover dyn:text-popover-foreground dyn:shadow-md dyn:ring-1 dyn:ring-border dyn:duration-100 dyn:data-[side=bottom]:slide-in-from-top-2 dyn:data-[side=left]:slide-in-from-right-2 dyn:data-[side=right]:slide-in-from-left-2 dyn:data-[side=top]:slide-in-from-bottom-2",
             className
           )}
           {...props}
@@ -112,7 +112,7 @@ function SelectLabel({
   return (
     <SelectPrimitive.GroupLabel
       data-slot="select-label"
-      className={cn("px-2 py-1.5 text-xs font-medium text-muted-foreground", className)}
+      className={cn("dyn:px-2 dyn:py-1.5 dyn:text-xs dyn:font-medium dyn:text-muted-foreground", className)}
       {...props}
     />
   );
@@ -127,17 +127,17 @@ function SelectItem({
     <SelectPrimitive.Item
       data-slot="select-item"
       className={cn(
-        "relative flex w-full cursor-default items-center gap-2 rounded-sm py-1.5 pr-8 pl-2 text-sm outline-none select-none focus:bg-accent focus:text-accent-foreground data-disabled:pointer-events-none data-disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+        "dyn:relative dyn:flex dyn:w-full dyn:cursor-default dyn:items-center dyn:gap-2 dyn:rounded-sm dyn:py-1.5 dyn:pr-8 dyn:pl-2 dyn:text-sm dyn:outline-none dyn:select-none dyn:focus:bg-accent dyn:focus:text-accent-foreground dyn:data-disabled:pointer-events-none dyn:data-disabled:opacity-50 dyn:[&_svg]:pointer-events-none dyn:[&_svg]:shrink-0 dyn:[&_svg:not([class*='size-'])]:size-4",
         className
       )}
       {...props}
     >
-      <SelectPrimitive.ItemText className="flex flex-1 shrink-0 gap-2 whitespace-nowrap">
+      <SelectPrimitive.ItemText className="dyn:flex dyn:flex-1 dyn:shrink-0 dyn:gap-2 dyn:whitespace-nowrap">
         {children}
       </SelectPrimitive.ItemText>
       <SelectPrimitive.ItemIndicator
         render={
-          <span className="pointer-events-none absolute right-2 flex size-4 items-center justify-center">
+          <span className="dyn:pointer-events-none dyn:absolute dyn:right-2 dyn:flex dyn:size-4 dyn:items-center dyn:justify-center">
             <CheckIcon className="size-4" />
           </span>
         }

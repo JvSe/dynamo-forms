@@ -43,8 +43,8 @@ function DropZone({
     <div
       ref={setNodeRef}
       className={cn(
-        "min-h-2 min-w-2 rounded transition-colors duration-150",
-        isOver ? "bg-[rgba(26,115,232,0.15)]" : "bg-transparent",
+        "dyn:min-h-2 dyn:min-w-2 dyn:rounded dyn:transition-colors dyn:duration-150",
+        isOver ? "dyn:bg-[rgba(26,115,232,0.15)]" : "dyn:bg-transparent",
         className
       )}
     >
@@ -86,10 +86,10 @@ function StepTabs({
   };
 
   return (
-    <div className="flex items-center gap-2 px-5 py-2 border-b border-gray-200 bg-gray-50/60 min-h-0">
-      <div className="flex-1 min-w-0 overflow-x-auto overflow-y-hidden flex items-center gap-1.5 py-0.5">
+    <div className="dyn:flex dyn:items-center dyn:gap-2 dyn:px-5 dyn:py-2 dyn:border-b dyn:border-gray-200 dyn:bg-gray-50/60 dyn:min-h-0">
+      <div className="dyn:flex-1 dyn:min-w-0 dyn:overflow-x-auto dyn:overflow-y-hidden dyn:flex dyn:items-center dyn:gap-1.5 dyn:py-0.5">
         {steps.map((step, i) => (
-          <div key={step.id} className="flex items-center shrink-0">
+          <div key={step.id} className="dyn:flex dyn:items-center dyn:shrink-0">
             {editingIndex === i ? (
               <input
                 autoFocus
@@ -100,7 +100,7 @@ function StepTabs({
                   if (e.key === "Enter") commitRename(i);
                   if (e.key === "Escape") setEditingIndex(null);
                 }}
-                className="px-2 py-1 rounded-md text-xs font-medium bg-white border border-blue-400 text-gray-900 w-24 outline-none"
+                className="dyn:px-2 dyn:py-1 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:bg-white dyn:border dyn:border-blue-400 dyn:text-gray-900 dyn:w-24 dyn:outline-none"
               />
             ) : (
               <button
@@ -108,28 +108,28 @@ function StepTabs({
                 onClick={() => onStepChange(i)}
                 onDoubleClick={() => startRename(i)}
                 className={cn(
-                  "group flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer border-0",
+                  "dyn:group dyn:flex dyn:items-center dyn:gap-1.5 dyn:px-3 dyn:py-1.5 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:transition-all dyn:cursor-pointer dyn:border-0",
                   activeStepIndex === i
-                    ? "bg-blue-50 text-blue-600"
-                    : "text-gray-500 hover:text-gray-900 hover:bg-gray-100 bg-transparent"
+                    ? "dyn:bg-blue-50 dyn:text-blue-600"
+                    : "dyn:text-gray-500 dyn:hover:text-gray-900 dyn:hover:bg-gray-100 dyn:bg-transparent"
                 )}
               >
                 <span className={cn(
-                  "flex items-center justify-center w-5 h-5 rounded-full text-[10px] font-semibold shrink-0",
+                  "dyn:flex dyn:items-center dyn:justify-center dyn:w-5 dyn:h-5 dyn:rounded-full dyn:text-[10px] dyn:font-semibold dyn:shrink-0",
                   activeStepIndex === i
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-600"
+                    ? "dyn:bg-blue-600 dyn:text-white"
+                    : "dyn:bg-gray-200 dyn:text-gray-600"
                 )}>
                   {i + 1}
                 </span>
-                <span className="truncate max-w-[120px]">{step.title}</span>
+                <span className="dyn:truncate dyn:max-w-[120px]">{step.title}</span>
                 {steps.length > 1 && (
                   <span
                     onClick={(e) => {
                       e.stopPropagation();
                       onRemoveStep(i);
                     }}
-                    className="ml-0.5 opacity-0 group-hover:opacity-100 hover:text-red-500 transition-all cursor-pointer shrink-0"
+                    className="dyn:ml-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:hover:text-red-500 dyn:transition-all dyn:cursor-pointer dyn:shrink-0"
                   >
                     <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M18 6L6 18M6 6l12 12" />
@@ -145,7 +145,7 @@ function StepTabs({
       <button
         type="button"
         onClick={onAddStep}
-        className="flex items-center justify-center w-7 h-7 rounded-md text-gray-400 hover:text-gray-700 hover:bg-gray-100 transition-colors cursor-pointer border-0 bg-transparent shrink-0"
+        className="dyn:flex dyn:items-center dyn:justify-center dyn:w-7 dyn:h-7 dyn:rounded-md dyn:text-gray-400 dyn:hover:text-gray-700 dyn:hover:bg-gray-100 dyn:transition-colors dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:shrink-0"
         title="Add step"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -153,15 +153,15 @@ function StepTabs({
         </svg>
       </button>
 
-      <div className="shrink-0 flex items-center gap-2 pl-2 border-l border-gray-200">
-        <span className="text-[11px] text-gray-400 whitespace-nowrap">
+      <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:gap-2 dyn:pl-2 dyn:border-l dyn:border-gray-200">
+        <span className="dyn:text-[11px] dyn:text-gray-400 dyn:whitespace-nowrap">
           {fieldCount} field{fieldCount !== 1 ? "s" : ""} · step {activeStepIndex + 1}/{steps.length}
         </span>
         {onToggleMultiStep && (
           <button
             type="button"
             onClick={onToggleMultiStep}
-            className="text-[11px] text-gray-400 hover:text-gray-600 cursor-pointer border-0 bg-transparent underline whitespace-nowrap"
+            className="dyn:text-[11px] dyn:text-gray-400 dyn:hover:text-gray-600 dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:underline dyn:whitespace-nowrap"
           >
             Disable steps
           </button>
@@ -217,9 +217,9 @@ function FormCanvasInner({
   }, [byRow]);
 
   return (
-    <div className="flex flex-col flex-1 min-h-0 w-full">
+    <div className="dyn:flex dyn:flex-col dyn:flex-1 dyn:min-h-0 dyn:w-full">
       {multiStepEnabled && steps && steps.length > 0 && onStepChange && onAddStep && onRemoveStep && onRenameStep && (
-        <div className="shrink-0">
+        <div className="dyn:shrink-0">
           <StepTabs
           steps={steps}
           activeStepIndex={activeStepIndex ?? 0}
@@ -233,11 +233,11 @@ function FormCanvasInner({
         </div>
       )}
       {!multiStepEnabled && onToggleMultiStep && (
-        <div className="shrink-0 flex items-center justify-end px-5 py-1.5 border-b border-gray-100">
+        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-end dyn:px-5 dyn:py-1.5 dyn:border-b dyn:border-gray-100">
           <button
             type="button"
             onClick={onToggleMultiStep}
-            className="text-[11px] text-gray-400 hover:text-blue-600 cursor-pointer border-0 bg-transparent"
+            className="dyn:text-[11px] dyn:text-gray-400 dyn:hover:text-blue-600 dyn:cursor-pointer dyn:border-0 dyn:bg-transparent"
           >
             + Enable steps
           </button>
@@ -246,8 +246,8 @@ function FormCanvasInner({
       <div
         ref={setCanvasRef}
         className={cn(
-          "flex-1 min-h-0 p-5 overflow-y-auto overflow-x-hidden relative",
-          isOver && "shadow-[inset_0_0_0_2px_rgba(26,115,232,0.3)]"
+          "dyn:flex-1 dyn:min-h-0 dyn:p-5 dyn:overflow-y-auto dyn:overflow-x-hidden dyn:relative",
+          isOver && "dyn:shadow-[inset_0_0_0_2px_rgba(26,115,232,0.3)]"
         )}
         style={{
           backgroundColor: isOver ? "rgba(255,255,255,0.95)" : "#fff",
@@ -256,16 +256,16 @@ function FormCanvasInner({
         }}
       >
         {fields.length === 0 ? (
-        <div className="text-gray-500 text-sm p-12 text-center border-2 border-dashed border-gray-300 rounded-xl bg-white relative z-1">
+        <div className="dyn:text-gray-500 dyn:text-sm dyn:p-12 dyn:text-center dyn:border-2 dyn:border-dashed dyn:border-gray-300 dyn:rounded-xl dyn:bg-white dyn:relative dyn:z-1">
           Drag or click components from the left to add them
         </div>
       ) : (
         <>
-          <DropZone id={CANVAS_TOP_DROP_ID} className="w-full h-3 mb-0.5" />
+          <DropZone id={CANVAS_TOP_DROP_ID} className="dyn:w-full dyn:h-3 dyn:mb-0.5" />
 
           {sortedByLayout.map((field) => (
             <React.Fragment key={field.id}>
-              <div className="w-full">
+              <div className="dyn:w-full">
                 {field.type === "group" ? (
                   <GroupBlock
                     field={field}
@@ -297,7 +297,7 @@ function FormCanvasInner({
                   </FieldCard>
                 )}
               </div>
-              <DropZone id={dropBottomId(field.id)} className="w-full h-3 mb-0.5" />
+              <DropZone id={dropBottomId(field.id)} className="dyn:w-full dyn:h-3 dyn:mb-0.5" />
             </React.Fragment>
           ))}
         </>
@@ -343,19 +343,19 @@ function GroupBlock({
       <div
         ref={setNodeRef}
         className={cn(
-          "min-h-[7rem] flex flex-col gap-3 p-3 rounded-[10px]",
+          "dyn:min-h-[7rem] dyn:flex dyn:flex-col dyn:gap-3 dyn:p-3 dyn:rounded-[10px]",
           isOver
-            ? "bg-[rgba(26,115,232,0.08)] border-2 border-dashed border-[#1a73e8]"
-            : "bg-gray-50 border border-dashed border-gray-200"
+            ? "dyn:bg-[rgba(26,115,232,0.08)] dyn:border-2 dyn:border-dashed dyn:border-[#1a73e8]"
+            : "dyn:bg-gray-50 dyn:border dyn:border-dashed dyn:border-gray-200"
         )}
       >
         <SortableContext items={children.map((c) => c.id)} strategy={verticalListSortingStrategy}>
           {children.length === 0 ? (
-            <div className="flex-1 flex items-center justify-center text-gray-500 text-[13px] text-center py-6 px-4">
+            <div className="dyn:flex-1 dyn:flex dyn:items-center dyn:justify-center dyn:text-gray-500 dyn:text-[13px] dyn:text-center dyn:py-6 dyn:px-4">
               Arraste campos para cá ou solte abaixo
             </div>
           ) : (
-            <div className="flex flex-col gap-3">
+            <div className="dyn:flex dyn:flex-col dyn:gap-3">
               {children.map((child) => (
                 <FieldCard
                   key={child.id}
@@ -381,10 +381,10 @@ function GroupBlock({
         </SortableContext>
         <div
           className={cn(
-            "shrink-0 py-2 px-3 rounded-md text-center text-xs font-medium transition-colors",
+            "dyn:shrink-0 dyn:py-2 dyn:px-3 dyn:rounded-md dyn:text-center dyn:text-xs dyn:font-medium dyn:transition-colors",
             isOver
-              ? "bg-[#1a73e8]/15 text-[#1a73e8]"
-              : "bg-gray-100/80 text-gray-500"
+              ? "dyn:bg-[#1a73e8]/15 dyn:text-[#1a73e8]"
+              : "dyn:bg-gray-100/80 dyn:text-gray-500"
           )}
         >
           Solte aqui para adicionar ao grupo

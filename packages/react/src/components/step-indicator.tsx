@@ -21,8 +21,8 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   const stepGap = 30;
 
   return (
-    <nav aria-label="Form progress" className="w-full overflow-x-auto overflow-y-visible py-3 px-1">
-      <ol className="flex items-center min-w-max" style={{ gap: 0 }}>
+    <nav aria-label="Form progress" className="dyn:w-full dyn:overflow-x-auto dyn:overflow-y-visible dyn:py-3 dyn:px-1">
+      <ol className="dyn:flex dyn:items-center dyn:min-w-max" style={{ gap: 0 }}>
         {steps.map((step, i) => {
           const isCompleted = i < currentStep;
           const isCurrent = i === currentStep;
@@ -32,15 +32,15 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
             <React.Fragment key={step.id}>
               <li
                 ref={isCurrent ? currentStepRef : undefined}
-                className="flex flex-col items-center gap-1 shrink-0"
+                className="dyn:flex dyn:flex-col dyn:items-center dyn:gap-1 dyn:shrink-0"
               >
                 <div
-                  className={`flex items-center justify-center w-8 h-8 rounded-full text-xs font-semibold transition-colors shrink-0 ${
+                  className={`dyn:flex dyn:items-center dyn:justify-center dyn:w-8 dyn:h-8 dyn:rounded-full dyn:text-xs dyn:font-semibold dyn:transition-colors dyn:shrink-0 ${
                     isCompleted
-                      ? "bg-primary text-primary-foreground"
+                      ? "dyn:bg-primary dyn:text-primary-foreground"
                       : isCurrent
-                        ? "bg-primary text-primary-foreground ring-2 ring-primary/30 ring-offset-2"
-                        : "bg-muted text-muted-foreground"
+                        ? "dyn:bg-primary dyn:text-primary-foreground dyn:ring-2 dyn:ring-primary/30 dyn:ring-offset-2"
+                        : "dyn:bg-muted dyn:text-muted-foreground"
                   }`}
                 >
                   {isCompleted ? (
@@ -61,12 +61,12 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
                   )}
                 </div>
                 <span
-                  className={`text-[11px] font-medium text-center max-w-[80px] truncate block ${
+                  className={`dyn:text-[11px] dyn:font-medium dyn:text-center dyn:max-w-[80px] dyn:truncate dyn:block ${
                     isCurrent
-                      ? "text-foreground"
+                      ? "dyn:text-foreground"
                       : isCompleted
-                        ? "text-foreground/70"
-                        : "text-muted-foreground"
+                        ? "dyn:text-foreground/70"
+                        : "dyn:text-muted-foreground"
                   }`}
                 >
                   {step.title}
@@ -74,13 +74,13 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
               </li>
               {!isLast && (
                 <li
-                  className="flex items-center shrink-0 mt-[-18px] self-stretch p-2"
+                  className="dyn:flex dyn:items-center dyn:shrink-0 dyn:mt-[-18px] dyn:self-stretch dyn:p-2"
                   style={{ width: stepGap + 16 }}
                   aria-hidden
                 >
                   <div
-                    className={`h-0.5 w-full rounded-full transition-colors ${
-                      isCompleted ? "bg-primary" : "bg-muted"
+                    className={`dyn:h-0.5 dyn:w-full dyn:rounded-full dyn:transition-colors ${
+                      isCompleted ? "dyn:bg-primary" : "dyn:bg-muted"
                     }`}
                   />
                 </li>

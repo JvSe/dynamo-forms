@@ -131,13 +131,13 @@ function PaletteItem({ item, onAddField }: { item: PaletteItemConfig; onAddField
         })
       }
       className={cn(
-        "flex flex-col items-start justify-between min-h-[88px] py-3 px-3.5 bg-white rounded-[10px] cursor-pointer text-xs font-medium text-gray-900 select-none",
+        "dyn:flex dyn:flex-col dyn:items-start dyn:justify-between dyn:min-h-[88px] dyn:py-3 dyn:px-3.5 dyn:bg-white dyn:rounded-[10px] dyn:cursor-pointer dyn:text-xs dyn:font-medium dyn:text-gray-900 dyn:select-none",
         isDragging
-          ? "border-2 border-[#1a73e8] shadow-[0_4px_12px_rgba(26,115,232,0.3)]"
-          : "border border-gray-200 shadow-[0_1px_2px_rgba(0,0,0,0.05)] hover:border-[#1a73e8] hover:shadow-[0_2px_8px_rgba(26,115,232,0.15)] transition-[border-color,box-shadow]"
+          ? "dyn:border-2 dyn:border-[#1a73e8] dyn:shadow-[0_4px_12px_rgba(26,115,232,0.3)]"
+          : "dyn:border dyn:border-gray-200 dyn:shadow-[0_1px_2px_rgba(0,0,0,0.05)] dyn:hover:border-[#1a73e8] dyn:hover:shadow-[0_2px_8px_rgba(26,115,232,0.15)] dyn:transition-[border-color,box-shadow]"
       )}
     >
-      <div className="flex items-center justify-center shrink-0 mb-2">
+      <div className="dyn:flex dyn:items-center dyn:justify-center dyn:shrink-0 dyn:mb-2">
         <Icon
           size={ICON_SIZE}
           stroke={start}
@@ -145,7 +145,7 @@ function PaletteItem({ item, onAddField }: { item: PaletteItemConfig; onAddField
           strokeWidth={2}
         />
       </div>
-      <span className="text-center leading-[1.2]">{item.label}</span>
+      <span className="dyn:text-center dyn:leading-[1.2]">{item.label}</span>
     </div>
   );
 }
@@ -168,27 +168,27 @@ export function FieldPalette({ onAddField }: { onAddField?: (data: PaletteDragDa
   }, [search]);
 
   return (
-    <div className="p-3.5 flex flex-col gap-3.5 bg-white">
-      <div className="relative">
+    <div className="dyn:p-3.5 dyn:flex dyn:flex-col dyn:gap-3.5 dyn:bg-white">
+      <div className="dyn:relative">
         <Search
           size={16}
-          className="absolute left-2.5 top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+          className="dyn:absolute dyn:left-2.5 dyn:top-1/2 dyn:-translate-y-1/2 dyn:text-gray-500 dyn:pointer-events-none"
         />
         <input
           type="text"
           placeholder="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="w-full py-2 px-2.5 pl-9 rounded-lg border border-gray-200 text-[13px] bg-gray-50 text-gray-900 outline-none"
+          className="dyn:w-full dyn:py-2 dyn:px-2.5 dyn:pl-9 dyn:rounded-lg dyn:border dyn:border-gray-200 dyn:text-[13px] dyn:bg-gray-50 dyn:text-gray-900 dyn:outline-none"
         />
       </div>
 
       {filtered.map((category) => (
         <div key={category.title}>
-          <div className="text-xs font-semibold text-gray-900 mb-2.5 tracking-[0.3px]">
+          <div className="dyn:text-xs dyn:font-semibold dyn:text-gray-900 dyn:mb-2.5 dyn:tracking-[0.3px]">
             {category.title}
           </div>
-          <div className="grid grid-cols-2 gap-2.5 items-stretch">
+          <div className="dyn:grid dyn:grid-cols-2 dyn:gap-2.5 dyn:items-stretch">
             {category.items.map((item) => (
               <PaletteItem key={getPaletteDragId(item)} item={item} onAddField={onAddField} />
             ))}

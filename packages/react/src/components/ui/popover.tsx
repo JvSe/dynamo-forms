@@ -13,7 +13,7 @@ function PopoverTrigger({
   return (
     <PopoverPrimitive.Trigger
       className={cn(
-        "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+        "dyn:inline-flex dyn:items-center dyn:justify-center dyn:rounded-md dyn:text-sm dyn:font-medium dyn:transition-colors dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:pointer-events-none dyn:disabled:opacity-50",
         className
       )}
       {...props}
@@ -41,11 +41,11 @@ function PopoverContent({
         alignOffset={alignOffset}
         side={side}
         sideOffset={sideOffset}
-        className="z-50"
+        className="dyn:z-50"
       >
         <PopoverPrimitive.Popup
           className={cn(
-            "z-50 w-72 rounded-md border bg-popover p-4 text-popover-foreground shadow-md outline-none data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95 data-[side=bottom]:slide-in-from-top-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2",
+            "dyn:z-50 dyn:w-72 dyn:rounded-md dyn:border dyn:bg-popover dyn:p-4 dyn:text-popover-foreground dyn:shadow-md dyn:outline-none dyn:data-[state=open]:animate-in dyn:data-[state=closed]:animate-out dyn:data-[state=closed]:fade-out-0 dyn:data-[state=open]:fade-in-0 dyn:data-[state=closed]:zoom-out-95 dyn:data-[state=open]:zoom-in-95 dyn:data-[side=bottom]:slide-in-from-top-2 dyn:data-[side=left]:slide-in-from-right-2 dyn:data-[side=right]:slide-in-from-left-2 dyn:data-[side=top]:slide-in-from-bottom-2",
             className
           )}
           {...props}

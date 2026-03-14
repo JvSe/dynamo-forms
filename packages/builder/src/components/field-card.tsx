@@ -46,34 +46,34 @@ function FieldActions({
   onDuplicate?: () => void;
 }) {
   return (
-    <div className="absolute top-1.5 right-1.5 flex items-center gap-0.5 z-10">
-      <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+    <div className="dyn:absolute dyn:top-1.5 dyn:right-1.5 dyn:flex dyn:items-center dyn:gap-0.5 dyn:z-10">
+      <div className="dyn:flex dyn:items-center dyn:gap-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:transition-opacity">
         {onDuplicate && (
           <button
             type="button"
             title="Duplicate"
             onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
-            className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400/50 hover:text-gray-700 transition-colors"
+            className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-gray-100 dyn:text-gray-400/50 dyn:hover:text-gray-700 dyn:transition-colors"
           >
-            <Copy className="w-3 h-3" />
+            <Copy className="dyn:w-3 dyn:h-3" />
           </button>
         )}
         <button
           type="button"
           title="Edit"
           onClick={(e) => { e.stopPropagation(); onSelect(); }}
-          className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400/50 hover:text-gray-700 transition-colors"
+          className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-gray-100 dyn:text-gray-400/50 dyn:hover:text-gray-700 dyn:transition-colors"
         >
-          <Pencil className="w-3 h-3" />
+          <Pencil className="dyn:w-3 dyn:h-3" />
         </button>
         {onRemove && (
           <button
             type="button"
             title="Remove"
             onClick={(e) => { e.stopPropagation(); onRemove(); }}
-            className="p-1.5 rounded-md hover:bg-red-50 text-gray-400/50 hover:text-red-500 transition-colors"
+            className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-red-50 dyn:text-gray-400/50 dyn:hover:text-red-500 dyn:transition-colors"
           >
-            <Trash2 className="w-3 h-3" />
+            <Trash2 className="dyn:w-3 dyn:h-3" />
           </button>
         )}
       </div>
@@ -123,8 +123,8 @@ export function FieldCard({
       : field.config.label || field.config.name || field.id;
 
   const baseCardClass = cn(
-    "mb-1 rounded-xl border border-gray-200 bg-white overflow-hidden",
-    isDragging ? "opacity-0" : "opacity-100"
+    "dyn:mb-1 dyn:rounded-xl dyn:border dyn:border-gray-200 dyn:bg-white dyn:overflow-hidden",
+    isDragging ? "dyn:opacity-0" : "dyn:opacity-100"
   );
 
   const baseCardStyle: React.CSSProperties = {
@@ -138,59 +138,59 @@ export function FieldCard({
       return (
         <div
           ref={combinedRef}
-          className={cn(baseCardClass, "group")}
+          className={cn(baseCardClass, "dyn:group")}
           style={baseCardStyle}
           {...attributes}
         >
-          <div className="flex items-center gap-0 border-b border-gray-100 bg-gray-50">
+          <div className="dyn:flex dyn:items-center dyn:gap-0 dyn:border-b dyn:border-gray-100 dyn:bg-gray-50">
             <div
               {...listeners}
-              className="flex items-center justify-center px-2 py-3 text-gray-300 hover:text-gray-500 cursor-grab active:cursor-grabbing shrink-0 self-stretch"
+              className="dyn:flex dyn:items-center dyn:justify-center dyn:px-2 dyn:py-3 dyn:text-gray-300 dyn:hover:text-gray-500 dyn:cursor-grab dyn:active:cursor-grabbing dyn:shrink-0 dyn:self-stretch"
               onClick={(e) => e.stopPropagation()}
             >
               <DragDotsIcon />
             </div>
             <div
-              className="flex flex-1 items-center gap-1.5 py-3 cursor-pointer"
+              className="dyn:flex dyn:flex-1 dyn:items-center dyn:gap-1.5 dyn:py-3 dyn:cursor-pointer"
               onClick={(e) => { e.stopPropagation(); onSelect(); }}
             >
-              <span className="text-[15px] font-medium text-gray-900">
+              <span className="dyn:text-[15px] dyn:font-medium dyn:text-gray-900">
                 {sectionTitle}
               </span>
               {!!field.config.conditions && (
-                <span title="Has conditional logic" className="flex items-center text-amber-400">
-                  <Zap className="w-3.5 h-3.5" />
+                <span title="Has conditional logic" className="dyn:flex dyn:items-center dyn:text-amber-400">
+                  <Zap className="dyn:w-3.5 dyn:h-3.5" />
                 </span>
               )}
             </div>
-            <div className="flex items-center gap-0.5 pr-2">
-              <div className="flex items-center gap-0.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="dyn:flex dyn:items-center dyn:gap-0.5 dyn:pr-2">
+              <div className="dyn:flex dyn:items-center dyn:gap-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:transition-opacity">
                 {onDuplicate && (
                   <button
                     type="button"
                     title="Duplicate"
                     onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
-                    className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400/50 hover:text-gray-700 transition-colors"
+                    className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-gray-100 dyn:text-gray-400/50 dyn:hover:text-gray-700 dyn:transition-colors"
                   >
-                    <Copy className="w-3 h-3" />
+                    <Copy className="dyn:w-3 dyn:h-3" />
                   </button>
                 )}
                 <button
                   type="button"
                   title="Edit"
                   onClick={(e) => { e.stopPropagation(); onSelect(); }}
-                  className="p-1.5 rounded-md hover:bg-gray-100 text-gray-400/50 hover:text-gray-700 transition-colors"
+                  className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-gray-100 dyn:text-gray-400/50 dyn:hover:text-gray-700 dyn:transition-colors"
                 >
-                  <Pencil className="w-3 h-3" />
+                  <Pencil className="dyn:w-3 dyn:h-3" />
                 </button>
                 {onRemove && (
                   <button
                     type="button"
                     title="Remove"
                     onClick={(e) => { e.stopPropagation(); onRemove(); }}
-                    className="p-1.5 rounded-md hover:bg-red-50 text-gray-400/50 hover:text-red-500 transition-colors"
+                    className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-red-50 dyn:text-gray-400/50 dyn:hover:text-red-500 dyn:transition-colors"
                   >
-                    <Trash2 className="w-3 h-3" />
+                    <Trash2 className="dyn:w-3 dyn:h-3" />
                   </button>
                 )}
               </div>
@@ -206,27 +206,27 @@ export function FieldCard({
     return (
       <div
         ref={combinedRef}
-        className={cn(baseCardClass, "flex group")}
+        className={cn(baseCardClass, "dyn:flex dyn:group")}
         style={baseCardStyle}
         {...attributes}
       >
         <div
           {...listeners}
-          className="flex items-center justify-center px-1.5 text-gray-300 hover:text-gray-500 cursor-grab active:cursor-grabbing shrink-0 self-stretch"
+          className="dyn:flex dyn:items-center dyn:justify-center dyn:px-1.5 dyn:text-gray-300 dyn:hover:text-gray-500 dyn:cursor-grab dyn:active:cursor-grabbing dyn:shrink-0 dyn:self-stretch"
           onClick={(e) => e.stopPropagation()}
         >
           <DragDotsIcon />
         </div>
 
         <div
-          className="relative flex-1 min-w-0 cursor-pointer py-2.5 pr-2.5"
+          className="dyn:relative dyn:flex-1 dyn:min-w-0 dyn:cursor-pointer dyn:py-2.5 dyn:pr-2.5"
           onClick={(e) => { e.stopPropagation(); onSelect(); }}
         >
-          <div className="flex items-center gap-1.5 mb-1">
-            <span className="text-sm font-medium text-gray-900">{sectionTitle}</span>
+          <div className="dyn:flex dyn:items-center dyn:gap-1.5 dyn:mb-1">
+            <span className="dyn:text-sm dyn:font-medium dyn:text-gray-900">{sectionTitle}</span>
             {!!field.config.conditions && (
-              <span title="Has conditional logic" className="flex items-center text-amber-400">
-                <Zap className="w-3.5 h-3.5" />
+              <span title="Has conditional logic" className="dyn:flex dyn:items-center dyn:text-amber-400">
+                <Zap className="dyn:w-3.5 dyn:h-3.5" />
               </span>
             )}
           </div>
@@ -245,27 +245,27 @@ export function FieldCard({
   return (
     <div
       ref={combinedRef}
-      className={cn(baseCardClass, "flex group")}
+      className={cn(baseCardClass, "dyn:flex dyn:group")}
       style={baseCardStyle}
       {...attributes}
     >
       <div
         {...listeners}
-        className="flex items-center justify-center px-1.5 text-gray-300 hover:text-gray-500 cursor-grab active:cursor-grabbing shrink-0 self-stretch"
+        className="dyn:flex dyn:items-center dyn:justify-center dyn:px-1.5 dyn:text-gray-300 dyn:hover:text-gray-500 dyn:cursor-grab dyn:active:cursor-grabbing dyn:shrink-0 dyn:self-stretch"
         onClick={(e) => e.stopPropagation()}
       >
         <DragDotsIcon />
       </div>
 
       <div
-        className="relative flex-1 min-w-0 cursor-pointer py-2.5 pr-2.5"
+        className="dyn:relative dyn:flex-1 dyn:min-w-0 dyn:cursor-pointer dyn:py-2.5 dyn:pr-2.5"
         onClick={(e) => { e.stopPropagation(); onSelect(); }}
       >
-        <div className="flex items-center gap-1.5 mb-1">
-          <span className="text-sm font-medium text-gray-900">{sectionTitle}</span>
+        <div className="dyn:flex dyn:items-center dyn:gap-1.5 dyn:mb-1">
+          <span className="dyn:text-sm dyn:font-medium dyn:text-gray-900">{sectionTitle}</span>
           {!!field.config.conditions && (
-            <span title="Has conditional logic" className="flex items-center text-amber-400">
-              <Zap className="w-3.5 h-3.5" />
+            <span title="Has conditional logic" className="dyn:flex dyn:items-center dyn:text-amber-400">
+              <Zap className="dyn:w-3.5 dyn:h-3.5" />
             </span>
           )}
         </div>
@@ -274,7 +274,7 @@ export function FieldCard({
           onRemove={onRemove}
           onDuplicate={onDuplicate}
         />
-        <div className="text-xs text-gray-500 mt-0.5">{typeLabel}</div>
+        <div className="dyn:text-xs dyn:text-gray-500 dyn:mt-0.5">{typeLabel}</div>
       </div>
     </div>
   );

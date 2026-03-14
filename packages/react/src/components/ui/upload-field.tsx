@@ -29,19 +29,19 @@ export const UploadField: React.FC<UploadFieldProps> = ({
   };
 
   const baseClasses =
-    "flex h-10 w-full rounded-md border bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-primary file:text-primary-foreground file:px-3 file:py-1.5 file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50";
+    "dyn:flex dyn:h-10 dyn:w-full dyn:rounded-md dyn:border dyn:bg-background dyn:px-3 dyn:py-2 dyn:text-sm dyn:ring-offset-background dyn:file:border-0 dyn:file:bg-primary dyn:file:text-primary-foreground dyn:file:px-3 dyn:file:py-1.5 dyn:file:text-sm dyn:file:font-medium dyn:placeholder:text-muted-foreground dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2 dyn:disabled:cursor-not-allowed dyn:disabled:opacity-50";
 
   const borderClasses = error
-    ? "border-destructive"
+    ? "dyn:border-destructive"
     : success
-    ? "border-emerald-500"
-    : "border-input";
+    ? "dyn:border-emerald-500"
+    : "dyn:border-input";
 
   return (
-    <div className="space-y-2">
+    <div className="dyn:space-y-2">
       <label
         htmlFor={id ?? fieldId}
-        className="text-sm font-medium text-muted-foreground"
+        className="dyn:text-sm dyn:font-medium dyn:text-muted-foreground"
       >
         {fieldLabel}
       </label>

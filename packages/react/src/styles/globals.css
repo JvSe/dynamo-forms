@@ -32,10 +32,10 @@
 
 @layer base {
   * {
-    @apply border-border;
+    @apply dyn:border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply dyn:bg-background dyn:text-foreground;
   }
 }
 

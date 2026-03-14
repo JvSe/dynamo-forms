@@ -13,12 +13,12 @@ export const Input = React.forwardRef<HTMLInputElement, InputProps>(
       <input
         type={type}
         className={cn(
-          "flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background",
-          "file:border-0 file:bg-transparent file:text-sm file:font-medium",
-          "placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-          "disabled:cursor-not-allowed disabled:opacity-50",
-          error && "border-destructive",
-          !error && success && "border-emerald-500",
+          "dyn:flex dyn:h-10 dyn:w-full dyn:rounded-md dyn:border dyn:border-input dyn:bg-background dyn:px-3 dyn:py-2 dyn:text-sm dyn:ring-offset-background",
+          "dyn:file:border-0 dyn:file:bg-transparent dyn:file:text-sm dyn:file:font-medium",
+          "dyn:placeholder:text-muted-foreground dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2",
+          "dyn:disabled:cursor-not-allowed dyn:disabled:opacity-50",
+          error && "dyn:border-destructive",
+          !error && success && "dyn:border-emerald-500",
           className
         )}
         ref={ref}

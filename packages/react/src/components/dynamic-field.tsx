@@ -123,15 +123,15 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
     fieldStatus && type !== "upload" && type !== "signature";
 
   return (
-    <div className="flex gap-2" ref={fieldRef}>
+    <div className="dyn:flex dyn:gap-2" ref={fieldRef}>
       {shouldShowFieldStatus && (
         <div
-          className={`w-1 md:w-1.5 rounded-xl ${
-            fieldStatus.status === "aprovado" ? "bg-emerald-500" : "bg-red-500"
+          className={`dyn:w-1 dyn:md:w-1.5 dyn:rounded-xl ${
+            fieldStatus.status === "aprovado" ? "dyn:bg-emerald-500" : "dyn:bg-red-500"
           }`}
         />
       )}
-      <div className="flex-1 space-y-2">
+      <div className="dyn:flex-1 dyn:space-y-2">
         <Controller
           control={control}
           name={field.id}
@@ -247,8 +247,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                     <RadioGroup
                       className={
                         config.alignment === "horizontal"
-                          ? "flex flex-row flex-wrap gap-2"
-                          : "flex flex-col gap-2"
+                          ? "dyn:flex dyn:flex-row dyn:flex-wrap dyn:gap-2"
+                          : "dyn:flex dyn:flex-col dyn:gap-2"
                       }
                       value={safeValue}
                       onValueChange={(newValue) => {
@@ -273,8 +273,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       id={id}
                       className={
                         config.alignment === "horizontal"
-                          ? "flex flex-row flex-wrap gap-2"
-                          : "flex flex-col gap-2"
+                          ? "dyn:flex dyn:flex-row dyn:flex-wrap dyn:gap-2"
+                          : "dyn:flex dyn:flex-col dyn:gap-2"
                       }
                     >
                       {optionsWithValue.map((option) => {
@@ -308,7 +308,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         return (
                           <label
                             key={option.value}
-                            className="flex items-center gap-2 rounded-md border px-3 py-2 text-sm cursor-pointer transition-colors bg-background hover:bg-muted"
+                            className="dyn:flex dyn:items-center dyn:gap-2 dyn:rounded-md dyn:border dyn:px-3 dyn:py-2 dyn:text-sm dyn:cursor-pointer dyn:transition-colors dyn:bg-background dyn:hover:bg-muted"
                           >
                             <Checkbox
                               checked={checked}
@@ -430,11 +430,11 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                 aria-invalid={fieldState.invalid || undefined}
               >
                 {!hideLabel && !components?.[type] && (
-                  <div className="flex items-center justify-between mb-1 md:mb-2">
+                  <div className="dyn:flex dyn:items-center dyn:justify-between dyn:mb-1 dyn:md:mb-2">
                     <FieldLabel htmlFor={id}>
                       {config.label}
                       {config.required && (
-                        <span className="text-red-500" aria-hidden="true">
+                        <span className="dyn:text-red-500" aria-hidden="true">
                           {" "}
                           *
                         </span>
@@ -455,8 +455,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
           }}
         />
         {fieldStatus?.status === "reprovado" && fieldStatus.mensagem && (
-          <div className="w-full rounded-lg bg-red-100 mt-2 md:mt-3 p-2 md:p-3">
-            <p className="text-red-600 text-sm md:text-base font-semibold">
+          <div className="dyn:w-full dyn:rounded-lg dyn:bg-red-100 dyn:mt-2 dyn:md:mt-3 dyn:p-2 dyn:md:p-3">
+            <p className="dyn:text-red-600 dyn:text-sm dyn:md:text-base dyn:font-semibold">
               Note: {fieldStatus.mensagem}
             </p>
           </div>

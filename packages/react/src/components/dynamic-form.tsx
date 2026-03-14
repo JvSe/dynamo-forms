@@ -422,7 +422,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   return (
     <FormProvider {...methods}>
       <form
-        className="w-full flex flex-col gap-4 md:gap-6 min-h-0 flex-1"
+        className="dyn:w-full dyn:flex dyn:flex-col dyn:gap-4 dyn:md:gap-6 dyn:min-h-0 dyn:flex-1"
         aria-labelledby={formId}
         onSubmit={(event) => {
           event.preventDefault();
@@ -437,8 +437,8 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
         )}
 
         <div
-          className={`w-full flex flex-col flex-1 min-h-0 ${
-            scrollEnabled ? "overflow-y-auto" : "overflow-hidden"
+          className={`dyn:w-full dyn:flex dyn:flex-col dyn:flex-1 dyn:min-h-0 ${
+            scrollEnabled ? "dyn:overflow-y-auto" : "dyn:overflow-hidden"
           }`}
           style={{ gap: 15 }}
         >
@@ -464,7 +464,7 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
           ))}
         </div>
 
-        <div className="mt-auto shrink-0">
+        <div className="dyn:mt-auto dyn:shrink-0">
           <FormFooter
             isSubmitting={isSubmitting}
           multiStep={isMultiStep}

@@ -114,7 +114,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     };
 
     return (
-      <div className={cn("relative flex w-full", className)}>
+      <div className={cn("dyn:relative dyn:flex dyn:w-full", className)}>
         <Input
           id={id}
           value={inputValue}
@@ -129,23 +129,23 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
           disabled={disabled}
           error={error}
           success={success}
-          className="pr-9"
+          className="dyn:pr-9"
         />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger
             type="button"
             className={cn(
-              "absolute right-0 top-0 h-full rounded-r-md border border-l-0 border-input bg-transparent px-2",
-              "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-              "disabled:pointer-events-none disabled:opacity-50"
+              "dyn:absolute dyn:right-0 dyn:top-0 dyn:h-full dyn:rounded-r-md dyn:border dyn:border-l-0 dyn:border-input dyn:bg-transparent dyn:px-2",
+              "dyn:hover:bg-accent dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2",
+              "dyn:disabled:pointer-events-none dyn:disabled:opacity-50"
             )}
             disabled={disabled}
             aria-label="Selecionar data"
           >
-            <CalendarIcon className="size-4 text-muted-foreground" />
+            <CalendarIcon className="dyn:size-4 dyn:text-muted-foreground" />
           </PopoverTrigger>
           <PopoverContent
-            className="w-auto overflow-hidden p-0"
+            className="dyn:w-auto dyn:overflow-hidden dyn:p-0"
             align="end"
             alignOffset={-8}
             sideOffset={8}
@@ -191,8 +191,8 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
   };
 
   return (
-    <div className={cn("flex w-full gap-2", className)}>
-      <div className="relative flex min-w-0 flex-1">
+    <div className={cn("dyn:flex dyn:w-full dyn:gap-2", className)}>
+      <div className="dyn:relative dyn:flex dyn:min-w-0 dyn:flex-1">
         <Input
           id={id}
           value={formatDateDisplay(datePart, "date")}
@@ -202,23 +202,23 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
           disabled={disabled}
           error={error}
           success={success}
-          className="cursor-pointer pr-9"
+          className="dyn:cursor-pointer dyn:pr-9"
         />
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger
             type="button"
             className={cn(
-              "absolute right-0 top-0 h-full rounded-r-md border border-l-0 border-input bg-transparent px-2",
-              "hover:bg-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
-              "disabled:pointer-events-none disabled:opacity-50"
+              "dyn:absolute dyn:right-0 dyn:top-0 dyn:h-full dyn:rounded-r-md dyn:border dyn:border-l-0 dyn:border-input dyn:bg-transparent dyn:px-2",
+              "dyn:hover:bg-accent dyn:focus-visible:outline-none dyn:focus-visible:ring-2 dyn:focus-visible:ring-ring dyn:focus-visible:ring-offset-2",
+              "dyn:disabled:pointer-events-none dyn:disabled:opacity-50"
             )}
             disabled={disabled}
             aria-label="Selecionar data"
           >
-            <CalendarIcon className="size-4 text-muted-foreground" />
+            <CalendarIcon className="dyn:size-4 dyn:text-muted-foreground" />
           </PopoverTrigger>
           <PopoverContent
-            className="w-auto overflow-hidden p-0"
+            className="dyn:w-auto dyn:overflow-hidden dyn:p-0"
             align="end"
             alignOffset={-8}
             sideOffset={8}
@@ -241,7 +241,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         disabled={disabled}
         error={error}
         success={success}
-        className="min-w-0 flex-1"
+        className="dyn:min-w-0 dyn:flex-1"
       />
     </div>
   );

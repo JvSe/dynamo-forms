@@ -64,7 +64,7 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/40"
+      className="dyn:fixed dyn:inset-0 dyn:z-[100] dyn:flex dyn:items-center dyn:justify-center dyn:p-4 dyn:bg-black/40"
       onClick={handleClose}
       role="dialog"
       aria-modal="true"
@@ -72,19 +72,19 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
     >
       <div
         className={cn(
-          "bg-white rounded-xl shadow-xl flex flex-col w-full max-w-2xl max-h-[85vh]",
-          "border border-gray-200"
+          "dyn:bg-white dyn:rounded-xl dyn:shadow-xl dyn:flex dyn:flex-col dyn:w-full dyn:max-w-2xl dyn:max-h-[85vh]",
+          "dyn:border dyn:border-gray-200"
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="shrink-0 flex items-center justify-between px-5 py-4 border-b border-gray-200">
-          <h2 id="import-modal-title" className="text-lg font-semibold text-gray-900">
+        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-between dyn:px-5 dyn:py-4 dyn:border-b dyn:border-gray-200">
+          <h2 id="import-modal-title" className="dyn:text-lg dyn:font-semibold dyn:text-gray-900">
             Importar template (JSON)
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="p-2 rounded-lg text-gray-500 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+            className="dyn:p-2 dyn:rounded-lg dyn:text-gray-500 dyn:hover:bg-gray-100 dyn:hover:text-gray-700 dyn:transition-colors"
             aria-label="Fechar"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -93,11 +93,11 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
           </button>
         </div>
 
-        <div className="flex-1 min-h-0 flex flex-col gap-3 px-5 py-4">
-          <p className="text-sm text-gray-500">
+        <div className="dyn:flex-1 dyn:min-h-0 dyn:flex dyn:flex-col dyn:gap-3 dyn:px-5 dyn:py-4">
+          <p className="dyn:text-sm dyn:text-gray-500">
             Cole o schema JSON do formulário. Os campos serão validados e exibidos no canvas.
           </p>
-          <div className="flex-1 min-h-0 flex flex-col">
+          <div className="dyn:flex-1 dyn:min-h-0 dyn:flex dyn:flex-col">
             <textarea
               value={json}
               onChange={(e) => {
@@ -106,33 +106,33 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
               }}
               placeholder={PLACEHOLDER}
               className={cn(
-                "w-full flex-1 min-h-[240px] p-3 rounded-lg border text-sm font-mono resize-y",
-                "border-gray-300 bg-gray-50/50 text-gray-900 placeholder:text-gray-400",
-                "focus:outline-none focus:ring-2 focus:ring-[#1a73e8] focus:border-transparent",
-                error && "border-red-400 bg-red-50/30"
+                "dyn:w-full dyn:flex-1 dyn:min-h-[240px] dyn:p-3 dyn:rounded-lg dyn:border dyn:text-sm dyn:font-mono dyn:resize-y",
+                "dyn:border-gray-300 dyn:bg-gray-50/50 dyn:text-gray-900 dyn:placeholder:text-gray-400",
+                "dyn:focus:outline-none dyn:focus:ring-2 dyn:focus:ring-[#1a73e8] dyn:focus:border-transparent",
+                error && "dyn:border-red-400 dyn:bg-red-50/30"
               )}
               spellCheck={false}
             />
             {error && (
-              <p className="mt-2 text-sm text-red-600" role="alert">
+              <p className="dyn:mt-2 dyn:text-sm dyn:text-red-600" role="alert">
                 {error}
               </p>
             )}
           </div>
         </div>
 
-        <div className="shrink-0 flex justify-end gap-2 px-5 py-4 border-t border-gray-200 bg-gray-50/50 rounded-b-xl">
+        <div className="dyn:shrink-0 dyn:flex dyn:justify-end dyn:gap-2 dyn:px-5 dyn:py-4 dyn:border-t dyn:border-gray-200 dyn:bg-gray-50/50 dyn:rounded-b-xl">
           <button
             type="button"
             onClick={handleClose}
-            className="py-2.5 px-4 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-gray-700 dyn:bg-white dyn:border dyn:border-gray-300 dyn:rounded-lg dyn:hover:bg-gray-50"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={handleImport}
-            className="py-2.5 px-4 text-sm font-medium text-white bg-[#1a73e8] rounded-lg hover:bg-[#1557b0]"
+            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-white dyn:bg-[#1a73e8] dyn:rounded-lg dyn:hover:bg-[#1557b0]"
           >
             Importar e aplicar
           </button>
