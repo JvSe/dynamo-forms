@@ -305,7 +305,12 @@ export function FormBuilder({
         }
       }
 
-      if (drop?.type === "group" && drop.groupId && drop.groupId !== parent?.group.id) {
+      if (
+        drop?.type === "group" &&
+        drop.groupId &&
+        drop.groupId !== parent?.group.id &&
+        drop.groupId !== activeIdStr
+      ) {
         const without = isFromGroup
           ? removeFieldFromGroup(value, parent!.group.id, activeIdStr).fields
           : value.filter((f) => f.id !== activeIdStr);

@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useMemo } from "react";
 import { Control, Controller, FormState } from "react-hook-form";
-import { Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import {
   useDebounce,
   useOptimizedConditions,
@@ -142,20 +142,23 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
   };
 
   return (
-    <View className="flex-row" ref={fieldRef} onLayout={handleLayout}>
+    <View style={styles.row} ref={fieldRef} onLayout={handleLayout}>
       {shouldShowFieldStatus && (
         <View
-          className={`w-1 md:w-1.5 h-full mr-2 md:mr-3 rounded-xl ${
-            fieldStatus.status === "aprovado" ? "bg-green-500" : "bg-red-500"
-          }`}
+          style={[
+            styles.statusBar,
+            fieldStatus.status === "aprovado"
+              ? styles.statusBarAprovado
+              : styles.statusBarReprovado,
+          ]}
         />
       )}
-      <View className="w-full flex-1">
+      <View style={styles.content}>
         {type !== "group" && !components?.[type] && (
-          <View className="flex-row items-center justify-between mb-1 md:mb-2">
-            <Text className="text-base md:text-xl text-gray-800 font-semibold">
+          <View style={styles.labelRow}>
+            <Text style={styles.label}>
               {config.label}
-              {config.required && <Text className="text-red-500"> *</Text>}
+              {config.required && <Text style={styles.required}> *</Text>}
             </Text>
           </View>
         )}
@@ -374,14 +377,14 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
           }}
         />
         {fieldStatus?.status === "reprovado" && fieldStatus.mensagem && (
-          <View className="w-full rounded-lg bg-red-100 mt-2 md:mt-3 p-2 md:p-3">
-            <Text className="text-red-500 text-sm md:text-base font-semibold">
+          <View style={styles.errorNoteBox}>
+            <Text style={styles.errorNoteText}>
               Note: {fieldStatus.mensagem}
             </Text>
           </View>
         )}
         {isError && (
-          <Text className="text-red-500 text-sm md:text-base mt-2 md:mt-3 font-semibold">
+          <Text style={styles.errorText}>
             {formState?.errors[id]?.message as string}
           </Text>
         )}
@@ -389,6 +392,49 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  row: { flexDirection: "row" },
+  statusBar: {
+    width: 4,
+    height: "100%",
+    marginRight: 12,
+    borderRadius: 6,
+  },
+  statusBarAprovado: { backgroundColor: "#22c55e" },
+  statusBarReprovado: { backgroundColor: "#ef4444" },
+  content: { flex: 1, width: "100%" },
+  labelRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    marginBottom: 8,
+  },
+  label: {
+    fontSize: 16,
+    color: "#1f2937",
+    fontWeight: "600",
+  },
+  required: { color: "#ef4444" },
+  errorNoteBox: {
+    width: "100%",
+    borderRadius: 8,
+    backgroundColor: "#fee2e2",
+    marginTop: 12,
+    padding: 12,
+  },
+  errorNoteText: {
+    color: "#ef4444",
+    fontSize: 14,
+    fontWeight: "600",
+  },
+  errorText: {
+    color: "#ef4444",
+    fontSize: 14,
+    marginTop: 12,
+    fontWeight: "600",
+  },
+});
 
 export const DynamicField = memo(
   DynamicFieldComponent,

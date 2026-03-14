@@ -6,7 +6,45 @@ import { getStepsWithFieldIds } from "@jvseen/dynamo-core";
 import { DynamicForm } from "@jvseen/dynamo-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+
+const STORAGE_KEY = "dynamo-forms-builder-draft";
+
+type StoredDraft = {
+  fields: DynamicFieldConfig[];
+  formTitle: string;
+  steps: FormStep[];
+};
+
+function loadDraft(): StoredDraft | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = window.localStorage.getItem(STORAGE_KEY);
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as unknown;
+    if (
+      parsed &&
+      typeof parsed === "object" &&
+      Array.isArray((parsed as StoredDraft).fields) &&
+      typeof (parsed as StoredDraft).formTitle === "string" &&
+      Array.isArray((parsed as StoredDraft).steps)
+    ) {
+      return parsed as StoredDraft;
+    }
+  } catch {
+    // ignore invalid or old data
+  }
+  return null;
+}
+
+function saveDraft(draft: StoredDraft) {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(draft));
+  } catch {
+    // ignore quota / private mode
+  }
+}
 
 const initialSteps: FormStep[] = [{ id: "step_1", title: "Step 1" }];
 
@@ -17,7 +55,23 @@ export default function BuilderTestPage() {
   const [steps, setSteps] = useState<FormStep[]>(initialSteps);
   const [finishedJson, setFinishedJson] = useState<string | null>(null);
   const [showPreview, setShowPreview] = useState(false);
+  const [hasLoadedDraft, setHasLoadedDraft] = useState(false);
   const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const draft = loadDraft();
+    if (draft) {
+      setFields(draft.fields);
+      setFormTitle(draft.formTitle);
+      setSteps(draft.steps.length > 0 ? draft.steps : initialSteps);
+    }
+    setHasLoadedDraft(true);
+  }, []);
+
+  useEffect(() => {
+    if (!hasLoadedDraft) return;
+    saveDraft({ fields, formTitle, steps });
+  }, [hasLoadedDraft, fields, formTitle, steps]);
 
   const handleFinish = (value: DynamicFieldConfig[]) => {
     const schema = {
