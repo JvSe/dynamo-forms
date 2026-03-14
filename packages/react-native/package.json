@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-react-native",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Dynamic forms for React Native - Dynamo Forms",
   "private": false,
   "license": "MIT",
