@@ -1,0 +1,867 @@
+{
+  "id": "form_protocol",
+  "name": "ROTEIRO DE INVESTIGAÇÃO – SUSPEITA DE AVC ISQUÊMICO AGUDO",
+  "fields": [
+    {
+      "id": "field-1773445579374-bbl0ea8",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "ROTEIRO DE INVESTIGAÇÃO – SUSPEITA DE AVC ISQUÊMICO AGUDO",
+        "required": false,
+        "titleText": "ROTEIRO DE INVESTIGAÇÃO – SUSPEITA DE AVC ISQUÊMICO AGUDO",
+        "step": 0
+      }
+    },
+    {
+      "id": "field-1773445586897-l7xp8xr",
+      "type": "divider",
+      "config": {
+        "name": "divider",
+        "label": "Divider",
+        "required": false,
+        "step": 0
+      }
+    },
+    {
+      "id": "field-1773445601418-0rmfkrb",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "1. Determinação do Tempo",
+        "required": false,
+        "titleText": "1. Determinação do Tempo",
+        "step": 0
+      }
+    },
+    {
+      "id": "field-1773445624179-ygf5m9s",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Qual o dia e o horário exato do início dos sintomas?",
+        "required": true,
+        "options": [
+          {
+            "label": "Dia e Horário"
+          },
+          {
+            "label": "Sintomas ao despertar"
+          },
+          {
+            "label": "Não sei informar"
+          }
+        ],
+        "step": 0
+      }
+    },
+    {
+      "id": "field-1773445650922-v6d8tz9",
+      "type": "datetime",
+      "config": {
+        "name": "date_and_time",
+        "label": "Dia e Horário",
+        "required": true,
+        "dateType": "datetime",
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773445624179-ygf5m9s",
+              "operador": "equals",
+              "valor": "dia_e_horario"
+            }
+          ]
+        },
+        "step": 0
+      }
+    },
+    {
+      "id": "field-1773445759222-2sllevx",
+      "type": "group",
+      "config": {
+        "name": "group",
+        "label": "Detalhes do sintomas",
+        "required": true,
+        "children": [
+          {
+            "id": "field-1773445785331-cf7d22j",
+            "type": "radio",
+            "config": {
+              "name": "options",
+              "label": "Qual foi a última vez que o paciente foi visto normal? ",
+              "required": true,
+              "options": [
+                {
+                  "label": "Dia e Horário"
+                },
+                {
+                  "label": "Não é possível determinar"
+                }
+              ],
+              "step": 0
+            }
+          },
+          {
+            "id": "field-1773445818707-f2hf4qv",
+            "type": "datetime",
+            "config": {
+              "name": "date_and_time",
+              "label": "Date and time",
+              "required": true,
+              "dateType": "datetime",
+              "step": 0,
+              "conditions": {
+                "action": "show",
+                "tipo": "AND",
+                "regras": [
+                  {
+                    "campo": "field-1773445785331-cf7d22j",
+                    "operador": "equals",
+                    "valor": "dia_e_horario"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "id": "field-1773445837005-1h5838n",
+            "type": "radio",
+            "config": {
+              "name": "options",
+              "label": "Os sintomas foram:",
+              "required": true,
+              "options": [
+                {
+                  "label": "Súbitos"
+                },
+                {
+                  "label": "Progressivos"
+                },
+                {
+                  "label": "Flutuantes"
+                }
+              ],
+              "step": 0
+            }
+          },
+          {
+            "id": "field-1773445864605-4o54aat",
+            "type": "radio",
+            "config": {
+              "name": "options",
+              "label": "Houve melhora dos sintomas?",
+              "required": true,
+              "options": [
+                {
+                  "label": " Sim, completa"
+                },
+                {
+                  "label": "Sim, parcial"
+                },
+                {
+                  "label": "Não, sintomas estáveis"
+                },
+                {
+                  "label": "Não, os sintomas pioraram"
+                }
+              ],
+              "step": 0
+            }
+          }
+        ],
+        "expanded": true,
+        "step": 0,
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773445624179-ygf5m9s",
+              "operador": "equals",
+              "valor": "nao_sei_informar"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "field-1773445903873-50s1acw",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "2. Critérios de Exclusão Absoluta para Trombólise",
+        "required": false,
+        "titleText": "2. Critérios de Exclusão Absoluta para Trombólise",
+        "step": 1
+      }
+    },
+    {
+      "id": "field-1773445911228-e6sr7zw",
+      "type": "divider",
+      "config": {
+        "name": "divider",
+        "label": "Divider",
+        "required": false,
+        "step": 1
+      }
+    },
+    {
+      "id": "field-1773445912454-02g0x8i",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "A) Hemorragia ou risco hemorrágico",
+        "required": false,
+        "titleText": "A) Hemorragia ou risco hemorrágico",
+        "step": 1
+      }
+    },
+    {
+      "id": "field-1773445930743-lnvlkik",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Já teve hemorragia intracraniana?",
+        "required": false,
+        "options": [
+          {
+            "label": "Sim"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sei informar"
+          }
+        ],
+        "step": 1
+      }
+    },
+    {
+      "id": "field-1773445965794-y08djev",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Tem diagnóstico de malformação arteriovenosa ou aneurisma conhecido?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, malformação arteriovenosa"
+          },
+          {
+            "label": "Sim, aneurisma cerebral"
+          },
+          {
+            "label": "Sim, ambos"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 2
+      }
+    },
+    {
+      "id": "field-1773445996226-s87vbls",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "História de neoplasia intracraniana?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, tumor cerebral atual"
+          },
+          {
+            "label": "Sim, tumor cerebral tratado"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 3
+      }
+    },
+    {
+      "id": "field-1773446022519-gvbz4lv",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "TCE grave nos últimos 3 meses?",
+        "required": false,
+        "options": [
+          {
+            "label": "Sim, há menos de 3 meses"
+          },
+          {
+            "label": "Sim, há mais de 3 meses"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 4
+      }
+    },
+    {
+      "id": "field-1773446061789-tyh1f1v",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": " AVC isquêmico nos últimos 3 meses?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, há menos de 3 meses"
+          },
+          {
+            "label": "Sim, há mais de 3 meses"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 5
+      }
+    },
+    {
+      "id": "field-1773446098539-ualto00",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Cirurgia intracraniana ou raquimedular recente?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, cirurgia intracraniana (<14 dias)"
+          },
+          {
+            "label": "Sim, cirurgia raquimedular (<14 dias)"
+          },
+          {
+            "label": "Sim, mas há mais de 14 dias"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 6
+      }
+    },
+    {
+      "id": "field-1773446130564-trzjilh",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": " Punção arterial não compressível nos últimos 7 dias?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, femoral"
+          },
+          {
+            "label": "Sim, subclávia"
+          },
+          {
+            "label": "Sim, outra localização não compressível"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 7
+      }
+    },
+    {
+      "id": "field-1773446159360-0x9gbya",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Hemorragia digestiva ativa ou recente (<21 dias)?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, hemorragia ativa no momento"
+          },
+          {
+            "label": "Sim, hemorragia há menos de 21 dias"
+          },
+          {
+            "label": "Sim, hemorragia há mais de 21 dias"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 8
+      }
+    },
+    {
+      "id": "field-1773446195055-m7zxnot",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Qual o número de Plaquetas?",
+        "required": true,
+        "options": [
+          {
+            "label": "< 100.000/mm³ (contraindicação absoluta)"
+          },
+          {
+            "label": "100.000 - 150.000/mm³"
+          },
+          {
+            "label": "> 150.000/mm³ (normal)"
+          },
+          {
+            "label": "Exame não disponível"
+          },
+          {
+            "label": "Valor exato: __________ /mm³"
+          }
+        ],
+        "step": 9
+      }
+    },
+    {
+      "id": "field-1773446227725-3p2ztuw",
+      "type": "text",
+      "config": {
+        "name": "short_text",
+        "label": "Valor exato: __________ /mm³",
+        "required": true,
+        "step": 9,
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773446195055-m7zxnot",
+              "operador": "equals",
+              "valor": "valor_exato____________mm"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "field-1773446251987-2rgeg57",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "B) Uso de Anticoagulantes",
+        "required": false,
+        "titleText": "B) Uso de Anticoagulantes",
+        "step": 10
+      }
+    },
+    {
+      "id": "field-1773446264462-vzdlfaq",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Usa ou usou varfarina ou outros anticoagulantes?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, varfarina"
+          },
+          {
+            "label": "Sim, outro:"
+          },
+          {
+            "label": "Não usa anticoagulantes"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 10
+      }
+    },
+    {
+      "id": "field-1773446294088-9b2ojwq",
+      "type": "text",
+      "config": {
+        "name": "short_text",
+        "label": "Descreva o outro anticoagulantes",
+        "required": true,
+        "step": 10,
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773446264462-vzdlfaq",
+              "operador": "equals",
+              "valor": "sim_outro"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "field-1773446328637-u89encv",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Último INR? (se usa varfarina)",
+        "required": false,
+        "options": [
+          {
+            "label": "INR < 1,7 (permite trombólise)"
+          },
+          {
+            "label": "INR ≥ 1,7 (contraindicação)"
+          },
+          {
+            "label": "INR não disponível"
+          },
+          {
+            "label": "Não usa varfarina"
+          },
+          {
+            "label": "Valor exato do INR: ______"
+          }
+        ],
+        "step": 11
+      }
+    },
+    {
+      "id": "field-1773446360081-7ufc5k5",
+      "type": "text",
+      "config": {
+        "name": "short_text",
+        "label": "Valor exato do INR: ______",
+        "required": true,
+        "step": 11,
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773446328637-u89encv",
+              "operador": "equals",
+              "valor": "valor_exato_do_inr_______"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "field-1773446379494-0yruvyh",
+      "type": "title",
+      "config": {
+        "name": "section_title",
+        "label": "3. Condições Clínicas Associadas",
+        "required": false,
+        "titleText": "3. Condições Clínicas Associadas",
+        "step": 12
+      }
+    },
+    {
+      "id": "field-1773446391002-l33ztii",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Infarto agudo do miocárdio recente?",
+        "required": false,
+        "options": [
+          {
+            "label": "Sim, nas últimas 3 semanas"
+          },
+          {
+            "label": "Sim, há mais de 3 semanas"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 12
+      }
+    },
+    {
+      "id": "field-1773446424369-59989ax",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Endocardite?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, endocardite ativa"
+          },
+          {
+            "label": "Sim, endocardite tratada"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 13
+      }
+    },
+    {
+      "id": "field-1773446448531-mfbdhlw",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Dissecção de aorta suspeita?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, dissecção confirmada"
+          },
+          {
+            "label": "Suspeita clínica presente"
+          },
+          {
+            "label": "Não há suspeita"
+          },
+          {
+            "label": "Não avaliado"
+          }
+        ],
+        "step": 14
+      }
+    },
+    {
+      "id": "field-1773446503149-ae8kmdw",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Sexo",
+        "required": true,
+        "options": [
+          {
+            "label": "Masculino"
+          },
+          {
+            "label": "Feminino"
+          }
+        ],
+        "step": 15
+      }
+    },
+    {
+      "id": "field-1773446533599-2jpjczt",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Gestante?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim"
+          },
+          {
+            "label": "Não"
+          }
+        ],
+        "step": 15,
+        "conditions": {
+          "action": "show",
+          "tipo": "AND",
+          "regras": [
+            {
+              "campo": "field-1773446503149-ae8kmdw",
+              "operador": "equals",
+              "valor": "feminino"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "field-1773446559002-n6kidbv",
+      "type": "radio",
+      "config": {
+        "name": "options",
+        "label": "Doença hepática grave?",
+        "required": true,
+        "options": [
+          {
+            "label": "Sim, cirrose hepática"
+          },
+          {
+            "label": "Sim, insuficiência hepática"
+          },
+          {
+            "label": "Sim, coagulopatia por hepatopatia"
+          },
+          {
+            "label": "Não"
+          },
+          {
+            "label": "Não sabe informar"
+          }
+        ],
+        "step": 16
+      }
+    }
+  ],
+  "steps": [
+    {
+      "id": "step_1",
+      "title": "Step 1",
+      "fieldIds": [
+        "field-1773445579374-bbl0ea8",
+        "field-1773445586897-l7xp8xr",
+        "field-1773445601418-0rmfkrb",
+        "field-1773445624179-ygf5m9s",
+        "field-1773445650922-v6d8tz9",
+        "field-1773445759222-2sllevx"
+      ]
+    },
+    {
+      "id": "step_2",
+      "title": "Step 2",
+      "fieldIds": [
+        "field-1773445903873-50s1acw",
+        "field-1773445911228-e6sr7zw",
+        "field-1773445912454-02g0x8i",
+        "field-1773445930743-lnvlkik"
+      ]
+    },
+    {
+      "id": "step_3",
+      "title": "Step 3",
+      "fieldIds": [
+        "field-1773445965794-y08djev"
+      ]
+    },
+    {
+      "id": "step_4",
+      "title": "Step 4",
+      "fieldIds": [
+        "field-1773445996226-s87vbls"
+      ]
+    },
+    {
+      "id": "step_5",
+      "title": "Step 5",
+      "fieldIds": [
+        "field-1773446022519-gvbz4lv"
+      ]
+    },
+    {
+      "id": "step_6",
+      "title": "Step 6",
+      "fieldIds": [
+        "field-1773446061789-tyh1f1v"
+      ]
+    },
+    {
+      "id": "step_7",
+      "title": "Step 7",
+      "fieldIds": [
+        "field-1773446098539-ualto00"
+      ]
+    },
+    {
+      "id": "step_8",
+      "title": "Step 8",
+      "fieldIds": [
+        "field-1773446130564-trzjilh"
+      ]
+    },
+    {
+      "id": "step_9",
+      "title": "Step 9",
+      "fieldIds": [
+        "field-1773446159360-0x9gbya"
+      ]
+    },
+    {
+      "id": "step_10",
+      "title": "Step 10",
+      "fieldIds": [
+        "field-1773446195055-m7zxnot",
+        "field-1773446227725-3p2ztuw"
+      ]
+    },
+    {
+      "id": "step_11",
+      "title": "Step 11",
+      "fieldIds": [
+        "field-1773446251987-2rgeg57",
+        "field-1773446264462-vzdlfaq",
+        "field-1773446294088-9b2ojwq"
+      ]
+    },
+    {
+      "id": "step_12",
+      "title": "Step 12",
+      "fieldIds": [
+        "field-1773446328637-u89encv",
+        "field-1773446360081-7ufc5k5"
+      ]
+    },
+    {
+      "id": "step_13",
+      "title": "Step 13",
+      "fieldIds": [
+        "field-1773446379494-0yruvyh",
+        "field-1773446391002-l33ztii"
+      ]
+    },
+    {
+      "id": "step_14",
+      "title": "Step 14",
+      "fieldIds": [
+        "field-1773446424369-59989ax"
+      ]
+    },
+    {
+      "id": "step_15",
+      "title": "Step 15",
+      "fieldIds": [
+        "field-1773446448531-mfbdhlw"
+      ]
+    },
+    {
+      "id": "step_16",
+      "title": "Step 16",
+      "fieldIds": [
+        "field-1773446503149-ae8kmdw",
+        "field-1773446533599-2jpjczt"
+      ]
+    },
+    {
+      "id": "step_17",
+      "title": "Step 17",
+      "fieldIds": [
+        "field-1773446559002-n6kidbv"
+      ]
+    }
+  ]
+}
