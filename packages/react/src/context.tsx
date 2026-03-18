@@ -1,3 +1,9 @@
+import type {
+  DynamicFieldConfig,
+  ErrorFieldInfo,
+  FormStep,
+  FormUpload,
+} from "@jvseen/dynamo-core";
 import React, {
   createContext,
   PropsWithChildren,
@@ -5,12 +11,7 @@ import React, {
   useMemo,
   useState,
 } from "react";
-import type {
-  DynamicFieldConfig,
-  FormStep,
-  FormUpload,
-  ErrorFieldInfo,
-} from "@jvseen/dynamo-core";
+import type { ComponentOverridesMap } from "./components/dynamic-field";
 import {
   DynamicFormFields,
   DynamicFormFooter,
@@ -19,7 +20,6 @@ import {
   DynamicFormSteps,
   DynamicFormValidationOverlay,
 } from "./components/dynamic-form";
-import type { ComponentOverridesMap } from "./components/dynamic-field";
 import type { ActionsButtonProps } from "./components/form-footer";
 
 interface FormContextType {
@@ -53,10 +53,6 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   steps?: FormStep[];
 };
 
-/**
- * Preset "pronto" (Header/Steps/Contents/Footer/Overlay).
- * Para composição livre, use `DynamicForm` (Provider) exportado do entrypoint.
- */
 export const DynamicFormDefault = React.memo(
   ({
     fields,
