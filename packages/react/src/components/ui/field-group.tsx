@@ -1,5 +1,5 @@
-import React, { PropsWithChildren } from "react";
 import { cn } from "@/lib/utils";
+import React, { PropsWithChildren } from "react";
 
 export interface FieldGroupProps extends PropsWithChildren {
   label?: string;
@@ -12,7 +12,7 @@ export const FieldGroup: React.FC<FieldGroupProps> = ({ label, children, alignme
   return (
     <fieldset
       className={cn(
-        "dyn:w-full dyn:rounded-lg dyn:border dyn:bg-card dyn:p-4 dyn:md:p-5",
+        "dyn:w-full dyn:rounded-lg dyn:border dyn:p-4 dyn:md:p-5",
         !isHorizontal && "dyn:space-y-4 dyn:md:space-y-5"
       )}
     >
