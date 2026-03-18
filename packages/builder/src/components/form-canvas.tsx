@@ -7,7 +7,7 @@ import { DynamicField } from "@jvseen/dynamo-react";
 import { FieldCard } from "./field-card.js";
 import { getPreviewDefaultValues } from "../lib/preview-default-values.js";
 import type { FieldLayout } from "../lib/layout-utils.js";
-import { FORM_CANVAS_ID, CANVAS_TOP_DROP_ID, dropBottomId, groupChildrenId } from "../constants/drop-ids.js";
+import { FORM_CANVAS_ID, CANVAS_TOP_DROP_ID, dropBottomId, dropUngroupId, groupChildrenId } from "../constants/drop-ids.js";
 import { cn } from "../lib/utils.js";
 
 export { FORM_CANVAS_ID };
@@ -19,6 +19,7 @@ type FormCanvasProps = {
   onSelectField: (id: string | null) => void;
   onRemoveField?: (id: string) => void;
   onDuplicateField?: (id: string) => void;
+  onMoveFieldOutOfGroup?: (groupId: string, fieldId: string) => void;
   multiStepEnabled?: boolean;
   steps?: FormStep[];
   activeStepIndex?: number;
@@ -178,6 +179,7 @@ function FormCanvasInner({
   onSelectField,
   onRemoveField,
   onDuplicateField,
+  onMoveFieldOutOfGroup,
   multiStepEnabled,
   steps,
   activeStepIndex,
@@ -265,6 +267,14 @@ function FormCanvasInner({
 
           {sortedByLayout.map((field) => (
             <React.Fragment key={field.id}>
+              {field.type === "group" && (
+                <DropZone
+                  id={dropUngroupId(field.id)}
+                  className="dyn:w-full dyn:min-h-10 dyn:mb-2 dyn:flex dyn:items-center dyn:justify-center dyn:rounded-lg dyn:border-2 dyn:border-dashed dyn:border-gray-300 dyn:bg-gray-50 dyn:text-xs dyn:font-medium dyn:text-gray-500 dyn:transition-colors hover:dyn:border-[#1a73e8] hover:dyn:bg-[#1a73e8]/10 hover:dyn:text-[#1a73e8]"
+                >
+                  ← Solte aqui para mover campo para fora do grupo
+                </DropZone>
+              )}
               <div className="dyn:w-full">
                 {field.type === "group" ? (
                   <GroupBlock
@@ -273,6 +283,7 @@ function FormCanvasInner({
                     onSelectField={onSelectField}
                     onRemoveField={onRemoveField}
                     onDuplicateField={onDuplicateField}
+                    onMoveFieldOutOfGroup={onMoveFieldOutOfGroup}
                     control={control}
                     formValues={formValues ?? {}}
                     formState={formState}
@@ -313,6 +324,7 @@ type GroupBlockProps = {
   onSelectField: (id: string | null) => void;
   onRemoveField?: (id: string) => void;
   onDuplicateField?: (id: string) => void;
+  onMoveFieldOutOfGroup?: (groupId: string, fieldId: string) => void;
   control: any;
   formValues: Record<string, unknown>;
   formState: any;
@@ -324,12 +336,14 @@ function GroupBlock({
   onSelectField,
   onRemoveField,
   onDuplicateField,
+  onMoveFieldOutOfGroup,
   control,
   formValues,
   formState,
 }: GroupBlockProps) {
   const { setNodeRef, isOver } = useDroppable({ id: groupChildrenId(field.id) });
   const children = field.type === "group" ? (field.config.children ?? []) : [];
+  const groupId = field.id;
 
   return (
     <FieldCard
@@ -356,7 +370,7 @@ function GroupBlock({
             </div>
           ) : (
             <div className="dyn:flex dyn:flex-col dyn:gap-3">
-              {children.map((child) => (
+                {children.map((child) => (
                 <FieldCard
                   key={child.id}
                   field={child}
@@ -364,6 +378,9 @@ function GroupBlock({
                   onSelect={() => onSelectField(child.id)}
                   onRemove={onRemoveField ? () => onRemoveField(child.id) : undefined}
                   onDuplicate={onDuplicateField ? () => onDuplicateField(child.id) : undefined}
+                  onMoveOutOfGroup={
+                    onMoveFieldOutOfGroup ? () => onMoveFieldOutOfGroup(groupId, child.id) : undefined
+                  }
                   mode="sortable"
                 >
                   <DynamicField

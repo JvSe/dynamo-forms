@@ -3,6 +3,7 @@ import {
   DndContext,
   DragOverlay,
   PointerSensor,
+  pointerWithin,
   useSensor,
   useSensors,
   type DragEndEvent,
@@ -332,6 +333,32 @@ export function FormBuilder({
         return;
       }
 
+      if (drop?.type === "ungroup" && drop.groupId && isFromGroup && parent?.group.id === drop.groupId) {
+        const { fields: nextFields, removed } = removeFieldFromGroup(value, parent.group.id, activeIdStr);
+        if (!removed) return;
+        const groupIndex = nextFields.findIndex((f) => f.id === drop.groupId);
+        const insertIndex = groupIndex >= 0 ? groupIndex : nextFields.length;
+        const next = [...nextFields.slice(0, insertIndex), removed, ...nextFields.slice(insertIndex)];
+        let nextLayout: typeof layout;
+        if (insertIndex === 0) {
+          nextLayout = { [removed.id]: { row: 0, col: 0 } };
+          for (const id of Object.keys(layout)) {
+            const pos = layout[id] ?? { row: 0, col: 0 };
+            nextLayout[id] = { ...pos, row: pos.row + 1 };
+          }
+        } else {
+          const prevRootIds = getAllRootFieldIds(nextFields);
+          const { row, col, nextLayout: updated } = getLayoutForNewField(layout, prevRootIds, {
+            below: nextFields[insertIndex - 1]!.id,
+          });
+          nextLayout = { ...updated, [removed.id]: { row, col } };
+        }
+        setLayout(nextLayout);
+        onChange(next);
+        setSelectedFieldId(removed.id);
+        return;
+      }
+
       if (drop?.type === "top") {
         const rootIds = getAllRootFieldIds(value);
         const nextLayout = { ...layout };
@@ -434,6 +461,36 @@ export function FormBuilder({
     [value, onChange, layout]
   );
 
+  const handleMoveFieldOutOfGroup = useCallback(
+    (groupId: string, fieldId: string) => {
+      const parent = findFieldParent(value, fieldId);
+      if (!parent || parent.group.id !== groupId) return;
+      const { fields: nextFields, removed } = removeFieldFromGroup(value, groupId, fieldId);
+      if (!removed) return;
+      const groupIndex = nextFields.findIndex((f) => f.id === groupId);
+      const insertIndex = groupIndex >= 0 ? groupIndex : nextFields.length;
+      const next = [...nextFields.slice(0, insertIndex), removed, ...nextFields.slice(insertIndex)];
+      let nextLayout: typeof layout;
+      if (insertIndex === 0) {
+        nextLayout = { [removed.id]: { row: 0, col: 0 } };
+        for (const id of Object.keys(layout)) {
+          const pos = layout[id] ?? { row: 0, col: 0 };
+          nextLayout[id] = { ...pos, row: pos.row + 1 };
+        }
+      } else {
+        const prevRootIds = getAllRootFieldIds(nextFields);
+        const { row, col, nextLayout: updated } = getLayoutForNewField(layout, prevRootIds, {
+          below: nextFields[insertIndex - 1]!.id,
+        });
+        nextLayout = { ...updated, [removed.id]: { row, col } };
+      }
+      setLayout(nextLayout);
+      onChange(next);
+      setSelectedFieldId(removed.id);
+    },
+    [value, onChange, layout]
+  );
+
   const handleAddFromPalette = useCallback(
     (item: PaletteDragData) => {
       const newField = createDefaultFieldConfig(item.fieldType, {
@@ -465,7 +522,12 @@ export function FormBuilder({
   const canvasContainerRef = React.useRef<HTMLDivElement>(null);
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={sensors}
+      collisionDetection={pointerWithin}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div
         className={cn(
           "dyn:grid dyn:grid-cols-[280px_1fr] dyn:h-screen dyn:max-h-screen dyn:rounded-2xl dyn:overflow-hidden dyn:shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
@@ -543,6 +605,7 @@ export function FormBuilder({
               onSelectField={setSelectedFieldId}
               onRemoveField={handleRemoveField}
               onDuplicateField={handleDuplicateField}
+              onMoveFieldOutOfGroup={handleMoveFieldOutOfGroup}
               multiStepEnabled={multiStepEnabled}
               steps={steps}
               activeStepIndex={activeStepIndex}

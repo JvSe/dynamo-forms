@@ -2,7 +2,7 @@ import React from "react";
 import { useDraggable } from "@dnd-kit/core";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
-import { Copy, Pencil, Trash2, Zap } from "lucide-react";
+import { ArrowUpToLine, Copy, Pencil, Trash2, Zap } from "lucide-react";
 import type { DynamicFieldConfig } from "@jvseen/dynamo-core";
 import { FIELD_TYPES } from "../constants/field-types.js";
 import { cn } from "../lib/utils.js";
@@ -32,6 +32,7 @@ type FieldCardProps = {
   onSelect: () => void;
   onRemove?: () => void;
   onDuplicate?: () => void;
+  onMoveOutOfGroup?: () => void;
   children?: React.ReactNode;
   mode?: FieldCardMode;
 };
@@ -40,14 +41,26 @@ function FieldActions({
   onSelect,
   onRemove,
   onDuplicate,
+  onMoveOutOfGroup,
 }: {
   onSelect: () => void;
   onRemove?: () => void;
   onDuplicate?: () => void;
+  onMoveOutOfGroup?: () => void;
 }) {
   return (
     <div className="dyn:absolute dyn:top-1.5 dyn:right-1.5 dyn:flex dyn:items-center dyn:gap-0.5 dyn:z-10">
       <div className="dyn:flex dyn:items-center dyn:gap-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:transition-opacity">
+        {onMoveOutOfGroup && (
+          <button
+            type="button"
+            title="Mover para fora do grupo"
+            onClick={(e) => { e.stopPropagation(); onMoveOutOfGroup(); }}
+            className="dyn:p-1.5 dyn:rounded-md dyn:hover:bg-blue-50 dyn:text-gray-400/50 dyn:hover:text-blue-600 dyn:transition-colors"
+          >
+            <ArrowUpToLine className="dyn:w-3 dyn:h-3" />
+          </button>
+        )}
         {onDuplicate && (
           <button
             type="button"
@@ -87,6 +100,7 @@ export function FieldCard({
   onSelect,
   onRemove,
   onDuplicate,
+  onMoveOutOfGroup,
   children,
   mode = "sortable",
 }: FieldCardProps) {
@@ -234,6 +248,7 @@ export function FieldCard({
             onSelect={onSelect}
             onRemove={onRemove}
             onDuplicate={onDuplicate}
+            onMoveOutOfGroup={onMoveOutOfGroup}
           />
           {children}
         </div>
