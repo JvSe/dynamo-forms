@@ -1,7 +1,7 @@
 /**
- * Post-process Tailwind-built CSS to remove @layer directives.
- * This allows the published CSS to be imported in projects that use Tailwind v4
- * without triggering "no matching @tailwind base directive" errors.
+ * Post-process Tailwind-built CSS to:
+ * 1. Remove @layer directives (allows import in projects with Tailwind v4)
+ * 2. Scope :root/:host theme variables to [data-dynamo-root] (evita sobrescrever o projeto externo)
  */
 import postcss from "postcss";
 import fs from "fs";
@@ -16,7 +16,7 @@ if (!fs.existsSync(cssPath)) {
   process.exit(1);
 }
 
-const css = fs.readFileSync(cssPath, "utf8");
+let css = fs.readFileSync(cssPath, "utf8");
 
 const stripLayers = () => ({
   postcssPlugin: "strip-layer-rules",
@@ -28,5 +28,11 @@ const stripLayers = () => ({
 });
 stripLayers.postcss = true;
 
-const result = await postcss([stripLayers]).process(css, { from: cssPath });
-fs.writeFileSync(cssPath, result.css);
+let result = await postcss([stripLayers]).process(css, { from: cssPath });
+css = result.css;
+
+// Escopa variáveis de tema de :root,:host para [data-dynamo-root]
+// para não interferir no projeto que importa o pacote
+css = css.replace(/:root,:host/g, "[data-dynamo-root]");
+
+fs.writeFileSync(cssPath, css);

@@ -1,4 +1,8 @@
-:root {
+/**
+ * Design tokens e estilos base são escopados a [data-dynamo-root]
+ * para não interferir no projeto que importa o pacote.
+ */
+[data-dynamo-root] {
   --dyn-background: 0 0% 100%;
   --dyn-foreground: 222.2 84% 4.9%;
 
@@ -31,10 +35,10 @@
 }
 
 @layer base {
-  * {
+  [data-dynamo-root] * {
     @apply dyn:border-border;
   }
-  body {
+  [data-dynamo-root] {
     @apply dyn:bg-background dyn:text-foreground;
   }
 }

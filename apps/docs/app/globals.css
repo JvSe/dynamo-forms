@@ -3,6 +3,30 @@
 @source "../../../packages/react/src/**/*.{ts,tsx}";
 @source "../../../packages/builder/src/**/*.{ts,tsx}";
 
+/* Docs app: define --dyn-* em :root para o @theme resolver (apenas para o build da docs) */
+:root {
+  --dyn-background: 0 0% 100%;
+  --dyn-foreground: 222.2 84% 4.9%;
+  --dyn-muted: 210 40% 96.1%;
+  --dyn-muted-foreground: 215.4 16.3% 46.9%;
+  --dyn-border: 214.3 31.8% 91.4%;
+  --dyn-input: 214.3 31.8% 91.4%;
+  --dyn-ring: 222.2 84% 56.1%;
+  --dyn-primary: 222.2 47.4% 11.2%;
+  --dyn-primary-foreground: 210 40% 98%;
+  --dyn-secondary: 210 40% 96.1%;
+  --dyn-secondary-foreground: 222.2 47.4% 11.2%;
+  --dyn-destructive: 0 84.2% 60.2%;
+  --dyn-destructive-foreground: 210 40% 98%;
+  --dyn-card: 0 0% 100%;
+  --dyn-card-foreground: 222.2 84% 4.9%;
+  --dyn-popover: 0 0% 100%;
+  --dyn-popover-foreground: 222.2 84% 4.9%;
+  --dyn-accent: 210 40% 96.1%;
+  --dyn-accent-foreground: 222.2 47.4% 11.2%;
+  --dyn-radius: 0.5rem;
+}
+
 @theme {
   --color-background: hsl(var(--dyn-background));
   --color-foreground: hsl(var(--dyn-foreground));

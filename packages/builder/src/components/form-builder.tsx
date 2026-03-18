@@ -71,7 +71,7 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
 
   return (
     <FormProvider {...methods}>
-        <div className="dyn:p-2.5 dyn:bg-white dyn:rounded-xl dyn:border dyn:border-gray-200 dyn:shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.06)] dyn:min-w-[180px]">
+        <div data-dynamo-root className="dyn:p-2.5 dyn:bg-white dyn:rounded-xl dyn:border dyn:border-gray-200 dyn:shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.06)] dyn:min-w-[180px]">
         <DynamicField
           field={field}
           control={control}
@@ -529,6 +529,7 @@ export function FormBuilder({
       onDragEnd={handleDragEnd}
     >
       <div
+        data-dynamo-root
         className={cn(
           "dyn:grid dyn:grid-cols-[280px_1fr] dyn:h-screen dyn:max-h-screen dyn:rounded-2xl dyn:overflow-hidden dyn:shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
           className

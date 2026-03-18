@@ -1,4 +1,5 @@
-@import "tailwindcss" prefix(dyn);
+@import "tailwindcss/theme" theme(reference) prefix(dyn);
+@import "tailwindcss/utilities" layer(utilities) prefix(dyn);
 
 @source "../**/*.{ts,tsx}";
 

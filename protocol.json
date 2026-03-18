@@ -43,13 +43,16 @@
         "required": true,
         "options": [
           {
-            "label": "Dia e Horário"
+            "label": "Dia e Horário",
+            "value": "dia_e_horario"
           },
           {
-            "label": "Sintomas ao despertar"
+            "label": "Sintomas ao despertar",
+            "value": "sintomas_ao_despertar"
           },
           {
-            "label": "Não sei informar"
+            "label": "Não sei informar",
+            "value": "nao_sei_informar"
           }
         ],
         "step": 0
@@ -94,10 +97,12 @@
               "required": true,
               "options": [
                 {
-                  "label": "Dia e Horário"
+                  "label": "Dia e Horário",
+                  "value": "dia_e_horario"
                 },
                 {
-                  "label": "Não é possível determinar"
+                  "label": "Não é possível determinar",
+                  "value": "nao_e_possivel_determinar"
                 }
               ],
               "step": 0
@@ -134,13 +139,16 @@
               "required": true,
               "options": [
                 {
-                  "label": "Súbitos"
+                  "label": "Súbitos",
+                  "value": "subitos"
                 },
                 {
-                  "label": "Progressivos"
+                  "label": "Progressivos",
+                  "value": "progressivos"
                 },
                 {
-                  "label": "Flutuantes"
+                  "label": "Flutuantes",
+                  "value": "flutuantes"
                 }
               ],
               "step": 0
@@ -155,16 +163,20 @@
               "required": true,
               "options": [
                 {
-                  "label": " Sim, completa"
+                  "label": " Sim, completa",
+                  "value": "_sim_completa"
                 },
                 {
-                  "label": "Sim, parcial"
+                  "label": "Sim, parcial",
+                  "value": "sim_parcial"
                 },
                 {
-                  "label": "Não, sintomas estáveis"
+                  "label": "Não, sintomas estáveis",
+                  "value": "nao_sintomas_estaveis"
                 },
                 {
-                  "label": "Não, os sintomas pioraram"
+                  "label": "Não, os sintomas pioraram",
+                  "value": "nao_os_sintomas_pioraram"
                 }
               ],
               "step": 0
@@ -227,13 +239,16 @@
         "required": false,
         "options": [
           {
-            "label": "Sim"
+            "label": "Sim",
+            "value": "sim"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sei informar"
+            "label": "Não sei informar",
+            "value": "nao_sei_informar"
           }
         ],
         "step": 1
@@ -248,19 +263,24 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, malformação arteriovenosa"
+            "label": "Sim, malformação arteriovenosa",
+            "value": "sim_malformacao_arteriovenosa"
           },
           {
-            "label": "Sim, aneurisma cerebral"
+            "label": "Sim, aneurisma cerebral",
+            "value": "sim_aneurisma_cerebral"
           },
           {
-            "label": "Sim, ambos"
+            "label": "Sim, ambos",
+            "value": "sim_ambos"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 2
@@ -275,16 +295,20 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, tumor cerebral atual"
+            "label": "Sim, tumor cerebral atual",
+            "value": "sim_tumor_cerebral_atual"
           },
           {
-            "label": "Sim, tumor cerebral tratado"
+            "label": "Sim, tumor cerebral tratado",
+            "value": "sim_tumor_cerebral_tratado"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 3
@@ -299,16 +323,20 @@
         "required": false,
         "options": [
           {
-            "label": "Sim, há menos de 3 meses"
+            "label": "Sim, há menos de 3 meses",
+            "value": "sim_ha_menos_de_3_meses"
           },
           {
-            "label": "Sim, há mais de 3 meses"
+            "label": "Sim, há mais de 3 meses",
+            "value": "sim_ha_mais_de_3_meses"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 4
@@ -323,16 +351,20 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, há menos de 3 meses"
+            "label": "Sim, há menos de 3 meses",
+            "value": "sim_ha_menos_de_3_meses"
           },
           {
-            "label": "Sim, há mais de 3 meses"
+            "label": "Sim, há mais de 3 meses",
+            "value": "sim_ha_mais_de_3_meses"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 5
@@ -347,19 +379,24 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, cirurgia intracraniana (<14 dias)"
+            "label": "Sim, cirurgia intracraniana (<14 dias)",
+            "value": "sim_cirurgia_intracraniana_14_dias"
           },
           {
-            "label": "Sim, cirurgia raquimedular (<14 dias)"
+            "label": "Sim, cirurgia raquimedular (<14 dias)",
+            "value": "sim_cirurgia_raquimedular_14_dias"
           },
           {
-            "label": "Sim, mas há mais de 14 dias"
+            "label": "Sim, mas há mais de 14 dias",
+            "value": "sim_mas_ha_mais_de_14_dias"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 6
@@ -374,19 +411,24 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, femoral"
+            "label": "Sim, femoral",
+            "value": "sim_femoral"
           },
           {
-            "label": "Sim, subclávia"
+            "label": "Sim, subclávia",
+            "value": "sim_subclavia"
           },
           {
-            "label": "Sim, outra localização não compressível"
+            "label": "Sim, outra localização não compressível",
+            "value": "sim_outra_localizacao_nao_compressivel"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 7
@@ -401,19 +443,24 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, hemorragia ativa no momento"
+            "label": "Sim, hemorragia ativa no momento",
+            "value": "sim_hemorragia_ativa_no_momento"
           },
           {
-            "label": "Sim, hemorragia há menos de 21 dias"
+            "label": "Sim, hemorragia há menos de 21 dias",
+            "value": "sim_hemorragia_ha_menos_de_21_dias"
           },
           {
-            "label": "Sim, hemorragia há mais de 21 dias"
+            "label": "Sim, hemorragia há mais de 21 dias",
+            "value": "sim_hemorragia_ha_mais_de_21_dias"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 8
@@ -428,19 +475,24 @@
         "required": true,
         "options": [
           {
-            "label": "< 100.000/mm³ (contraindicação absoluta)"
+            "label": "< 100.000/mm³ (contraindicação absoluta)",
+            "value": "_100000mm_contraindicacao_absoluta"
           },
           {
-            "label": "100.000 - 150.000/mm³"
+            "label": "100.000 - 150.000/mm³",
+            "value": "100000__150000mm"
           },
           {
-            "label": "> 150.000/mm³ (normal)"
+            "label": "> 150.000/mm³ (normal)",
+            "value": "_150000mm_normal"
           },
           {
-            "label": "Exame não disponível"
+            "label": "Exame não disponível",
+            "value": "exame_nao_disponivel"
           },
           {
-            "label": "Valor exato: __________ /mm³"
+            "label": "Valor exato: __________ /mm³",
+            "value": "valor_exato____________mm"
           }
         ],
         "step": 9
@@ -487,16 +539,20 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, varfarina"
+            "label": "Sim, varfarina",
+            "value": "sim_varfarina"
           },
           {
-            "label": "Sim, outro:"
+            "label": "Sim, outro:",
+            "value": "sim_outro"
           },
           {
-            "label": "Não usa anticoagulantes"
+            "label": "Não usa anticoagulantes",
+            "value": "nao_usa_anticoagulantes"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 10
@@ -532,19 +588,24 @@
         "required": false,
         "options": [
           {
-            "label": "INR < 1,7 (permite trombólise)"
+            "label": "INR < 1,7 (permite trombólise)",
+            "value": "inr__17_permite_trombolise"
           },
           {
-            "label": "INR ≥ 1,7 (contraindicação)"
+            "label": "INR ≥ 1,7 (contraindicação)",
+            "value": "inr__17_contraindicacao"
           },
           {
-            "label": "INR não disponível"
+            "label": "INR não disponível",
+            "value": "inr_nao_disponivel"
           },
           {
-            "label": "Não usa varfarina"
+            "label": "Não usa varfarina",
+            "value": "nao_usa_varfarina"
           },
           {
-            "label": "Valor exato do INR: ______"
+            "label": "Valor exato do INR: ______",
+            "value": "valor_exato_do_inr_______"
           }
         ],
         "step": 11
@@ -591,16 +652,20 @@
         "required": false,
         "options": [
           {
-            "label": "Sim, nas últimas 3 semanas"
+            "label": "Sim, nas últimas 3 semanas",
+            "value": "sim_nas_ultimas_3_semanas"
           },
           {
-            "label": "Sim, há mais de 3 semanas"
+            "label": "Sim, há mais de 3 semanas",
+            "value": "sim_ha_mais_de_3_semanas"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 12
@@ -615,16 +680,20 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, endocardite ativa"
+            "label": "Sim, endocardite ativa",
+            "value": "sim_endocardite_ativa"
           },
           {
-            "label": "Sim, endocardite tratada"
+            "label": "Sim, endocardite tratada",
+            "value": "sim_endocardite_tratada"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 13
@@ -639,16 +708,20 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, dissecção confirmada"
+            "label": "Sim, dissecção confirmada",
+            "value": "sim_disseccao_confirmada"
           },
           {
-            "label": "Suspeita clínica presente"
+            "label": "Suspeita clínica presente",
+            "value": "suspeita_clinica_presente"
           },
           {
-            "label": "Não há suspeita"
+            "label": "Não há suspeita",
+            "value": "nao_ha_suspeita"
           },
           {
-            "label": "Não avaliado"
+            "label": "Não avaliado",
+            "value": "nao_avaliado"
           }
         ],
         "step": 14
@@ -663,10 +736,12 @@
         "required": true,
         "options": [
           {
-            "label": "Masculino"
+            "label": "Masculino",
+            "value": "masculino"
           },
           {
-            "label": "Feminino"
+            "label": "Feminino",
+            "value": "feminino"
           }
         ],
         "step": 15
@@ -681,10 +756,12 @@
         "required": true,
         "options": [
           {
-            "label": "Sim"
+            "label": "Sim",
+            "value": "sim"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           }
         ],
         "step": 15,
@@ -710,19 +787,24 @@
         "required": true,
         "options": [
           {
-            "label": "Sim, cirrose hepática"
+            "label": "Sim, cirrose hepática",
+            "value": "sim_cirrose_hepatica"
           },
           {
-            "label": "Sim, insuficiência hepática"
+            "label": "Sim, insuficiência hepática",
+            "value": "sim_insuficiencia_hepatica"
           },
           {
-            "label": "Sim, coagulopatia por hepatopatia"
+            "label": "Sim, coagulopatia por hepatopatia",
+            "value": "sim_coagulopatia_por_hepatopatia"
           },
           {
-            "label": "Não"
+            "label": "Não",
+            "value": "nao"
           },
           {
-            "label": "Não sabe informar"
+            "label": "Não sabe informar",
+            "value": "nao_sabe_informar"
           }
         ],
         "step": 16

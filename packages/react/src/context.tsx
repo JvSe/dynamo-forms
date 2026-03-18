@@ -90,7 +90,7 @@ export const DynamicForm = React.memo(
 
     return (
       <FormContext.Provider value={contextValue}>
-        <div style={{ width: "100%", minHeight: "100%", display: "flex", flexDirection: "column" }}>
+        <div data-dynamo-root style={{ width: "100%", minHeight: "100%", display: "flex", flexDirection: "column" }}>
           <DynamicFormCore
             fields={fields}
             formId={formId}

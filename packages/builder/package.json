@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-builder",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Drag-and-drop form builder for Dynamo Forms - outputs DynamicFieldConfig[]",
   "private": false,
   "license": "MIT",
