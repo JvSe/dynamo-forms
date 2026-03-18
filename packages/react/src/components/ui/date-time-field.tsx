@@ -235,8 +235,8 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
   };
 
   return (
-    <div className={cn("dyn:flex dyn:w-full dyn:gap-2", className)}>
-      <div className="dyn:relative dyn:flex dyn:min-w-0 dyn:flex-1">
+    <div className={cn("dyn:flex dyn:flex-col dyn:w-full dyn:gap-2", className)}>
+      <div className="dyn:relative dyn:flex dyn:min-w-0 dyn:w-full">
         <Input
           id={id}
           value={formatDateDisplay(datePart, "date")}
@@ -286,7 +286,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
         disabled={disabled}
         error={error}
         success={success}
-        className="dyn:min-w-0 dyn:flex-1"
+        className="dyn:w-full"
       />
     </div>
   );
