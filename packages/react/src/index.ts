@@ -1,8 +1,16 @@
 export {
-  DynamicForm,
-  useDynamicForm,
+  DynamicFormProvider as DynamicForm,
+  DynamicFormHeader,
+  DynamicFormSteps,
+  DynamicFormFields,
+  DynamicFormFields as DynamicFormContents,
+  DynamicFormFooter,
+  DynamicFormValidationOverlay,
+  useDynamicFormComposition,
   type DynamicFormProviderProps,
-} from "./context";
+} from "./components/dynamic-form";
+export { DynamicFormDefault, useDynamicForm } from "./context";
+export type { DynamicFormProviderProps as DynamicFormDefaultProps } from "./context";
 export {
   DynamicField,
   type ComponentOverrideProps,

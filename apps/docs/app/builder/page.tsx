@@ -1,9 +1,17 @@
 "use client";
 
-import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-builder";
 import { FormBuilder } from "@jvseen/dynamo-builder";
 import { getStepsWithFieldIds } from "@jvseen/dynamo-core";
-import { DynamicForm } from "@jvseen/dynamo-react";
+import {
+  DynamicForm,
+  DynamicFormFields,
+  DynamicFormFooter,
+  DynamicFormHeader,
+  DynamicFormSteps,
+  DynamicFormValidationOverlay,
+  type DynamicFieldConfig,
+  type FormStep,
+} from "@jvseen/dynamo-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -91,18 +99,18 @@ export default function BuilderTestPage() {
   };
 
   return (
-    <main style={{ padding: "1.5rem 2rem", maxWidth: 1600, margin: "0 auto" }}>
-      <div style={{ marginBottom: 20, display: "flex", alignItems: "center", gap: 16 }}>
+    <main className="dyn:px-8 dyn:py-6 dyn:max-w-[1600px] dyn:mx-auto">
+      <div className="dyn:flex dyn:items-center dyn:gap-4 dyn:mb-5">
         <Link
           href="/"
-          style={{ color: "#1a73e8", textDecoration: "none", fontSize: 14, fontWeight: 500 }}
+          className="dyn:text-primary dyn:no-underline dyn:text-sm dyn:font-medium dyn:hover:underline"
         >
           ← Voltar
         </Link>
-        <h1 style={{ margin: 0, fontSize: 24, color: "#202124" }}>Construtor de formulários</h1>
+        <h1 className="dyn:m-0 dyn:text-2xl dyn:text-foreground">Construtor de formulários</h1>
       </div>
 
-      <p style={{ color: "#5f6368", marginBottom: 24, fontSize: 14 }}>
+      <p className="dyn:text-muted-foreground dyn:mb-6 dyn:text-sm">
         Arraste os componentes da esquerda para o centro, configure no painel da direita. Use Preview para visualizar e Publish para gerar o JSON.
       </p>
 
@@ -115,10 +123,12 @@ export default function BuilderTestPage() {
           onFormTitleChange={setFormTitle}
           onPreview={handlePreview}
           onBack={() => router.back()}
+          className=""
+          style={{}}
           steps={steps}
           onStepsChange={setSteps}
           multiStepEnabled={steps.length > 1}
-          onMultiStepChange={(enabled) => {
+          onMultiStepChange={(enabled: boolean) => {
             if (enabled && steps.length <= 1) setSteps([...steps, { id: `step_2_${Date.now()}`, title: "Step 2" }]);
             if (!enabled) setSteps(initialSteps);
           }}
@@ -126,48 +136,46 @@ export default function BuilderTestPage() {
       </div>
 
       {finishedJson !== null && (
-        <div ref={previewRef} style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div ref={previewRef} className="dyn:flex dyn:flex-col dyn:gap-6">
           <section>
-            <h2 style={{ fontSize: 18, marginBottom: 12 }}>JSON gerado (schema: id, name, fields, steps)</h2>
+            <h2 className="dyn:text-lg dyn:mb-3 dyn:text-foreground">JSON gerado (schema: id, name, fields, steps)</h2>
             <textarea
               readOnly
               value={finishedJson}
               rows={16}
-              style={{
-                width: "100%",
-                maxWidth: 800,
-                fontFamily: "monospace",
-                fontSize: 12,
-                padding: 12,
-                borderRadius: 8,
-                border: "1px solid #e2e8f0",
-                background: "#f8fafc",
-              }}
+              className="dyn:w-full dyn:max-w-[800px] dyn:font-mono dyn:text-xs dyn:p-3 dyn:rounded-lg dyn:border dyn:border-border dyn:bg-muted dyn:text-foreground dyn:outline-none"
             />
           </section>
 
           {showPreview && fields.length > 0 && (
             <section>
-              <h2 style={{ fontSize: 18, marginBottom: 12 }}>Preview do formulário</h2>
-              <div
-                style={{
-                  maxWidth: 480,
-                  padding: 24,
-                  background: "#fff",
-                  borderRadius: 12,
-                  border: "1px solid #e2e8f0",
-                }}
-              >
+              <h2 className="dyn:text-lg dyn:mb-3 dyn:text-foreground">Preview do formulário</h2>
+              <div className="dyn:max-w-[480px] dyn:p-6 dyn:rounded-xl dyn:border dyn:border-border dyn:bg-card">
                 <DynamicForm
                   fields={fields}
-                  formId="preview-form"
-                  formName="Preview"
-                  steps={steps.length > 1 ? steps : undefined}
-                  onSubmit={({ dados, uploads }) => {
-                    console.log("Submit preview:", { dados, uploads });
-                    alert("Dados do preview:\n" + JSON.stringify(dados, null, 2));
+                  formId="builder-preview"
+                  formName={formTitle}
+                  steps={getStepsWithFieldIds(steps, fields)}
+                  onSubmit={async ({ dados, uploads }) => {
+                    // Preview only: keep it simple but visible.
+                    console.log("[docs/builder] submit", { dados, uploads });
+                    alert(
+                      `Submitted (preview)\n\nDados: ${JSON.stringify(
+                        dados,
+                        null,
+                        2
+                      )}\n\nUploads: ${uploads.length}`
+                    );
                   }}
-                />
+                  formClassName="dyn:gap-8"
+
+                >
+                  <DynamicFormHeader className="dyn:mb-2" />
+                  <DynamicFormSteps className="dyn:sticky dyn:top-0 dyn:bg-background" />
+                  <DynamicFormFields className="dyn:px-4" gap={24} />
+                  <DynamicFormFooter className="dyn:pt-4 dyn:border-t" />
+                  <DynamicFormValidationOverlay className="dyn:z-50" />
+                </DynamicForm>
               </div>
             </section>
           )}

@@ -11,7 +11,14 @@ import type {
   FormUpload,
   ErrorFieldInfo,
 } from "@jvseen/dynamo-core";
-import { DynamicFormCore } from "./components/dynamic-form";
+import {
+  DynamicFormFields,
+  DynamicFormFooter,
+  DynamicFormHeader,
+  DynamicFormProvider,
+  DynamicFormSteps,
+  DynamicFormValidationOverlay,
+} from "./components/dynamic-form";
 import type { ComponentOverridesMap } from "./components/dynamic-field";
 import type { ActionsButtonProps } from "./components/form-footer";
 
@@ -41,13 +48,13 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
   actionsButton?: ActionsButtonProps;
   steps?: FormStep[];
-  /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
-  showSteps?: boolean;
-  /** When true (default), renders the form header with the form name. Set to false to hide it. */
-  showHeader?: boolean;
 };
 
-export const DynamicForm = React.memo(
+/**
+ * Preset "pronto" (Header/Steps/Contents/Footer/Overlay).
+ * Para composição livre, use `DynamicForm` (Provider) exportado do entrypoint.
+ */
+export const DynamicFormDefault = React.memo(
   ({
     fields,
     formId,
@@ -62,8 +69,6 @@ export const DynamicForm = React.memo(
     components,
     actionsButton,
     steps,
-    showSteps,
-    showHeader,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
 
@@ -91,7 +96,7 @@ export const DynamicForm = React.memo(
     return (
       <FormContext.Provider value={contextValue}>
         <div data-dynamo-root style={{ width: "100%", minHeight: "100%", display: "flex", flexDirection: "column" }}>
-          <DynamicFormCore
+          <DynamicFormProvider
             fields={fields}
             formId={formId}
             formName={formName}
@@ -103,12 +108,15 @@ export const DynamicForm = React.memo(
             onValidationError={onValidationError}
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
-            components={components}
             actionsButton={actionsButton}
             steps={steps}
-            showSteps={showSteps}
-            showHeader={showHeader}
-          />
+          >
+            <DynamicFormHeader />
+            <DynamicFormSteps />
+            <DynamicFormFields components={components} />
+            <DynamicFormFooter />
+            <DynamicFormValidationOverlay />
+          </DynamicFormProvider>
         </div>
       </FormContext.Provider>
     );

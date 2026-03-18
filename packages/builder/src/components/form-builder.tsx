@@ -71,7 +71,7 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
 
   return (
     <FormProvider {...methods}>
-        <div data-dynamo-root className="dyn:p-2.5 dyn:bg-white dyn:rounded-xl dyn:border dyn:border-gray-200 dyn:shadow-[0_8px_24px_rgba(0,0,0,0.12),0_4px_8px_rgba(0,0,0,0.06)] dyn:min-w-[180px]">
+        <div data-dynamo-root className="dyn:p-2.5 dyn:bg-card dyn:rounded-xl dyn:border dyn:border-border dyn:shadow-xl dyn:min-w-[180px]">
         <DynamicField
           field={field}
           control={control}
@@ -536,21 +536,21 @@ export function FormBuilder({
         )}
         style={style}
       >
-        <div className="dyn:bg-white dyn:border-r dyn:border-gray-200 dyn:overflow-y-auto dyn:flex dyn:flex-col dyn:min-h-0 dyn:shrink-0 dyn:w-[280px]">
+        <div className="dyn:bg-background dyn:border-r dyn:border-border dyn:overflow-y-auto dyn:flex dyn:flex-col dyn:min-h-0 dyn:shrink-0 dyn:w-[280px]">
           <FieldPalette onAddField={handleAddFromPalette} />
         </div>
 
         <div
           ref={canvasContainerRef}
-          className="dyn:relative dyn:flex dyn:flex-col dyn:min-w-0 dyn:min-h-0 dyn:h-full dyn:bg-white dyn:overflow-hidden"
+          className="dyn:relative dyn:flex dyn:flex-col dyn:min-w-0 dyn:min-h-0 dyn:h-full dyn:bg-background dyn:overflow-hidden"
         >
-          <div className="dyn:flex dyn:items-center dyn:justify-between dyn:py-4 dyn:px-6 dyn:bg-white dyn:border-b dyn:border-gray-200 dyn:shrink-0">
+          <div className="dyn:flex dyn:items-center dyn:justify-between dyn:py-4 dyn:px-6 dyn:bg-background dyn:border-b dyn:border-border dyn:shrink-0">
             <div className="dyn:flex dyn:items-center dyn:gap-3">
               {onBack && (
                 <button
                   type="button"
                   onClick={onBack}
-                  className="dyn:flex dyn:items-center dyn:justify-center dyn:p-2 dyn:border-0 dyn:bg-transparent dyn:cursor-pointer dyn:rounded-lg dyn:text-gray-500"
+                  className="dyn:flex dyn:items-center dyn:justify-center dyn:p-2 dyn:border-0 dyn:bg-transparent dyn:cursor-pointer dyn:rounded-lg dyn:text-muted-foreground dyn:hover:text-foreground"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                     <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -561,14 +561,14 @@ export function FormBuilder({
                 type="text"
                 value={formTitle}
                 onChange={(e) => setFormTitle(e.target.value)}
-                className="dyn:text-base dyn:font-semibold dyn:border-0 dyn:bg-transparent dyn:py-1.5 dyn:px-2.5 dyn:rounded-lg dyn:min-w-[220px] dyn:text-gray-900 dyn:outline-none"
+                className="dyn:text-base dyn:font-semibold dyn:border-0 dyn:bg-transparent dyn:py-1.5 dyn:px-2.5 dyn:rounded-lg dyn:min-w-[220px] dyn:text-foreground dyn:outline-none"
               />
             </div>
             <div className="dyn:flex dyn:gap-3">
               <button
                 type="button"
                 onClick={() => setImportModalOpen(true)}
-                className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-white dyn:border dyn:border-gray-300 dyn:text-gray-700 dyn:rounded-[10px] dyn:hover:bg-gray-50"
+                className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-card dyn:border dyn:border-border dyn:text-foreground dyn:rounded-[10px] dyn:hover:bg-muted"
               >
                 Importar JSON
               </button>
@@ -576,7 +576,7 @@ export function FormBuilder({
                 <button
                   type="button"
                   onClick={onPreview}
-                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-gray-100 dyn:text-gray-900 dyn:border-0 dyn:rounded-[10px]"
+                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-muted dyn:text-foreground dyn:border-0 dyn:rounded-[10px] dyn:hover:bg-accent"
                 >
                   Preview
                 </button>
@@ -585,7 +585,7 @@ export function FormBuilder({
                 <button
                   type="button"
                   onClick={() => onFinish(value)}
-                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-[#1a73e8] dyn:text-white dyn:border-0 dyn:rounded-[10px]"
+                  className="dyn:py-2.5 dyn:px-5 dyn:text-sm dyn:font-medium dyn:cursor-pointer dyn:bg-primary dyn:text-primary-foreground dyn:border-0 dyn:rounded-[10px] dyn:hover:opacity-90"
                 >
                   Publish
                 </button>
@@ -637,7 +637,7 @@ export function FormBuilder({
                         onRemove={() => selectedFieldId && handleRemoveField(selectedFieldId)}
                       />
                     </div>
-                    <div className="dyn:p-4 dyn:border-t dyn:border-gray-200 dyn:shrink-0">
+                    <div className="dyn:p-4 dyn:border-t dyn:border-border dyn:shrink-0">
                       <button
                         type="button"
                         onClick={() => setSelectedFieldId(null)}

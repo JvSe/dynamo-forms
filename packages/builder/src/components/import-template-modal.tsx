@@ -72,19 +72,19 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
     >
       <div
         className={cn(
-          "dyn:bg-white dyn:rounded-xl dyn:shadow-xl dyn:flex dyn:flex-col dyn:w-full dyn:max-w-2xl dyn:max-h-[85vh]",
-          "dyn:border dyn:border-gray-200"
+          "dyn:bg-card dyn:rounded-xl dyn:shadow-xl dyn:flex dyn:flex-col dyn:w-full dyn:max-w-2xl dyn:max-h-[85vh]",
+          "dyn:border dyn:border-border"
         )}
         onClick={(e) => e.stopPropagation()}
       >
-        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-between dyn:px-5 dyn:py-4 dyn:border-b dyn:border-gray-200">
-          <h2 id="import-modal-title" className="dyn:text-lg dyn:font-semibold dyn:text-gray-900">
+        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-between dyn:px-5 dyn:py-4 dyn:border-b dyn:border-border">
+          <h2 id="import-modal-title" className="dyn:text-lg dyn:font-semibold dyn:text-foreground">
             Importar template (JSON)
           </h2>
           <button
             type="button"
             onClick={handleClose}
-            className="dyn:p-2 dyn:rounded-lg dyn:text-gray-500 dyn:hover:bg-gray-100 dyn:hover:text-gray-700 dyn:transition-colors"
+            className="dyn:p-2 dyn:rounded-lg dyn:text-muted-foreground dyn:hover:bg-muted dyn:hover:text-foreground dyn:transition-colors"
             aria-label="Fechar"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -94,7 +94,7 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
         </div>
 
         <div className="dyn:flex-1 dyn:min-h-0 dyn:flex dyn:flex-col dyn:gap-3 dyn:px-5 dyn:py-4">
-          <p className="dyn:text-sm dyn:text-gray-500">
+          <p className="dyn:text-sm dyn:text-muted-foreground">
             Cole o schema JSON do formulário. Os campos serão validados e exibidos no canvas.
           </p>
           <div className="dyn:flex-1 dyn:min-h-0 dyn:flex dyn:flex-col">
@@ -107,32 +107,32 @@ export function ImportTemplateModal({ open, onClose, onImport }: ImportTemplateM
               placeholder={PLACEHOLDER}
               className={cn(
                 "dyn:w-full dyn:flex-1 dyn:min-h-[240px] dyn:p-3 dyn:rounded-lg dyn:border dyn:text-sm dyn:font-mono dyn:resize-y",
-                "dyn:border-gray-300 dyn:bg-gray-50/50 dyn:text-gray-900 dyn:placeholder:text-gray-400",
-                "dyn:focus:outline-none dyn:focus:ring-2 dyn:focus:ring-[#1a73e8] dyn:focus:border-transparent",
+                "dyn:border-input dyn:bg-muted/50 dyn:text-foreground dyn:placeholder:text-muted-foreground",
+                "dyn:focus:outline-none dyn:focus:ring-2 dyn:focus:ring-primary dyn:focus:border-transparent",
                 error && "dyn:border-red-400 dyn:bg-red-50/30"
               )}
               spellCheck={false}
             />
             {error && (
-              <p className="dyn:mt-2 dyn:text-sm dyn:text-red-600" role="alert">
+              <p className="dyn:mt-2 dyn:text-sm dyn:text-destructive" role="alert">
                 {error}
               </p>
             )}
           </div>
         </div>
 
-        <div className="dyn:shrink-0 dyn:flex dyn:justify-end dyn:gap-2 dyn:px-5 dyn:py-4 dyn:border-t dyn:border-gray-200 dyn:bg-gray-50/50 dyn:rounded-b-xl">
+        <div className="dyn:shrink-0 dyn:flex dyn:justify-end dyn:gap-2 dyn:px-5 dyn:py-4 dyn:border-t dyn:border-border dyn:bg-muted/50 dyn:rounded-b-xl">
           <button
             type="button"
             onClick={handleClose}
-            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-gray-700 dyn:bg-white dyn:border dyn:border-gray-300 dyn:rounded-lg dyn:hover:bg-gray-50"
+            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-foreground dyn:bg-card dyn:border dyn:border-border dyn:rounded-lg dyn:hover:bg-muted"
           >
             Cancelar
           </button>
           <button
             type="button"
             onClick={handleImport}
-            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-white dyn:bg-[#1a73e8] dyn:rounded-lg dyn:hover:bg-[#1557b0]"
+            className="dyn:py-2.5 dyn:px-4 dyn:text-sm dyn:font-medium dyn:text-primary-foreground dyn:bg-primary dyn:rounded-lg dyn:hover:opacity-90"
           >
             Importar e aplicar
           </button>

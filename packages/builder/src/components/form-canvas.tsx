@@ -87,7 +87,7 @@ function StepTabs({
   };
 
   return (
-    <div className="dyn:flex dyn:items-center dyn:gap-2 dyn:px-5 dyn:py-2 dyn:border-b dyn:border-gray-200 dyn:bg-gray-50/60 dyn:min-h-0">
+    <div className="dyn:flex dyn:items-center dyn:gap-2 dyn:px-5 dyn:py-2 dyn:border-b dyn:border-border dyn:bg-muted/60 dyn:min-h-0">
       <div className="dyn:flex-1 dyn:min-w-0 dyn:overflow-x-auto dyn:overflow-y-hidden dyn:flex dyn:items-center dyn:gap-1.5 dyn:py-0.5">
         {steps.map((step, i) => (
           <div key={step.id} className="dyn:flex dyn:items-center dyn:shrink-0">
@@ -101,7 +101,7 @@ function StepTabs({
                   if (e.key === "Enter") commitRename(i);
                   if (e.key === "Escape") setEditingIndex(null);
                 }}
-                className="dyn:px-2 dyn:py-1 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:bg-white dyn:border dyn:border-blue-400 dyn:text-gray-900 dyn:w-24 dyn:outline-none"
+                className="dyn:px-2 dyn:py-1 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:bg-background dyn:border dyn:border-primary dyn:text-foreground dyn:w-24 dyn:outline-none"
               />
             ) : (
               <button
@@ -111,15 +111,15 @@ function StepTabs({
                 className={cn(
                   "dyn:group dyn:flex dyn:items-center dyn:gap-1.5 dyn:px-3 dyn:py-1.5 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:transition-all dyn:cursor-pointer dyn:border-0",
                   activeStepIndex === i
-                    ? "dyn:bg-blue-50 dyn:text-blue-600"
-                    : "dyn:text-gray-500 dyn:hover:text-gray-900 dyn:hover:bg-gray-100 dyn:bg-transparent"
+                    ? "dyn:bg-primary/20 dyn:text-primary"
+                    : "dyn:text-muted-foreground dyn:hover:text-foreground dyn:hover:bg-muted dyn:bg-transparent"
                 )}
               >
                 <span className={cn(
                   "dyn:flex dyn:items-center dyn:justify-center dyn:w-5 dyn:h-5 dyn:rounded-full dyn:text-[10px] dyn:font-semibold dyn:shrink-0",
                   activeStepIndex === i
-                    ? "dyn:bg-blue-600 dyn:text-white"
-                    : "dyn:bg-gray-200 dyn:text-gray-600"
+                    ? "dyn:bg-primary dyn:text-primary-foreground"
+                    : "dyn:bg-muted dyn:text-muted-foreground"
                 )}>
                   {i + 1}
                 </span>
@@ -146,7 +146,7 @@ function StepTabs({
       <button
         type="button"
         onClick={onAddStep}
-        className="dyn:flex dyn:items-center dyn:justify-center dyn:w-7 dyn:h-7 dyn:rounded-md dyn:text-gray-400 dyn:hover:text-gray-700 dyn:hover:bg-gray-100 dyn:transition-colors dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:shrink-0"
+        className="dyn:flex dyn:items-center dyn:justify-center dyn:w-7 dyn:h-7 dyn:rounded-md dyn:text-muted-foreground dyn:hover:text-foreground dyn:hover:bg-muted dyn:transition-colors dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:shrink-0"
         title="Add step"
       >
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -154,15 +154,15 @@ function StepTabs({
         </svg>
       </button>
 
-      <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:gap-2 dyn:pl-2 dyn:border-l dyn:border-gray-200">
-        <span className="dyn:text-[11px] dyn:text-gray-400 dyn:whitespace-nowrap">
+      <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:gap-2 dyn:pl-2 dyn:border-l dyn:border-border">
+        <span className="dyn:text-[11px] dyn:text-muted-foreground dyn:whitespace-nowrap">
           {fieldCount} field{fieldCount !== 1 ? "s" : ""} · step {activeStepIndex + 1}/{steps.length}
         </span>
         {onToggleMultiStep && (
           <button
             type="button"
             onClick={onToggleMultiStep}
-            className="dyn:text-[11px] dyn:text-gray-400 dyn:hover:text-gray-600 dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:underline dyn:whitespace-nowrap"
+            className="dyn:text-[11px] dyn:text-muted-foreground dyn:hover:text-foreground dyn:cursor-pointer dyn:border-0 dyn:bg-transparent dyn:underline dyn:whitespace-nowrap"
           >
             Disable steps
           </button>
@@ -235,11 +235,11 @@ function FormCanvasInner({
         </div>
       )}
       {!multiStepEnabled && onToggleMultiStep && (
-        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-end dyn:px-5 dyn:py-1.5 dyn:border-b dyn:border-gray-100">
+        <div className="dyn:shrink-0 dyn:flex dyn:items-center dyn:justify-end dyn:px-5 dyn:py-1.5 dyn:border-b dyn:border-border">
           <button
             type="button"
             onClick={onToggleMultiStep}
-            className="dyn:text-[11px] dyn:text-gray-400 dyn:hover:text-blue-600 dyn:cursor-pointer dyn:border-0 dyn:bg-transparent"
+            className="dyn:text-[11px] dyn:text-muted-foreground dyn:hover:text-primary dyn:cursor-pointer dyn:border-0 dyn:bg-transparent"
           >
             + Enable steps
           </button>
@@ -252,13 +252,13 @@ function FormCanvasInner({
           isOver && "dyn:shadow-[inset_0_0_0_2px_rgba(26,115,232,0.3)]"
         )}
         style={{
-          backgroundColor: isOver ? "rgba(255,255,255,0.95)" : "#fff",
-          backgroundImage: "radial-gradient(circle, #e0e0e0 1px, transparent 1px)",
+          backgroundColor: isOver ? "hsl(var(--dyn-card))" : "hsl(var(--dyn-background))",
+          backgroundImage: "radial-gradient(circle, hsl(var(--dyn-border)) 1px, transparent 1px)",
           backgroundSize: "24px 24px",
         }}
       >
         {fields.length === 0 ? (
-        <div className="dyn:text-gray-500 dyn:text-sm dyn:p-12 dyn:text-center dyn:border-2 dyn:border-dashed dyn:border-gray-300 dyn:rounded-xl dyn:bg-white dyn:relative dyn:z-1">
+        <div className="dyn:text-muted-foreground dyn:text-sm dyn:p-12 dyn:text-center dyn:border-2 dyn:border-dashed dyn:border-border dyn:rounded-xl dyn:bg-card dyn:relative dyn:z-1">
           Drag or click components from the left to add them
         </div>
       ) : (
@@ -270,7 +270,7 @@ function FormCanvasInner({
               {field.type === "group" && (
                 <DropZone
                   id={dropUngroupId(field.id)}
-                  className="dyn:w-full dyn:min-h-10 dyn:mb-2 dyn:flex dyn:items-center dyn:justify-center dyn:rounded-lg dyn:border-2 dyn:border-dashed dyn:border-gray-300 dyn:bg-gray-50 dyn:text-xs dyn:font-medium dyn:text-gray-500 dyn:transition-colors hover:dyn:border-[#1a73e8] hover:dyn:bg-[#1a73e8]/10 hover:dyn:text-[#1a73e8]"
+                  className="dyn:w-full dyn:min-h-10 dyn:mb-2 dyn:flex dyn:items-center dyn:justify-center dyn:rounded-lg dyn:border-2 dyn:border-dashed dyn:border-border dyn:bg-muted dyn:text-xs dyn:font-medium dyn:text-muted-foreground dyn:transition-colors hover:dyn:border-primary hover:dyn:bg-primary/10 hover:dyn:text-primary"
                 >
                   ← Solte aqui para mover campo para fora do grupo
                 </DropZone>
@@ -359,13 +359,13 @@ function GroupBlock({
         className={cn(
           "dyn:min-h-[7rem] dyn:flex dyn:flex-col dyn:gap-3 dyn:p-3 dyn:rounded-[10px]",
           isOver
-            ? "dyn:bg-[rgba(26,115,232,0.08)] dyn:border-2 dyn:border-dashed dyn:border-[#1a73e8]"
-            : "dyn:bg-gray-50 dyn:border dyn:border-dashed dyn:border-gray-200"
+            ? "dyn:bg-primary/10 dyn:border-2 dyn:border-dashed dyn:border-primary"
+            : "dyn:bg-muted dyn:border dyn:border-dashed dyn:border-border"
         )}
       >
         <SortableContext items={children.map((c) => c.id)} strategy={verticalListSortingStrategy}>
           {children.length === 0 ? (
-            <div className="dyn:flex-1 dyn:flex dyn:items-center dyn:justify-center dyn:text-gray-500 dyn:text-[13px] dyn:text-center dyn:py-6 dyn:px-4">
+            <div className="dyn:flex-1 dyn:flex dyn:items-center dyn:justify-center dyn:text-muted-foreground dyn:text-[13px] dyn:text-center dyn:py-6 dyn:px-4">
               Arraste campos para cá ou solte abaixo
             </div>
           ) : (
@@ -401,7 +401,7 @@ function GroupBlock({
             "dyn:shrink-0 dyn:py-2 dyn:px-3 dyn:rounded-md dyn:text-center dyn:text-xs dyn:font-medium dyn:transition-colors",
             isOver
               ? "dyn:bg-[#1a73e8]/15 dyn:text-[#1a73e8]"
-              : "dyn:bg-gray-100/80 dyn:text-gray-500"
+              : "dyn:bg-muted dyn:text-muted-foreground"
           )}
         >
           Solte aqui para adicionar ao grupo

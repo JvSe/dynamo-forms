@@ -1,4 +1,5 @@
 import React from "react";
+import { cn } from "../lib/utils";
 
 export type SubmitButtonProps = {
   isSubmitting: boolean;
@@ -30,6 +31,7 @@ interface FormFooterProps {
   onBack?: () => void;
   /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
   actionsButton?: ActionsButtonProps;
+  className?: string;
 }
 
 const defaultBackButtonClass =
@@ -49,6 +51,7 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   onNext,
   onBack,
   actionsButton,
+  className,
 }) => {
   const handleBack = onBack ?? (() => {});
   const handleNext = onNext ?? (() => {});
@@ -124,7 +127,12 @@ export const FormFooter: React.FC<FormFooterProps> = ({
 
   if (multiStep) {
     return (
-      <footer className="dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border">
+      <footer
+        className={cn(
+          "dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border",
+          className
+        )}
+      >
         <div className="dyn:flex dyn:gap-3">
           {!isFirstStep && renderBack()}
           {isLastStep ? renderSubmit() : renderNext()}
@@ -134,7 +142,12 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   }
 
   return (
-    <footer className="dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border">
+    <footer
+      className={cn(
+        "dyn:w-full dyn:pt-4 dyn:mt-2 dyn:border-t dyn:border-border",
+        className
+      )}
+    >
       {renderSubmit()}
     </footer>
   );

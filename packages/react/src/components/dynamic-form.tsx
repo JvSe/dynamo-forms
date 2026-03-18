@@ -1,5 +1,7 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, {
+  createContext,
+  useContext,
   useCallback,
   useEffect,
   useMemo,
@@ -30,8 +32,9 @@ import { FormHeader } from "./form-header";
 import { FormFooter, type ActionsButtonProps } from "./form-footer";
 import { StepIndicator } from "./step-indicator";
 import { ValidationOverlay } from "./validation-overlay";
+import { cn } from "../lib/utils";
 
-interface DynamicFormProps {
+export interface DynamicFormProviderProps {
   fields: DynamicFieldConfig[];
   formId: string;
   formName: string;
@@ -46,17 +49,61 @@ interface DynamicFormProps {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
-  components?: ComponentOverridesMap;
   /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
   actionsButton?: ActionsButtonProps;
   steps?: FormStep[];
-  /** When true (default), renders the step indicator when steps are provided. Set to false to hide it. */
-  showSteps?: boolean;
-  /** When true (default), renders the form header with the form name. Set to false to hide it. */
-  showHeader?: boolean;
+  children?: React.ReactNode;
+  formClassName?: string;
 }
 
-export const DynamicFormCore: React.FC<DynamicFormProps> = ({
+type DynamicFormContextValue = {
+  fields: DynamicFieldConfig[];
+  visibleFields: DynamicFieldConfig[];
+  steps?: FormStep[];
+  formId: string;
+  formName: string;
+  scrollEnabled: boolean;
+  actionsButton?: ActionsButtonProps;
+
+  isSubmitting: boolean;
+  isValidating: boolean;
+  setIsValidating: React.Dispatch<React.SetStateAction<boolean>>;
+
+  currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  isMultiStep: boolean;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+
+  methods: ReturnType<typeof useForm>;
+  allValues: Record<string, any>;
+  lastChangedField?: string;
+  lastBlurredField?: string;
+
+  registerFieldRef: (fieldId: string, element: HTMLDivElement | null) => void;
+  handleFieldBlur: (fieldId: string) => void;
+  getFieldStatusCallback: (fieldId: string) => ReturnType<typeof getFieldStatus>;
+
+  handleNextStep: () => Promise<void>;
+  handleBackStep: () => void;
+  handleSubmitWithValidation: () => Promise<void>;
+};
+
+const DynamicFormContext = createContext<DynamicFormContextValue | undefined>(
+  undefined
+);
+
+export function useDynamicFormComposition() {
+  const ctx = useContext(DynamicFormContext);
+  if (!ctx) {
+    throw new Error(
+      "useDynamicFormComposition must be used within DynamicFormProvider"
+    );
+  }
+  return ctx;
+}
+
+export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
   fields,
   formId,
   formName,
@@ -68,11 +115,10 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onValidationError,
   onFormDataChange,
   onFormDirtyChange,
-  components,
   actionsButton,
   steps,
-  showSteps = true,
-  showHeader = true,
+  children,
+  formClassName,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
@@ -419,69 +465,205 @@ export const DynamicFormCore: React.FC<DynamicFormProps> = ({
     onSubmitError,
   ]);
 
+  const ctx = useMemo<DynamicFormContextValue>(
+    () => ({
+      fields,
+      visibleFields,
+      steps,
+      formId,
+      formName,
+      scrollEnabled,
+      actionsButton,
+      isSubmitting,
+      isValidating,
+      setIsValidating,
+      currentStep,
+      setCurrentStep,
+      isMultiStep,
+      isFirstStep,
+      isLastStep,
+      methods,
+      allValues,
+      lastChangedField,
+      lastBlurredField,
+      registerFieldRef,
+      handleFieldBlur,
+      getFieldStatusCallback,
+      handleNextStep,
+      handleBackStep,
+      handleSubmitWithValidation,
+    }),
+    [
+      actionsButton,
+      allValues,
+      currentStep,
+      fields,
+      formId,
+      formName,
+      handleBackStep,
+      handleFieldBlur,
+      getFieldStatusCallback,
+      handleNextStep,
+      handleSubmitWithValidation,
+      isFirstStep,
+      isLastStep,
+      isMultiStep,
+      isSubmitting,
+      isValidating,
+      lastBlurredField,
+      lastChangedField,
+      methods,
+      scrollEnabled,
+      steps,
+      visibleFields,
+    ]
+  );
+
   return (
-    <FormProvider {...methods}>
-      <form
-        className="dyn:w-full dyn:flex dyn:flex-col dyn:gap-4 dyn:md:gap-6 dyn:min-h-0 dyn:flex-1"
-        aria-labelledby={formId}
-        onSubmit={(event) => {
-          event.preventDefault();
-          handleSubmitWithValidation();
-        }}
-        noValidate
-      >
-        {showHeader && <FormHeader formName={formName} />}
-
-        {isMultiStep && steps && showSteps && (
-          <StepIndicator steps={steps} currentStep={currentStep} />
-        )}
-
-        <div
-          className={`dyn:w-full dyn:flex dyn:flex-col dyn:flex-1 dyn:min-h-0 ${
-            scrollEnabled ? "dyn:overflow-y-auto" : "dyn:overflow-hidden"
-          }`}
-          style={{ gap: 15 }}
+    <DynamicFormContext.Provider value={ctx}>
+      <FormProvider {...methods}>
+        <form
+          className={cn(
+            "dyn:w-full dyn:flex dyn:flex-col dyn:gap-4 dyn:md:gap-6 dyn:min-h-0 dyn:flex-1",
+            formClassName
+          )}
+          aria-labelledby={formId}
+          onSubmit={(event) => {
+            event.preventDefault();
+            handleSubmitWithValidation();
+          }}
+          noValidate
         >
-          {visibleFields.map((field) => (
-            <div
-              key={field.id}
-              ref={(el) => registerFieldRef(field.id, el)}
-              id={field.id}
-            >
-              <DynamicField
-                field={field}
-                control={methods.control}
-                formValues={allValues}
-                formState={methods.formState}
-                changedFieldId={lastChangedField}
-                blurredFieldId={lastBlurredField}
-                onFieldBlur={handleFieldBlur}
-                fieldStatus={getFieldStatusCallback(field.id)}
-                getFieldStatus={getFieldStatusCallback}
-                components={components}
-              />
-            </div>
-          ))}
-        </div>
+          {children}
+        </form>
+      </FormProvider>
+    </DynamicFormContext.Provider>
+  );
+};
 
-        <div className="dyn:mt-auto dyn:shrink-0">
-          <FormFooter
-            isSubmitting={isSubmitting}
-          multiStep={isMultiStep}
-          isFirstStep={isFirstStep}
-          isLastStep={isLastStep}
-          onNext={handleNextStep}
-          onBack={handleBackStep}
-          actionsButton={actionsButton}
+export const DynamicFormHeader: React.FC<{
+  className?: string;
+  titleClassName?: string;
+}> = ({ className, titleClassName }) => {
+  const { formName } = useDynamicFormComposition();
+  return (
+    <FormHeader
+      formName={formName}
+      className={className}
+      titleClassName={titleClassName}
+    />
+  );
+};
+
+export const DynamicFormSteps: React.FC<{ className?: string }> = ({
+  className,
+}) => {
+  const { isMultiStep, steps, currentStep } = useDynamicFormComposition();
+  if (!isMultiStep || !steps) return null;
+  return (
+    <StepIndicator
+      steps={steps}
+      currentStep={currentStep}
+      className={className}
+    />
+  );
+};
+
+export const DynamicFormFields: React.FC<{
+  className?: string;
+  gap?: number;
+  components?: ComponentOverridesMap;
+}> = ({ className, gap = 15, components }) => {
+  const {
+    visibleFields,
+    scrollEnabled,
+    registerFieldRef,
+    methods,
+    allValues,
+    lastChangedField,
+    lastBlurredField,
+    handleFieldBlur,
+    getFieldStatusCallback,
+  } = useDynamicFormComposition();
+
+  return (
+    <div
+      className={cn(
+        "dyn:w-full dyn:flex dyn:flex-col dyn:flex-1 dyn:min-h-0",
+        scrollEnabled ? "dyn:overflow-y-auto" : "dyn:overflow-hidden",
+        className
+      )}
+      style={{ gap }}
+    >
+      {visibleFields.map((field) => (
+        <div
+          key={field.id}
+          ref={(el) => registerFieldRef(field.id, el)}
+          id={field.id}
+        >
+          <DynamicField
+            field={field}
+            control={methods.control}
+            formValues={allValues}
+            formState={methods.formState}
+            changedFieldId={lastChangedField}
+            blurredFieldId={lastBlurredField}
+            onFieldBlur={handleFieldBlur}
+            fieldStatus={getFieldStatusCallback(field.id)}
+            getFieldStatus={getFieldStatusCallback}
+            components={components}
           />
         </div>
+      ))}
+    </div>
+  );
+};
 
-        <ValidationOverlay
-          visible={isValidating}
-          onTimeout={() => setIsValidating(false)}
-        />
-      </form>
-    </FormProvider>
+/** @deprecated Use `DynamicFormFields` instead. */
+export const DynamicFormContents = DynamicFormFields;
+
+export const DynamicFormFooter: React.FC<{ className?: string }> = ({
+  className,
+}) => {
+  const {
+    isSubmitting,
+    isMultiStep,
+    isFirstStep,
+    isLastStep,
+    handleNextStep,
+    handleBackStep,
+    actionsButton,
+  } = useDynamicFormComposition();
+
+  return (
+    <FormFooter
+      isSubmitting={isSubmitting}
+      multiStep={isMultiStep}
+      isFirstStep={isFirstStep}
+      isLastStep={isLastStep}
+      onNext={handleNextStep}
+      onBack={handleBackStep}
+      actionsButton={actionsButton}
+      className={cn("dyn:mt-auto dyn:shrink-0", className)}
+    />
+  );
+};
+
+export const DynamicFormValidationOverlay: React.FC<{
+  className?: string;
+  cardClassName?: string;
+  textClassName?: string;
+}> = ({ className, cardClassName, textClassName }) => {
+  const { isValidating, setIsValidating } = useDynamicFormComposition();
+
+  return (
+    <ValidationOverlay
+      visible={isValidating}
+      onTimeout={() => setIsValidating(false)}
+      className={className}
+      cardClassName={cardClassName}
+      textClassName={textClassName}
+    />
   );
 };
 

@@ -1,45 +1,50 @@
 /**
- * Design tokens e estilos base são escopados a [data-dynamo-root]
- * para não interferir no projeto que importa o pacote.
+ * Design tokens escopados a [data-dynamo-root].
+ * Paleta light por padrão; use .dark no html para ativar dark mode.
  */
 [data-dynamo-root] {
+  /* Light (white) palette - default */
   --dyn-background: 0 0% 100%;
-  --dyn-foreground: 222.2 84% 4.9%;
-
-  --dyn-muted: 210 40% 96.1%;
-  --dyn-muted-foreground: 215.4 16.3% 46.9%;
-
-  --dyn-border: 214.3 31.8% 91.4%;
-  --dyn-input: 214.3 31.8% 91.4%;
-  --dyn-ring: 222.2 84% 56.1%;
-
-  --dyn-primary: 222.2 47.4% 11.2%;
-  --dyn-primary-foreground: 210 40% 98%;
-
-  --dyn-secondary: 210 40% 96.1%;
-  --dyn-secondary-foreground: 222.2 47.4% 11.2%;
-
-  --dyn-destructive: 0 84.2% 60.2%;
-  --dyn-destructive-foreground: 210 40% 98%;
-
+  --dyn-foreground: 222 47% 11%;
+  --dyn-muted: 210 40% 96%;
+  --dyn-muted-foreground: 215 16% 47%;
+  --dyn-border: 214 32% 91%;
+  --dyn-input: 214 32% 91%;
+  --dyn-ring: 217 91% 60%;
+  --dyn-primary: 217 91% 60%;
+  --dyn-primary-foreground: 0 0% 100%;
+  --dyn-secondary: 210 40% 96%;
+  --dyn-secondary-foreground: 222 47% 11%;
+  --dyn-destructive: 0 63% 50%;
+  --dyn-destructive-foreground: 0 0% 100%;
   --dyn-card: 0 0% 100%;
-  --dyn-card-foreground: 222.2 84% 4.9%;
-
+  --dyn-card-foreground: 222 47% 11%;
   --dyn-popover: 0 0% 100%;
-  --dyn-popover-foreground: 222.2 84% 4.9%;
-
-  --dyn-accent: 210 40% 96.1%;
-  --dyn-accent-foreground: 222.2 47.4% 11.2%;
-
+  --dyn-popover-foreground: 222 47% 11%;
+  --dyn-accent: 210 40% 96%;
+  --dyn-accent-foreground: 222 47% 11%;
   --dyn-radius: 0.5rem;
 }
 
-@layer base {
-  [data-dynamo-root] * {
-    @apply dyn:border-border;
-  }
-  [data-dynamo-root] {
-    @apply dyn:bg-background dyn:text-foreground;
-  }
+/* Dark palette - when html has class "dark" */
+.dark [data-dynamo-root] {
+  --dyn-background: 224 71% 4%;
+  --dyn-foreground: 213 31% 91%;
+  --dyn-muted: 223 47% 11%;
+  --dyn-muted-foreground: 215 20% 65%;
+  --dyn-border: 216 34% 17%;
+  --dyn-input: 216 34% 17%;
+  --dyn-ring: 217 91% 60%;
+  --dyn-primary: 217 91% 60%;
+  --dyn-primary-foreground: 224 71% 4%;
+  --dyn-secondary: 217 33% 17%;
+  --dyn-secondary-foreground: 213 31% 91%;
+  --dyn-destructive: 0 63% 50%;
+  --dyn-destructive-foreground: 0 0% 100%;
+  --dyn-card: 224 71% 6%;
+  --dyn-card-foreground: 213 31% 91%;
+  --dyn-popover: 224 71% 6%;
+  --dyn-popover-foreground: 213 31% 91%;
+  --dyn-accent: 217 33% 17%;
+  --dyn-accent-foreground: 213 31% 91%;
 }
-

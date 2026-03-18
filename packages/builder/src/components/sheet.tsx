@@ -65,11 +65,11 @@ export function SheetContent({
     <Dialog.Content
       data-sheet-side={side}
       className={cn(
-        "dyn:z-50 dyn:top-0 dyn:bottom-0 dyn:w-[320px] dyn:max-w-full dyn:bg-white dyn:flex dyn:flex-col dyn:outline-none",
+        "dyn:z-50 dyn:top-0 dyn:bottom-0 dyn:w-[320px] dyn:max-w-full dyn:bg-card dyn:flex dyn:flex-col dyn:outline-none",
         container ? "dyn:absolute" : "dyn:fixed",
         side === "right"
-          ? "dyn:right-0 dyn:border-l dyn:border-gray-200 dyn:shadow-[-4px_0_24px_rgba(0,0,0,0.08)]"
-          : "dyn:left-0 dyn:border-r dyn:border-gray-200 dyn:shadow-[4px_0_24px_rgba(0,0,0,0.08)]",
+          ? "dyn:right-0 dyn:border-l dyn:border-border dyn:shadow-[-4px_0_24px_rgba(0,0,0,0.4)]"
+          : "dyn:left-0 dyn:border-r dyn:border-border dyn:shadow-[4px_0_24px_rgba(0,0,0,0.4)]",
         className
       )}
       style={style}

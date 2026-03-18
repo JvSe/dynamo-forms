@@ -2,30 +2,22 @@ import Link from "next/link";
 
 export default function DocsPage() {
   return (
-    <main style={{ padding: "2rem", maxWidth: 800, margin: "0 auto" }}>
-      <h1>Dynamo Forms</h1>
-      <p>
+    <main className="dyn:px-8 dyn:py-8 dyn:max-w-[800px] dyn:mx-auto">
+      <h1 className="dyn:text-3xl dyn:font-bold dyn:text-foreground dyn:mb-4">Dynamo Forms</h1>
+      <p className="dyn:text-muted-foreground dyn:mb-6">
         Formulários dinâmicos para React e React Native. Documentação em construção.
       </p>
-      <h2>Pacotes</h2>
-      <ul>
-        <li><code>@jvseen/dynamo-core</code> – lógica compartilhada (condições, schema, validação)</li>
-        <li><code>@jvseen/dynamo-react</code> – componentes para React (web)</li>
-        <li><code>@jvseen/dynamo-react-native</code> – componentes para React Native</li>
-        <li><code>@jvseen/dynamo-builder</code> – construtor drag-and-drop de formulários</li>
+      <h2 className="dyn:text-xl dyn:font-semibold dyn:text-foreground dyn:mb-3">Pacotes</h2>
+      <ul className="dyn:list-disc dyn:list-inside dyn:space-y-1 dyn:text-muted-foreground dyn:mb-6">
+        <li><code className="dyn:bg-muted dyn:px-1 dyn:py-0.5 dyn:rounded dyn:text-foreground">@jvseen/dynamo-core</code> – lógica compartilhada (condições, schema, validação)</li>
+        <li><code className="dyn:bg-muted dyn:px-1 dyn:py-0.5 dyn:rounded dyn:text-foreground">@jvseen/dynamo-react</code> – componentes para React (web)</li>
+        <li><code className="dyn:bg-muted dyn:px-1 dyn:py-0.5 dyn:rounded dyn:text-foreground">@jvseen/dynamo-react-native</code> – componentes para React Native</li>
+        <li><code className="dyn:bg-muted dyn:px-1 dyn:py-0.5 dyn:rounded dyn:text-foreground">@jvseen/dynamo-builder</code> – construtor drag-and-drop de formulários</li>
       </ul>
-      <p style={{ marginTop: 24 }}>
+      <p className="dyn:mt-6">
         <Link
           href="/builder"
-          style={{
-            display: "inline-block",
-            padding: "10px 16px",
-            background: "#3b82f6",
-            color: "#fff",
-            borderRadius: 8,
-            textDecoration: "none",
-            fontWeight: 500,
-          }}
+          className="dyn:inline-block dyn:py-2.5 dyn:px-4 dyn:bg-primary dyn:text-primary-foreground dyn:rounded-lg dyn:no-underline dyn:font-medium dyn:hover:opacity-90 dyn:transition-opacity"
         >
           Testar builder de formulários →
         </Link>

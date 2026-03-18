@@ -1,14 +1,17 @@
 import React, { useEffect, useRef } from "react";
 import type { FormStep } from "@jvseen/dynamo-core";
+import { cn } from "../lib/utils";
 
 interface StepIndicatorProps {
   steps: FormStep[];
   currentStep: number;
+  className?: string;
 }
 
 export const StepIndicator: React.FC<StepIndicatorProps> = ({
   steps,
   currentStep,
+  className,
 }) => {
   const currentStepRef = useRef<HTMLLIElement>(null);
 
@@ -21,7 +24,13 @@ export const StepIndicator: React.FC<StepIndicatorProps> = ({
   const stepGap = 30;
 
   return (
-    <nav aria-label="Form progress" className="dyn:w-full dyn:overflow-x-auto dyn:overflow-y-visible dyn:py-3 dyn:px-1">
+    <nav
+      aria-label="Form progress"
+      className={cn(
+        "dyn:w-full dyn:overflow-x-auto dyn:overflow-y-visible dyn:py-3 dyn:px-1",
+        className
+      )}
+    >
       <ol className="dyn:flex dyn:items-center dyn:min-w-max" style={{ gap: 0 }}>
         {steps.map((step, i) => {
           const isCompleted = i < currentStep;

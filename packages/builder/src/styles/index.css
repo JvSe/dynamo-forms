@@ -2,13 +2,88 @@
 
 @source "../**/*.{ts,tsx}";
 
+/* Light palette por padrão; dark quando html.dark */
+[data-dynamo-root] {
+  --dyn-background: 0 0% 100%;
+  --dyn-foreground: 222 47% 11%;
+  --dyn-muted: 210 40% 96%;
+  --dyn-muted-foreground: 215 16% 47%;
+  --dyn-border: 214 32% 91%;
+  --dyn-input: 214 32% 91%;
+  --dyn-ring: 217 91% 60%;
+  --dyn-primary: 217 91% 60%;
+  --dyn-primary-foreground: 0 0% 100%;
+  --dyn-secondary: 210 40% 96%;
+  --dyn-secondary-foreground: 222 47% 11%;
+  --dyn-destructive: 0 63% 50%;
+  --dyn-destructive-foreground: 0 0% 100%;
+  --dyn-card: 0 0% 100%;
+  --dyn-card-foreground: 222 47% 11%;
+  --dyn-popover: 0 0% 100%;
+  --dyn-popover-foreground: 222 47% 11%;
+  --dyn-accent: 210 40% 96%;
+  --dyn-accent-foreground: 222 47% 11%;
+}
+
+.dark [data-dynamo-root] {
+  --dyn-background: 224 71% 4%;
+  --dyn-foreground: 213 31% 91%;
+  --dyn-muted: 223 47% 11%;
+  --dyn-muted-foreground: 215 20% 65%;
+  --dyn-border: 216 34% 17%;
+  --dyn-input: 216 34% 17%;
+  --dyn-ring: 217 91% 60%;
+  --dyn-primary: 217 91% 60%;
+  --dyn-primary-foreground: 224 71% 4%;
+  --dyn-secondary: 217 33% 17%;
+  --dyn-secondary-foreground: 213 31% 91%;
+  --dyn-destructive: 0 63% 50%;
+  --dyn-destructive-foreground: 0 0% 100%;
+  --dyn-card: 224 71% 6%;
+  --dyn-card-foreground: 213 31% 91%;
+  --dyn-popover: 224 71% 6%;
+  --dyn-popover-foreground: 213 31% 91%;
+  --dyn-accent: 217 33% 17%;
+  --dyn-accent-foreground: 213 31% 91%;
+}
+
+@theme {
+  --color-background: hsl(var(--dyn-background));
+  --color-foreground: hsl(var(--dyn-foreground));
+  --color-muted: hsl(var(--dyn-muted));
+  --color-muted-foreground: hsl(var(--dyn-muted-foreground));
+  --color-border: hsl(var(--dyn-border));
+  --color-input: hsl(var(--dyn-input));
+  --color-ring: hsl(var(--dyn-ring));
+  --color-primary: hsl(var(--dyn-primary));
+  --color-primary-foreground: hsl(var(--dyn-primary-foreground));
+  --color-secondary: hsl(var(--dyn-secondary));
+  --color-secondary-foreground: hsl(var(--dyn-secondary-foreground));
+  --color-destructive: hsl(var(--dyn-destructive));
+  --color-destructive-foreground: hsl(var(--dyn-destructive-foreground));
+  --color-card: hsl(var(--dyn-card));
+  --color-card-foreground: hsl(var(--dyn-card-foreground));
+  --color-popover: hsl(var(--dyn-popover));
+  --color-popover-foreground: hsl(var(--dyn-popover-foreground));
+  --color-accent: hsl(var(--dyn-accent));
+  --color-accent-foreground: hsl(var(--dyn-accent-foreground));
+}
+
 @keyframes sheet-slide-in-right {
-  from { transform: translateX(100%); }
-  to { transform: translateX(0); }
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }
 @keyframes sheet-slide-out-right {
-  from { transform: translateX(0); }
-  to { transform: translateX(100%); }
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(100%);
+  }
 }
 
 [data-sheet-side="right"][data-state="open"] {

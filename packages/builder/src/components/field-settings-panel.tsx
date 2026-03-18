@@ -31,7 +31,7 @@ function Toggle({
 }) {
   return (
     <div className="dyn:flex dyn:items-center dyn:justify-between dyn:mb-3">
-      <span className="dyn:text-[13px] dyn:text-gray-900">{label}</span>
+      <span className="dyn:text-[13px] dyn:text-foreground">{label}</span>
       <button
         type="button"
         role="switch"
@@ -39,12 +39,12 @@ function Toggle({
         onClick={() => onChange(!checked)}
         className={cn(
           "dyn:w-10 dyn:h-[22px] dyn:rounded-[11px] dyn:border-0 dyn:cursor-pointer dyn:relative dyn:shrink-0",
-          checked ? "dyn:bg-[#1a73e8]" : "dyn:bg-gray-300"
+          checked ? "dyn:bg-primary" : "dyn:bg-muted"
         )}
       >
         <span
           className={cn(
-            "dyn:absolute dyn:top-0.5 dyn:w-[18px] dyn:h-[18px] dyn:rounded-full dyn:bg-white dyn:shadow-[0_1px_3px_rgba(0,0,0,0.3)] dyn:transition-[left] dyn:duration-200",
+            "dyn:absolute dyn:top-0.5 dyn:w-[18px] dyn:h-[18px] dyn:rounded-full dyn:bg-white dyn:shadow-md dyn:transition-[left] dyn:duration-200",
             checked ? "dyn:left-5" : "dyn:left-0.5"
           )}
         />
@@ -53,7 +53,7 @@ function Toggle({
   );
 }
 
-const inputClass = "dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none";
+const inputClass = "dyn:w-full dyn:py-2.5 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-input dyn:bg-background dyn:text-foreground dyn:text-sm dyn:outline-none";
 
 export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: FieldSettingsPanelProps) {
   const updateConfig = (patch: Partial<DynamicFieldConfig["config"]> & Record<string, unknown>) => {
@@ -97,11 +97,11 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
   };
 
   return (
-    <div className="dyn:p-6 dyn:flex dyn:flex-col dyn:gap-5 dyn:bg-white">
-      <div className="dyn:text-sm dyn:font-semibold dyn:text-gray-900">Field settings</div>
+    <div className="dyn:p-6 dyn:flex dyn:flex-col dyn:gap-5 dyn:bg-background">
+      <div className="dyn:text-sm dyn:font-semibold dyn:text-foreground">Field settings</div>
 
       <div>
-        <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-gray-500">
+        <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-muted-foreground">
           Label
         </label>
         <input
@@ -117,7 +117,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
       </div>
 
       <div>
-        <div className="dyn:text-xs dyn:font-semibold dyn:mb-3 dyn:text-gray-500">Settings</div>
+        <div className="dyn:text-xs dyn:font-semibold dyn:mb-3 dyn:text-muted-foreground">Settings</div>
         <Toggle
           label="Required"
           checked={field.config.required}
@@ -141,14 +141,14 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
         />
         {field.config.description != null && (
           <div className="dyn:mt-2">
-            <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-gray-500">
+            <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-muted-foreground">
               Info message text
             </label>
             <textarea
               value={field.config.description ?? ""}
               onChange={(e) => updateConfig({ description: e.target.value })}
               rows={3}
-              className="dyn:w-full dyn:py-2 dyn:px-2.5 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-[13px] dyn:resize-y dyn:outline-none"
+              className="dyn:w-full dyn:py-2 dyn:px-2.5 dyn:rounded-lg dyn:border dyn:border-input dyn:bg-background dyn:text-foreground dyn:text-[13px] dyn:resize-y dyn:outline-none"
             />
           </div>
         )}
@@ -156,7 +156,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
       {showAlignment && (
         <div>
-          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-2 dyn:text-gray-500">
+          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-2 dyn:text-muted-foreground">
             Field alignment
           </label>
           <div className="dyn:flex dyn:gap-2">
@@ -166,8 +166,8 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
               className={cn(
                 "dyn:flex-1 dyn:py-2 dyn:px-3 dyn:text-[13px] dyn:rounded-lg dyn:border dyn:cursor-pointer",
                 field.config.alignment === "horizontal"
-                  ? "dyn:border-[#1a73e8] dyn:bg-blue-50 dyn:text-[#1a73e8]"
-                  : "dyn:border-gray-300 dyn:bg-white dyn:text-gray-500"
+                  ? "dyn:border-primary dyn:bg-primary/20 dyn:text-primary"
+                  : "dyn:border-border dyn:bg-card dyn:text-muted-foreground"
               )}
             >
               Horizontal
@@ -178,8 +178,8 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
               className={cn(
                 "dyn:flex-1 dyn:py-2 dyn:px-3 dyn:text-[13px] dyn:rounded-lg dyn:border dyn:cursor-pointer",
                 (field.config.alignment ?? "vertical") === "vertical"
-                  ? "dyn:border-[#1a73e8] dyn:bg-blue-50 dyn:text-[#1a73e8]"
-                  : "dyn:border-gray-300 dyn:bg-white dyn:text-gray-500"
+                  ? "dyn:border-primary dyn:bg-primary/20 dyn:text-primary"
+                  : "dyn:border-border dyn:bg-card dyn:text-muted-foreground"
               )}
             >
               Vertical
@@ -190,7 +190,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
       {showPlaceholder && (
         <div>
-          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-gray-500">
+          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-muted-foreground">
             Placeholder
           </label>
           <input
@@ -204,7 +204,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
       {showRows && (
         <div>
-          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-gray-500">
+          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-muted-foreground">
             Linhas
           </label>
           <input
@@ -219,7 +219,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
       {showTitleText && (
         <div>
-          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-gray-500">
+          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-1.5 dyn:text-muted-foreground">
             Texto do título
           </label>
           <input
@@ -233,16 +233,16 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
 
       {showOptions && (
         <div>
-          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-2 dyn:text-gray-500">
+          <label className="dyn:block dyn:text-xs dyn:font-medium dyn:mb-2 dyn:text-muted-foreground">
             Opções
           </label>
           {(field.config.options ?? []).length === 0 ? (
-            <p className="dyn:text-xs dyn:text-gray-500 dyn:mb-2">Adicione opções abaixo. O valor será gerado automaticamente a partir do texto.</p>
+            <p className="dyn:text-xs dyn:text-muted-foreground dyn:mb-2">Adicione opções abaixo. O valor será gerado automaticamente a partir do texto.</p>
           ) : null}
           {((field.config.options ?? []) as Array<{ label: string; value?: string }>).map((opt, i) => (
-            <div key={i} className="dyn:flex dyn:flex-col dyn:gap-1.5 dyn:mb-3 dyn:p-3 dyn:rounded-lg dyn:border dyn:border-gray-200 dyn:bg-gray-50 dyn:relative">
+            <div key={i} className="dyn:flex dyn:flex-col dyn:gap-1.5 dyn:mb-3 dyn:p-3 dyn:rounded-lg dyn:border dyn:border-border dyn:bg-muted dyn:relative">
               <div className="dyn:flex dyn:flex-col dyn:gap-1">
-                <span className="dyn:text-[11px] dyn:font-medium dyn:text-gray-400 dyn:uppercase dyn:tracking-wide">Label</span>
+                <span className="dyn:text-[11px] dyn:font-medium dyn:text-muted-foreground dyn:uppercase dyn:tracking-wide">Label</span>
                 <input
                   type="text"
                   placeholder="Ex: Sim, Não"
@@ -259,7 +259,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                     };
                     updateConfig({ options });
                   }}
-                  className="dyn:w-full dyn:py-2 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-gray-300 dyn:text-sm dyn:outline-none dyn:bg-white"
+                  className="dyn:w-full dyn:py-2 dyn:px-3 dyn:rounded-lg dyn:border dyn:border-input dyn:bg-background dyn:text-foreground dyn:text-sm dyn:outline-none"
                 />
               </div>
               {(field.config.options ?? []).length > 1 && (
@@ -291,7 +291,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                 ],
               });
             }}
-            className="dyn:py-2 dyn:px-3 dyn:text-xs dyn:font-medium dyn:rounded-lg dyn:border dyn:border-dashed dyn:border-gray-300 dyn:text-gray-600 dyn:hover:bg-gray-50 dyn:hover:border-gray-400 dyn:transition-colors"
+            className="dyn:py-2 dyn:px-3 dyn:text-xs dyn:font-medium dyn:rounded-lg dyn:border dyn:border-dashed dyn:border-border dyn:text-muted-foreground dyn:hover:bg-muted dyn:hover:border-foreground/30 dyn:transition-colors"
           >
             + Adicionar opção
           </button>
@@ -299,7 +299,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
       )}
 
       {showConditions && (
-        <div className="dyn:rounded-xl dyn:p-3.5 dyn:border dyn:border-gray-200 dyn:bg-gray-50">
+        <div className="dyn:rounded-xl dyn:p-3.5 dyn:border dyn:border-border dyn:bg-muted">
           <div className="dyn:flex dyn:items-center dyn:justify-between">
             <div className="dyn:flex dyn:items-center dyn:gap-2">
               <svg
@@ -315,7 +315,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
                 <circle cx="12" cy="12" r="3" />
               </svg>
-              <span className="dyn:text-[13px] dyn:font-medium dyn:text-gray-900">
+              <span className="dyn:text-[13px] dyn:font-medium dyn:text-foreground">
                 Show conditionally
               </span>
             </div>
@@ -344,13 +344,13 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
               }}
               className={cn(
                 "dyn:relative dyn:shrink-0 dyn:border-0 dyn:cursor-pointer dyn:rounded-[11px]",
-                hasConditions ? "dyn:bg-[#1a73e8]" : "dyn:bg-gray-300"
+                hasConditions ? "dyn:bg-primary" : "dyn:bg-muted"
               )}
               style={{ width: 40, height: 22 }}
             >
               <span
                 className={cn(
-                  "dyn:absolute dyn:top-0.5 dyn:w-[18px] dyn:h-[18px] dyn:rounded-full dyn:bg-white dyn:shadow-[0_1px_3px_rgba(0,0,0,0.3)] dyn:transition-[left] dyn:duration-200",
+                  "dyn:absolute dyn:top-0.5 dyn:w-[18px] dyn:h-[18px] dyn:rounded-full dyn:bg-white dyn:shadow-md dyn:transition-[left] dyn:duration-200",
                   hasConditions ? "dyn:left-5" : "dyn:left-0.5"
                 )}
               />
@@ -372,7 +372,7 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
       <button
         type="button"
         onClick={onRemove}
-        className="dyn:mt-2 dyn:py-2.5 dyn:px-4 dyn:text-[13px] dyn:cursor-pointer dyn:text-red-600 dyn:border dyn:border-red-100 dyn:rounded-lg dyn:bg-red-100 dyn:font-medium"
+        className="dyn:mt-2 dyn:py-2.5 dyn:px-4 dyn:text-[13px] dyn:cursor-pointer dyn:text-destructive dyn:border dyn:border-destructive/30 dyn:rounded-lg dyn:bg-destructive/10 dyn:font-medium dyn:hover:bg-destructive/20"
       >
         Remove field
       </button>

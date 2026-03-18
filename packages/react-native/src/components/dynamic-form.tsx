@@ -246,11 +246,13 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
               });
 
               if (i < batches.length - 1) {
-                await new Promise((resolve) => setTimeout(resolve, 50));
+                await new Promise<void>((resolve) =>
+                  setTimeout(() => resolve(), 50)
+                );
               }
             }
 
-            await new Promise((resolve) => setTimeout(resolve, 50));
+            await new Promise<void>((resolve) => setTimeout(() => resolve(), 50));
             await methods.trigger();
 
             setLastChangedField(undefined);
@@ -386,9 +388,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
 
       if (changedField) {
         setLastChangedField(changedField);
-        queueMicrotask(() => {
-          setLastChangedField(undefined);
-        });
+        Promise.resolve().then(() => setLastChangedField(undefined));
       }
 
       previousValues.current = { ...allValues };
@@ -475,7 +475,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
 
         setIsValidating(false);
 
-        await new Promise((resolve) => setTimeout(resolve, 100));
+        await new Promise<void>((resolve) => setTimeout(() => resolve(), 100));
 
         const errorFieldIds = Object.keys(errors);
         const firstErrorFieldId = findFirstErrorFieldId(fields, errorFieldIds);

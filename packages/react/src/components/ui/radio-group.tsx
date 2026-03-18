@@ -57,17 +57,17 @@ export const RadioItem = ({
       aria-checked={checked}
       onClick={onSelect}
       className={cn(
-        "dyn:flex dyn:items-center dyn:gap-2 dyn:rounded-md dyn:border dyn:px-3 dyn:py-2 dyn:text-sm dyn:cursor-pointer dyn:transition-colors",
+        "dyn:flex dyn:items-center dyn:gap-2 dyn:rounded-md dyn:border dyn:border-border dyn:px-3 dyn:py-2 dyn:text-sm dyn:text-foreground dyn:cursor-pointer dyn:transition-colors",
         "dyn:bg-background dyn:hover:bg-muted",
-        checked && "dyn:bg-primary/5 dyn:border-primary",
+        checked && "dyn:bg-primary/10 dyn:border-primary/50",
         className
       )}
       {...props}
     >
       <span
         className={cn(
-          "dyn:flex dyn:h-4 dyn:w-4 dyn:items-center dyn:justify-center dyn:rounded-full dyn:border dyn:border-input",
-          checked && "dyn:border-primary"
+          "dyn:flex dyn:h-4 dyn:w-4 dyn:items-center dyn:justify-center dyn:rounded-full dyn:border-2 dyn:border-border",
+          checked && "dyn:border-primary dyn:bg-primary/10"
         )}
       >
         {checked && (

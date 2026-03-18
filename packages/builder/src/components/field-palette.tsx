@@ -131,10 +131,10 @@ function PaletteItem({ item, onAddField }: { item: PaletteItemConfig; onAddField
         })
       }
       className={cn(
-        "dyn:flex dyn:flex-col dyn:items-start dyn:justify-between dyn:min-h-[88px] dyn:py-3 dyn:px-3.5 dyn:bg-white dyn:rounded-[10px] dyn:cursor-pointer dyn:text-xs dyn:font-medium dyn:text-gray-900 dyn:select-none",
+        "dyn:flex dyn:flex-col dyn:items-start dyn:justify-between dyn:min-h-[88px] dyn:py-3 dyn:px-3.5 dyn:bg-card dyn:rounded-[10px] dyn:cursor-pointer dyn:text-xs dyn:font-medium dyn:text-foreground dyn:select-none",
         isDragging
-          ? "dyn:border-2 dyn:border-[#1a73e8] dyn:shadow-[0_4px_12px_rgba(26,115,232,0.3)]"
-          : "dyn:border dyn:border-gray-200 dyn:shadow-[0_1px_2px_rgba(0,0,0,0.05)] dyn:hover:border-[#1a73e8] dyn:hover:shadow-[0_2px_8px_rgba(26,115,232,0.15)] dyn:transition-[border-color,box-shadow]"
+          ? "dyn:border-2 dyn:border-primary dyn:shadow-[0_4px_12px_rgba(59,130,246,0.3)]"
+          : "dyn:border dyn:border-border dyn:shadow-sm dyn:hover:border-primary dyn:hover:shadow-[0_2px_8px_rgba(59,130,246,0.2)] dyn:transition-[border-color,box-shadow]"
       )}
     >
       <div className="dyn:flex dyn:items-center dyn:justify-center dyn:shrink-0 dyn:mb-2">
@@ -168,24 +168,24 @@ export function FieldPalette({ onAddField }: { onAddField?: (data: PaletteDragDa
   }, [search]);
 
   return (
-    <div className="dyn:p-3.5 dyn:flex dyn:flex-col dyn:gap-3.5 dyn:bg-white">
+    <div className="dyn:p-3.5 dyn:flex dyn:flex-col dyn:gap-3.5 dyn:bg-background">
       <div className="dyn:relative">
         <Search
           size={16}
-          className="dyn:absolute dyn:left-2.5 dyn:top-1/2 dyn:-translate-y-1/2 dyn:text-gray-500 dyn:pointer-events-none"
+          className="dyn:absolute dyn:left-2.5 dyn:top-1/2 dyn:-translate-y-1/2 dyn:text-muted-foreground dyn:pointer-events-none"
         />
         <input
           type="text"
           placeholder="Search"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
-          className="dyn:w-full dyn:py-2 dyn:px-2.5 dyn:pl-9 dyn:rounded-lg dyn:border dyn:border-gray-200 dyn:text-[13px] dyn:bg-gray-50 dyn:text-gray-900 dyn:outline-none"
+          className="dyn:w-full dyn:py-2 dyn:px-2.5 dyn:pl-9 dyn:rounded-lg dyn:border dyn:border-border dyn:text-[13px] dyn:bg-muted dyn:text-foreground dyn:outline-none"
         />
       </div>
 
       {filtered.map((category) => (
         <div key={category.title}>
-          <div className="dyn:text-xs dyn:font-semibold dyn:text-gray-900 dyn:mb-2.5 dyn:tracking-[0.3px]">
+          <div className="dyn:text-xs dyn:font-semibold dyn:text-foreground dyn:mb-2.5 dyn:tracking-[0.3px]">
             {category.title}
           </div>
           <div className="dyn:grid dyn:grid-cols-2 dyn:gap-2.5 dyn:items-stretch">

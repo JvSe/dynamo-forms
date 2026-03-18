@@ -103,7 +103,7 @@ export const InputUpload: React.FC<InputUploadProps> = ({
 
     try {
       const result = await ImagePicker.launchCameraAsync({
-        mediaTypes: ["images"],
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
         allowsEditing: false,
         aspect: [1, 1],
         quality: 0.8,
