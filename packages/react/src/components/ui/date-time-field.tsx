@@ -48,7 +48,8 @@ function formatDateToValue(
 ): string {
   if (!date || !isValid(date)) return "";
   if (type === "time") return format(date, TIME_FORMAT);
-  if (type === "datetime") return date.toISOString().slice(0, 16);
+  /** Armazena em horário local para evitar offset de timezone (+3h no Brasil) */
+  if (type === "datetime") return format(date, "yyyy-MM-dd'T'HH:mm");
   return format(date, DATE_FORMAT_ISO);
 }
 
@@ -187,7 +188,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
             <CalendarIcon className="dyn:size-5 dyn:text-muted-foreground" />
           </PopoverTrigger>
           <PopoverContent
-            className="dyn:w-auto dyn:overflow-hidden dyn:p-0 dyn:bg-popover"
+            className="dyn:w-auto dyn:min-w-0 dyn:overflow-hidden dyn:p-0! dyn:bg-popover dyn:text-popover-foreground"
             align="end"
             alignOffset={-8}
             sideOffset={8}
@@ -199,7 +200,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
               onMonthChange={setMonth}
               onSelect={handleSelect}
               locale={ptBR}
-              captionLayout="dropdown"
               disabled={disabledDate}
             />
           </PopoverContent>
@@ -231,7 +231,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     const [h, m] = t.split(":").map(Number);
     const combined = datePart ? new Date(datePart) : new Date();
     combined.setHours(h, m, 0, 0);
-    onChange?.(combined.toISOString().slice(0, 16));
+    onChange?.(format(combined, "yyyy-MM-dd'T'HH:mm"));
   };
 
   return (
@@ -262,7 +262,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
             <CalendarIcon className="dyn:size-4 dyn:text-muted-foreground" />
           </PopoverTrigger>
           <PopoverContent
-            className="dyn:w-auto dyn:overflow-hidden dyn:p-0"
+            className="dyn:w-auto dyn:min-w-0 dyn:overflow-hidden dyn:p-0! dyn:bg-popover dyn:text-popover-foreground"
             align="end"
             alignOffset={-8}
             sideOffset={8}
@@ -274,7 +274,6 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
               onMonthChange={setMonth}
               onSelect={handleDateSelect}
               locale={ptBR}
-              captionLayout="dropdown"
               disabled={disabledDate}
             />
           </PopoverContent>

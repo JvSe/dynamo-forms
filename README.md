@@ -31,12 +31,12 @@ cd apps/docs && pnpm dev   # só a documentação
 
 - **Web:** `pnpm add @jvseen/dynamo-core @jvseen/dynamo-react`
 
-Importe os estilos no seu app:
+**Importe os estilos no seu app** (layout, _app ou main):
 ```ts
 import "@jvseen/dynamo-react/styles.css";
 ```
 
-Os estilos e variáveis CSS são escopados ao atributo `[data-dynamo-root]` e **não sobrescrevem** variáveis nem estilos base do seu projeto. O `DynamicForm` e o `FormBuilder` aplicam esse atributo automaticamente.
+Os estilos são escopados ao atributo `[data-dynamo-root]` e **não sobrescrevem** variáveis do seu projeto. O `DynamicForm` e o `FormBuilder` aplicam esse atributo automaticamente.
 - **React Native:** `pnpm add @jvseen/dynamo-core @jvseen/dynamo-react-native`
 - **Construtor de formulários (web):** `pnpm add @jvseen/dynamo-core @jvseen/dynamo-builder` — layout em 3 colunas (componentes arrastáveis | canvas | configurações do campo); saída em `DynamicFieldConfig[]` (JSON).
 

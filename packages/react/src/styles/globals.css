@@ -48,3 +48,22 @@
   --dyn-accent: 217 33% 17%;
   --dyn-accent-foreground: 213 31% 91%;
 }
+
+/* Calendar: layout da linha de dias da semana e das semanas (padrão shadcn) */
+[data-dynamo-root] [data-slot="calendar"] thead tr,
+[data-dynamo-root] [data-slot="calendar"] tbody tr {
+  display: flex;
+  width: 100%;
+}
+[data-dynamo-root] [data-slot="calendar"] thead th {
+  flex: 1 1 0%;
+  min-width: 0;
+  text-align: center;
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: hsl(var(--dyn-muted-foreground));
+}
+[data-dynamo-root] [data-slot="calendar"] tbody td {
+  flex: 1 1 0%;
+  min-width: 0;
+}

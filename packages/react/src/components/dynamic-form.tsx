@@ -521,22 +521,24 @@ export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
 
   return (
     <DynamicFormContext.Provider value={ctx}>
-      <FormProvider {...methods}>
-        <form
-          className={cn(
-            "dyn:w-full dyn:flex dyn:flex-col dyn:gap-4 dyn:md:gap-6 dyn:min-h-0 dyn:flex-1",
-            formClassName
-          )}
-          aria-labelledby={formId}
-          onSubmit={(event) => {
-            event.preventDefault();
-            handleSubmitWithValidation();
-          }}
-          noValidate
-        >
-          {children}
-        </form>
-      </FormProvider>
+      <div data-dynamo-root className="dyn:w-full dyn:min-h-0 dyn:flex dyn:flex-col dyn:flex-1">
+        <FormProvider {...methods}>
+          <form
+            className={cn(
+              "dyn:w-full dyn:flex dyn:flex-col dyn:gap-4 dyn:md:gap-6 dyn:min-h-0 dyn:flex-1",
+              formClassName
+            )}
+            aria-labelledby={formId}
+            onSubmit={(event) => {
+              event.preventDefault();
+              handleSubmitWithValidation();
+            }}
+            noValidate
+          >
+            {children}
+          </form>
+        </FormProvider>
+      </div>
     </DynamicFormContext.Provider>
   );
 };
