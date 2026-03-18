@@ -44,9 +44,12 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
+  /** Custom component overrides (opcional – omita se não precisar) */
   components?: ComponentOverridesMap;
   /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
   actionsButton?: ActionsButtonProps;
+  /** Classes CSS do formulário (opcional) */
+  formClassName?: string;
   steps?: FormStep[];
 };
 
@@ -68,6 +71,7 @@ export const DynamicFormDefault = React.memo(
     onFormDirtyChange,
     components,
     actionsButton,
+    formClassName,
     steps,
   }: DynamicFormProviderProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
@@ -109,6 +113,7 @@ export const DynamicFormDefault = React.memo(
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
             actionsButton={actionsButton}
+            formClassName={formClassName}
             steps={steps}
           >
             <DynamicFormHeader />
