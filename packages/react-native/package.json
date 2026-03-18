@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-react-native",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Dynamic forms for React Native - Dynamo Forms",
   "private": false,
   "license": "MIT",
@@ -15,7 +15,9 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pnpm exec tsup",
     "dev": "pnpm exec tsup --watch",
