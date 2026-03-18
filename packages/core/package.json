@@ -1,6 +1,6 @@
 {
   "name": "@jvseen/dynamo-core",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Core logic and types for Dynamo Forms - conditions, schema, validation",
   "private": false,
   "license": "MIT",
@@ -15,7 +15,9 @@
       "require": "./dist/index.cjs"
     }
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "pnpm exec tsup",
     "dev": "pnpm exec tsup --watch",
