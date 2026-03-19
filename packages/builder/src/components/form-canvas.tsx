@@ -1,7 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm, useFormContext, useWatch } from "react-hook-form";
 import { useDroppable } from "@dnd-kit/core";
-import { SortableContext, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { SortableContext, horizontalListSortingStrategy, useSortable, verticalListSortingStrategy } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-core";
 import { DynamicField } from "@jvseen/dynamo-react";
 import { FieldCard } from "./field-card.js";
@@ -89,58 +90,28 @@ function StepTabs({
   return (
     <div className="dyn:flex dyn:items-center dyn:gap-2 dyn:px-5 dyn:py-2 dyn:border-b dyn:border-border dyn:bg-muted/60 dyn:min-h-0">
       <div className="dyn:flex-1 dyn:min-w-0 dyn:overflow-x-auto dyn:overflow-y-hidden dyn:flex dyn:items-center dyn:gap-1.5 dyn:py-0.5">
-        {steps.map((step, i) => (
-          <div key={step.id} className="dyn:flex dyn:items-center dyn:shrink-0">
-            {editingIndex === i ? (
-              <input
-                autoFocus
-                value={renameValue}
-                onChange={(e) => setRenameValue(e.target.value)}
-                onBlur={() => commitRename(i)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter") commitRename(i);
-                  if (e.key === "Escape") setEditingIndex(null);
-                }}
-                className="dyn:px-2 dyn:py-1 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:bg-background dyn:border dyn:border-primary dyn:text-foreground dyn:w-24 dyn:outline-none"
-              />
-            ) : (
-              <button
-                type="button"
-                onClick={() => onStepChange(i)}
-                onDoubleClick={() => startRename(i)}
-                className={cn(
-                  "dyn:group dyn:flex dyn:items-center dyn:gap-1.5 dyn:px-3 dyn:py-1.5 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:transition-all dyn:cursor-pointer dyn:border-0",
-                  activeStepIndex === i
-                    ? "dyn:bg-primary/20 dyn:text-primary"
-                    : "dyn:text-muted-foreground dyn:hover:text-foreground dyn:hover:bg-muted dyn:bg-transparent"
-                )}
-              >
-                <span className={cn(
-                  "dyn:flex dyn:items-center dyn:justify-center dyn:w-5 dyn:h-5 dyn:rounded-full dyn:text-[10px] dyn:font-semibold dyn:shrink-0",
-                  activeStepIndex === i
-                    ? "dyn:bg-primary dyn:text-primary-foreground"
-                    : "dyn:bg-muted dyn:text-muted-foreground"
-                )}>
-                  {i + 1}
-                </span>
-                <span className="dyn:truncate dyn:max-w-[120px]">{step.title}</span>
-                {steps.length > 1 && (
-                  <span
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onRemoveStep(i);
-                    }}
-                    className="dyn:ml-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:hover:text-red-500 dyn:transition-all dyn:cursor-pointer dyn:shrink-0"
-                  >
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
-                  </span>
-                )}
-              </button>
-            )}
-          </div>
-        ))}
+        <SortableContext
+          items={steps.map((step) => `step-tab-${step.id}`)}
+          strategy={horizontalListSortingStrategy}
+        >
+          {steps.map((step, i) => (
+            <StepTabItem
+              key={step.id}
+              step={step}
+              index={i}
+              activeStepIndex={activeStepIndex}
+              editingIndex={editingIndex}
+              renameValue={renameValue}
+              stepsLength={steps.length}
+              onRenameValueChange={setRenameValue}
+              onCommitRename={commitRename}
+              onCancelRename={() => setEditingIndex(null)}
+              onStartRename={startRename}
+              onStepChange={onStepChange}
+              onRemoveStep={onRemoveStep}
+            />
+          ))}
+        </SortableContext>
       </div>
 
       <button
@@ -168,6 +139,107 @@ function StepTabs({
           </button>
         )}
       </div>
+    </div>
+  );
+}
+
+type StepTabItemProps = {
+  step: FormStep;
+  index: number;
+  activeStepIndex: number;
+  editingIndex: number | null;
+  renameValue: string;
+  stepsLength: number;
+  onRenameValueChange: (value: string) => void;
+  onCommitRename: (index: number) => void;
+  onCancelRename: () => void;
+  onStartRename: (index: number) => void;
+  onStepChange: (index: number) => void;
+  onRemoveStep: (index: number) => void;
+};
+
+function StepTabItem({
+  step,
+  index,
+  activeStepIndex,
+  editingIndex,
+  renameValue,
+  stepsLength,
+  onRenameValueChange,
+  onCommitRename,
+  onCancelRename,
+  onStartRename,
+  onStepChange,
+  onRemoveStep,
+}: StepTabItemProps) {
+  const sortable = useSortable({
+    id: `step-tab-${step.id}`,
+    data: { type: "step-tab", stepIndex: index },
+  });
+  const style: React.CSSProperties = {
+    transform: CSS.Transform.toString(sortable.transform),
+    transition: sortable.transition,
+    opacity: sortable.isDragging ? 0.65 : 1,
+  };
+
+  return (
+    <div
+      ref={sortable.setNodeRef}
+      style={style}
+      className="dyn:flex dyn:items-center dyn:shrink-0"
+    >
+      {editingIndex === index ? (
+        <input
+          autoFocus
+          value={renameValue}
+          onChange={(e) => onRenameValueChange(e.target.value)}
+          onBlur={() => onCommitRename(index)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") onCommitRename(index);
+            if (e.key === "Escape") onCancelRename();
+          }}
+          className="dyn:px-2 dyn:py-1 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:bg-background dyn:border dyn:border-primary dyn:text-foreground dyn:w-24 dyn:outline-none"
+        />
+      ) : (
+        <button
+          type="button"
+          onClick={() => onStepChange(index)}
+          onDoubleClick={() => onStartRename(index)}
+          {...sortable.attributes}
+          {...sortable.listeners}
+          className={cn(
+            "dyn:group dyn:flex dyn:items-center dyn:gap-1.5 dyn:px-3 dyn:py-1.5 dyn:rounded-md dyn:text-xs dyn:font-medium dyn:transition-all dyn:cursor-grab active:dyn:cursor-grabbing dyn:border-0",
+            activeStepIndex === index
+              ? "dyn:bg-primary/20 dyn:text-primary"
+              : "dyn:text-muted-foreground dyn:hover:text-foreground dyn:hover:bg-muted dyn:bg-transparent"
+          )}
+        >
+          <span
+            className={cn(
+              "dyn:flex dyn:items-center dyn:justify-center dyn:min-w-5 dyn:h-5 dyn:px-1 dyn:rounded-full dyn:text-[10px] dyn:font-semibold dyn:shrink-0",
+              activeStepIndex === index
+                ? "dyn:bg-primary dyn:text-primary-foreground"
+                : "dyn:bg-muted dyn:text-muted-foreground"
+            )}
+          >
+            {index + 1}
+          </span>
+          <span className="dyn:truncate dyn:max-w-[120px]">{step.title}</span>
+          {stepsLength > 1 && (
+            <span
+              onClick={(e) => {
+                e.stopPropagation();
+                onRemoveStep(index);
+              }}
+              className="dyn:ml-0.5 dyn:opacity-0 dyn:group-hover:opacity-100 dyn:hover:text-red-500 dyn:transition-all dyn:cursor-pointer dyn:shrink-0"
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </span>
+          )}
+        </button>
+      )}
     </div>
   );
 }

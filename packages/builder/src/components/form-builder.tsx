@@ -9,6 +9,7 @@ import {
   type DragEndEvent,
   type DragStartEvent,
 } from "@dnd-kit/core";
+import { arrayMove } from "@dnd-kit/sortable";
 import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-core";
 import { DynamicField } from "@jvseen/dynamo-react";
 import { FormProvider, useForm } from "react-hook-form";
@@ -84,11 +85,11 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
 }
 
 let _stepIdCounter = 0;
-function createStep(stepNumber: number): FormStep {
+function createStep(): FormStep {
   _stepIdCounter++;
   return {
     id: `step_${_stepIdCounter}_${Date.now()}`,
-    title: `Step ${stepNumber}`,
+    title: "Step",
   };
 }
 
@@ -137,7 +138,7 @@ export function FormBuilder({
   const setFormTitle = onFormTitleChange ?? setInternalTitle;
   const [isDragging, setIsDragging] = useState(false);
 
-  const [internalSteps, setInternalSteps] = useState<FormStep[]>([createStep(1)]);
+  const [internalSteps, setInternalSteps] = useState<FormStep[]>([createStep()]);
   const [internalMultiStep, setInternalMultiStep] = useState(false);
   const [activeStepIndex, setActiveStepIndex] = useState(0);
   const [importModalOpen, setImportModalOpen] = useState(false);
@@ -152,7 +153,7 @@ export function FormBuilder({
     setMultiStepEnabled(next);
     if (next) {
       if (steps.length === 0) {
-        setSteps([createStep(1)]);
+        setSteps([createStep()]);
       }
       onChange(value.map((f) => ({
         ...f,
@@ -163,7 +164,7 @@ export function FormBuilder({
   }, [multiStepEnabled, steps.length, value, onChange, setSteps, setMultiStepEnabled]);
 
   const handleAddStep = useCallback(() => {
-    const s = createStep(steps.length + 1);
+    const s = createStep();
     setSteps([...steps, s]);
     setActiveStepIndex(steps.length);
   }, [steps, setSteps]);
@@ -191,6 +192,49 @@ export function FormBuilder({
       setSteps(steps.map((s, i) => (i === index ? { ...s, title } : s)));
     },
     [steps, setSteps]
+  );
+
+  const handleReorderSteps = useCallback(
+    (fromIndex: number, toIndex: number) => {
+      if (fromIndex === toIndex) return;
+      if (fromIndex < 0 || toIndex < 0 || fromIndex >= steps.length || toIndex >= steps.length) return;
+
+      const reorderedSteps = arrayMove(steps, fromIndex, toIndex);
+      const oldStepIndexToNewIndex = new Map<number, number>();
+
+      reorderedSteps.forEach((step, newIndex) => {
+        const oldIndex = steps.findIndex((originalStep) => originalStep.id === step.id);
+        if (oldIndex >= 0) {
+          oldStepIndexToNewIndex.set(oldIndex, newIndex);
+        }
+      });
+
+      let fieldsChanged = false;
+      const reorderedFields = value.map((field) => {
+        const currentStep = field.config.step ?? 0;
+        const nextStep = oldStepIndexToNewIndex.get(currentStep);
+        if (nextStep == null || nextStep === currentStep) return field;
+        fieldsChanged = true;
+        return {
+          ...field,
+          config: {
+            ...field.config,
+            step: nextStep,
+          },
+        };
+      });
+
+      setSteps(reorderedSteps);
+      if (fieldsChanged) {
+        onChange(reorderedFields);
+      }
+
+      const newActiveStepIndex = oldStepIndexToNewIndex.get(activeStepIndex);
+      if (newActiveStepIndex != null) {
+        setActiveStepIndex(newActiveStepIndex);
+      }
+    },
+    [steps, value, onChange, activeStepIndex, setSteps]
   );
 
   const rootIds = getAllRootFieldIds(value);
@@ -235,6 +279,17 @@ export function FormBuilder({
       setActivePaletteData(null);
       setIsDragging(false);
       if (!over) return;
+
+      const activeData = active.data.current as { type?: string; stepIndex?: number } | undefined;
+      const overData = over.data.current as { type?: string; stepIndex?: number } | undefined;
+      if (activeData?.type === "step-tab" && overData?.type === "step-tab") {
+        const fromIndex = activeData.stepIndex;
+        const toIndex = overData.stepIndex;
+        if (typeof fromIndex === "number" && typeof toIndex === "number") {
+          handleReorderSteps(fromIndex, toIndex);
+        }
+        return;
+      }
 
       const activeIdStr = String(active.id);
       const overIdStr = String(over.id);
@@ -399,7 +454,7 @@ export function FormBuilder({
         setSelectedFieldId(movedField.id);
       }
     },
-    [value, onChange, layout, multiStepEnabled, activeStepIndex]
+    [value, onChange, layout, multiStepEnabled, activeStepIndex, handleReorderSteps]
   );
 
   const handleUpdateField = useCallback(

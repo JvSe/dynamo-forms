@@ -1,0 +1,28 @@
+---
+description: Sempre verificar e usar skills locais em .agents para melhor contexto
+alwaysApply: true
+---
+
+# Uso obrigatorio de skills do projeto
+
+## Objetivo
+- Antes de responder ou implementar qualquer tarefa, verificar skills disponiveis em `@.agents/`.
+- Priorizar skills locais do projeto para aumentar precisao, consistencia e contexto.
+
+## Comportamento esperado
+- Sempre buscar skills em `@.agents/skills/**/SKILL.md` no inicio de cada nova solicitacao.
+- Quando houver skill relevante, ler e seguir as instrucoes dela antes de propor solucoes.
+- Se houver mais de uma skill aplicavel, combinar as instrucoes de forma coerente.
+- Em caso de conflito entre skills, priorizar:
+  1) seguranca e restricoes do sistema
+  2) convencoes do projeto
+  3) especificidade da skill para a tarefa atual
+
+## Criterios de aplicacao
+- Considerar uma skill relevante quando o pedido do usuario corresponder ao dominio descrito no `SKILL.md`.
+- Se nenhuma skill for claramente aplicavel, seguir fluxo padrao e explicitar rapidamente que nao encontrou skill adequada.
+
+## Boas praticas
+- Nao citar skill sem de fato ler seu conteudo.
+- Nao inventar instrucoes nao presentes nas skills.
+- Manter respostas objetivas, mas aplicar integralmente o que a skill exigir.

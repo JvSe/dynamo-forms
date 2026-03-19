@@ -54,7 +54,7 @@ function saveDraft(draft: StoredDraft) {
   }
 }
 
-const initialSteps: FormStep[] = [{ id: "step_1", title: "Step 1" }];
+const initialSteps: FormStep[] = [{ id: "step_1", title: "Step" }];
 
 export default function BuilderTestPage() {
   const router = useRouter();
@@ -129,7 +129,7 @@ export default function BuilderTestPage() {
           onStepsChange={setSteps}
           multiStepEnabled={steps.length > 1}
           onMultiStepChange={(enabled: boolean) => {
-            if (enabled && steps.length <= 1) setSteps([...steps, { id: `step_2_${Date.now()}`, title: "Step 2" }]);
+            if (enabled && steps.length <= 1) setSteps([...steps, { id: `step_2_${Date.now()}`, title: "Step" }]);
             if (!enabled) setSteps(initialSteps);
           }}
         />
