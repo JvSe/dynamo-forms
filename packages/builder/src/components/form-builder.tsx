@@ -1,4 +1,3 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
   DndContext,
   DragOverlay,
@@ -12,21 +11,23 @@ import {
 import { arrayMove } from "@dnd-kit/sortable";
 import type { DynamicFieldConfig, FormStep } from "@jvseen/dynamo-core";
 import { DynamicField } from "@jvseen/dynamo-react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { FormProvider, useForm } from "react-hook-form";
-import { FieldPalette, getPaletteDragId, type PaletteDragData } from "./field-palette.js";
-import { InlineSheetRoot, InlineSheetPortal, InlineSheetContent } from "./inline-sheet.js";
-import { ImportTemplateModal } from "./import-template-modal.js";
-import { FormCanvas } from "./form-canvas.js";
-import { FieldSettingsPanel } from "./field-settings-panel.js";
-import { createDefaultFieldConfig } from "../lib/default-field-config.js";
-import { getPreviewDefaultValues } from "../lib/preview-default-values.js";
-import { FIELD_TYPES } from "../constants/field-types.js";
-import type { FieldType } from "../constants/field-types.js";
 import {
-  FORM_CANVAS_ID,
-  CANVAS_TOP_DROP_ID,
-  parseDropId,
+  parseDropId
 } from "../constants/drop-ids.js";
+import type { FieldType } from "../constants/field-types.js";
+import { FIELD_TYPES } from "../constants/field-types.js";
+import { createDefaultFieldConfig } from "../lib/default-field-config.js";
+import {
+  addFieldToGroup,
+  findFieldParent,
+  getAllRootFieldIds,
+  getFieldById,
+  getFlattenedFields,
+  moveFieldWithinGroup,
+  removeFieldFromGroup,
+} from "../lib/group-utils.js";
 import {
   ensureLayoutForFields,
   getLayoutForNewField,
@@ -34,16 +35,13 @@ import {
   removeFromLayout,
   type FieldLayout,
 } from "../lib/layout-utils.js";
-import {
-  addFieldToGroup,
-  findFieldParent,
-  getFieldById,
-  getAllRootFieldIds,
-  getFlattenedFields,
-  moveFieldWithinGroup,
-  removeFieldFromGroup,
-} from "../lib/group-utils.js";
+import { getPreviewDefaultValues } from "../lib/preview-default-values.js";
 import { cn } from "../lib/utils.js";
+import { FieldPalette, type PaletteDragData } from "./field-palette.js";
+import { FieldSettingsPanel } from "./field-settings-panel.js";
+import { FormCanvas } from "./form-canvas.js";
+import { ImportTemplateModal } from "./import-template-modal.js";
+import { InlineSheetContent, InlineSheetPortal, InlineSheetRoot } from "./inline-sheet.js";
 
 const PALETTE_PREFIX = "field-palette-";
 
@@ -72,7 +70,7 @@ function DragOverlayField({ field }: { field: DynamicFieldConfig }) {
 
   return (
     <FormProvider {...methods}>
-        <div data-dynamo-root className="dyn:p-2.5 dyn:bg-card dyn:rounded-xl dyn:border dyn:border-border dyn:shadow-xl dyn:min-w-[180px]">
+      <div data-dynamo-root className="dyn:p-2.5 dyn:bg-card dyn:rounded-xl dyn:border dyn:border-border dyn:shadow-xl dyn:min-w-[180px]">
         <DynamicField
           field={field}
           control={control}
@@ -586,7 +584,7 @@ export function FormBuilder({
       <div
         data-dynamo-root
         className={cn(
-          "dyn:grid dyn:grid-cols-[280px_1fr] dyn:h-screen dyn:max-h-screen dyn:rounded-2xl dyn:overflow-hidden dyn:shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
+          "dyn:grid dyn:grid-cols-[280px_1fr] dyn:h-full dyn:max-h-screen dyn:rounded-2xl dyn:overflow-hidden dyn:shadow-[0_4px_24px_rgba(0,0,0,0.08)]",
           className
         )}
         style={style}

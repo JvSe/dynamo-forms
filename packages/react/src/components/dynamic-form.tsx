@@ -49,8 +49,6 @@ export interface DynamicFormProviderProps {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
-  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
-  actionsButton?: ActionsButtonProps;
   steps?: FormStep[];
   children?: React.ReactNode;
   formClassName?: string;
@@ -63,7 +61,6 @@ type DynamicFormContextValue = {
   formId: string;
   formName: string;
   scrollEnabled: boolean;
-  actionsButton?: ActionsButtonProps;
 
   isSubmitting: boolean;
   isValidating: boolean;
@@ -115,7 +112,6 @@ export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
   onValidationError,
   onFormDataChange,
   onFormDirtyChange,
-  actionsButton,
   steps,
   children,
   formClassName,
@@ -473,7 +469,6 @@ export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
       formId,
       formName,
       scrollEnabled,
-      actionsButton,
       isSubmitting,
       isValidating,
       setIsValidating,
@@ -494,7 +489,6 @@ export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
       handleSubmitWithValidation,
     }),
     [
-      actionsButton,
       allValues,
       currentStep,
       fields,
@@ -624,9 +618,11 @@ export const DynamicFormFields: React.FC<{
 /** @deprecated Use `DynamicFormFields` instead. */
 export const DynamicFormContents = DynamicFormFields;
 
-export const DynamicFormFooter: React.FC<{ className?: string }> = ({
-  className,
-}) => {
+export const DynamicFormFooter: React.FC<{
+  className?: string;
+  /** Custom submit / back button components (same pattern as `DynamicFormFields` `components`). */
+  components?: ActionsButtonProps;
+}> = ({ className, components }) => {
   const {
     isSubmitting,
     isMultiStep,
@@ -634,7 +630,6 @@ export const DynamicFormFooter: React.FC<{ className?: string }> = ({
     isLastStep,
     handleNextStep,
     handleBackStep,
-    actionsButton,
   } = useDynamicFormComposition();
 
   return (
@@ -645,7 +640,7 @@ export const DynamicFormFooter: React.FC<{ className?: string }> = ({
       isLastStep={isLastStep}
       onNext={handleNextStep}
       onBack={handleBackStep}
-      actionsButton={actionsButton}
+      components={components}
       className={cn("dyn:mt-auto dyn:shrink-0", className)}
     />
   );

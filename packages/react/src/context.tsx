@@ -46,8 +46,8 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onFormDirtyChange?: (dirty: boolean) => void;
   /** Custom component overrides (opcional – omita se não precisar) */
   components?: ComponentOverridesMap;
-  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
-  actionsButton?: ActionsButtonProps;
+  /** Custom submit / back for `DynamicFormFooter` (não use mais no root; passe aqui se usar `DynamicFormDefault`). */
+  footerComponents?: ActionsButtonProps;
   /** Classes CSS do formulário (opcional) */
   formClassName?: string;
   steps?: FormStep[];
@@ -66,7 +66,7 @@ export const DynamicFormDefault = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
-    actionsButton,
+    footerComponents,
     formClassName,
     steps,
   }: DynamicFormProviderProps) => {
@@ -108,14 +108,13 @@ export const DynamicFormDefault = React.memo(
             onValidationError={onValidationError}
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
-            actionsButton={actionsButton}
             formClassName={formClassName}
             steps={steps}
           >
             <DynamicFormHeader />
             <DynamicFormSteps />
             <DynamicFormFields components={components} />
-            <DynamicFormFooter />
+            <DynamicFormFooter components={footerComponents} />
             <DynamicFormValidationOverlay />
           </DynamicFormProvider>
         </div>

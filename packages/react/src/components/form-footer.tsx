@@ -22,6 +22,9 @@ export type ActionsButtonProps = {
   back?: React.ComponentType<BackButtonProps>;
 };
 
+/** Same shape as footer `components` overrides (alias for docs / backward typing). */
+export type FooterComponentsMap = ActionsButtonProps;
+
 interface FormFooterProps {
   isSubmitting: boolean;
   multiStep?: boolean;
@@ -29,8 +32,8 @@ interface FormFooterProps {
   isLastStep?: boolean;
   onNext?: () => void;
   onBack?: () => void;
-  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
-  actionsButton?: ActionsButtonProps;
+  /** Custom components for submit and back buttons. Pass `submit` and/or `back` to override one or both. */
+  components?: FooterComponentsMap;
   className?: string;
 }
 
@@ -50,15 +53,15 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   isLastStep = true,
   onNext,
   onBack,
-  actionsButton,
+  components,
   className,
 }) => {
   const handleBack = onBack ?? (() => {});
   const handleNext = onNext ?? (() => {});
 
   const renderBack = () => {
-    if (actionsButton?.back) {
-      const Back = actionsButton.back;
+    if (components?.back) {
+      const Back = components.back;
       return <Back onBack={handleBack} disabled={isSubmitting} />;
     }
     return (
@@ -74,8 +77,8 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   };
 
   const renderSubmit = () => {
-    if (actionsButton?.submit) {
-      const Submit = actionsButton.submit;
+    if (components?.submit) {
+      const Submit = components.submit;
       return (
         <Submit
           isSubmitting={isSubmitting}
@@ -100,8 +103,8 @@ export const FormFooter: React.FC<FormFooterProps> = ({
   };
 
   const renderNext = () => {
-    if (actionsButton?.submit) {
-      const Submit = actionsButton.submit;
+    if (components?.submit) {
+      const Submit = components.submit;
       return (
         <Submit
           isSubmitting={isSubmitting}

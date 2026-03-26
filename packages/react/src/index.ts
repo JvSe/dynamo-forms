@@ -20,6 +20,7 @@ export type {
   SubmitButtonProps,
   BackButtonProps,
   ActionsButtonProps,
+  FooterComponentsMap,
 } from "./components/form-footer";
 
 export type {
