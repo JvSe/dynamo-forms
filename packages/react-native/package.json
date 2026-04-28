@@ -35,7 +35,6 @@
   "dependencies": {
     "@jvseen/dynamo-core": "workspace:*",
     "@hookform/resolvers": "^3.3.0",
-    "@shopify/flash-list": "^1.7.0",
     "date-fns": "^3.6.0",
     "react-hook-form": "^7.53.0",
     "svg-path-properties": "^1.0.4",
@@ -69,6 +68,7 @@
     }
   },
   "devDependencies": {
+    "@shopify/flash-list": "^1.7.0",
     "@types/react": "^18.2.0",
     "react": "^18.2.0",
     "react-native": "^0.76.0",
