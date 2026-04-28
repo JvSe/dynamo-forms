@@ -35,6 +35,7 @@
   "dependencies": {
     "@jvseen/dynamo-core": "workspace:*",
     "@hookform/resolvers": "^3.3.0",
+    "@shopify/flash-list": "^1.7.0",
     "date-fns": "^3.6.0",
     "react-hook-form": "^7.53.0",
     "svg-path-properties": "^1.0.4",
@@ -72,7 +73,6 @@
     "react": "^18.2.0",
     "react-native": "^0.76.0",
     "@react-native-community/datetimepicker": "^7.0.0",
-    "@shopify/flash-list": "^1.7.0",
     "expo-image-picker": "^15.0.0",
     "expo-location": "^15.0.0",
     "react-native-element-dropdown": "^2.0.0",

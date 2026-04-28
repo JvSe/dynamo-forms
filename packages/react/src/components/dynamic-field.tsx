@@ -1,31 +1,31 @@
-import React, { memo, useEffect, useMemo, useRef } from "react";
-import { Control, Controller, FormState } from "react-hook-form";
 import {
+  getOptionValue,
+  registerFieldDependency,
   useDebounce,
   useOptimizedConditions,
-  registerFieldDependency,
-  getOptionValue,
   type DynamicFieldConfig,
 } from "@jvseen/dynamo-core";
+import React, { memo, useEffect, useMemo, useRef } from "react";
+import { Control, Controller, FormState } from "react-hook-form";
 
 import {
-  Input,
-  Textarea,
+  CapturasField,
   Checkbox,
-  RadioGroup,
-  Switch,
-  Separator,
+  DateTimeField,
   Field,
-  FieldLabel,
   FieldDescription,
   FieldError,
   FieldGroup,
+  FieldLabel,
   FieldTitle,
-  DateTimeField,
-  UploadField,
-  CapturasField,
-  SignatureField,
+  Input,
+  RadioGroup,
   Select,
+  Separator,
+  SignatureField,
+  Switch,
+  Textarea,
+  UploadField,
 } from "./ui";
 
 export type ComponentOverrideProps = {
@@ -58,9 +58,9 @@ type DynamicFieldProps = {
   } | null;
   getFieldStatus?: (fieldId: string) =>
     | {
-        status: "aprovado" | "reprovado";
-        mensagem?: string | null;
-      }
+      status: "aprovado" | "reprovado";
+      mensagem?: string | null;
+    }
     | null
     | undefined;
   /** When true, always render the field (e.g. in builder canvas), ignoring conditional visibility */
@@ -126,9 +126,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
     <div className="dyn:flex dyn:gap-2" ref={fieldRef}>
       {shouldShowFieldStatus && (
         <div
-          className={`dyn:w-1 dyn:md:w-1.5 dyn:rounded-xl ${
-            fieldStatus.status === "aprovado" ? "dyn:bg-emerald-500" : "dyn:bg-red-500"
-          }`}
+          className={`dyn:w-1 dyn:md:w-1.5 dyn:rounded-xl ${fieldStatus.status === "aprovado" ? "dyn:bg-emerald-500" : "dyn:bg-red-500"
+            }`}
         />
       )}
       <div className="dyn:flex-1 dyn:space-y-2">
