@@ -8,6 +8,7 @@ import {
   getOptionValue,
   type DynamicFieldConfig,
 } from "@jvseen/dynamo-core";
+import { formatDocument, formatPhone, formatZipCode } from "../lib/masks.js";
 
 import {
   InputCapturas,
@@ -190,19 +191,66 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
             }
 
             switch (type) {
-              case "text":
+              case "text": {
+                const semantic = config.semanticType ?? "default";
+
+                if (semantic === "document") {
+                  return (
+                    <InputText
+                      placeholder={config.placeholder || "000.000.000-00"}
+                      onChangeText={(text) =>
+                        onChange(text.replace(/\D/g, "").slice(0, 14))
+                      }
+                      value={formatDocument(safeValue)}
+                      onBlur={() => handleBlur(id)}
+                      keyboardType="numeric"
+                      controller={{ error: isError, success: isSuccess }}
+                    />
+                  );
+                }
+
+                if (semantic === "zipcode") {
+                  return (
+                    <InputText
+                      placeholder={config.placeholder || "00000-000"}
+                      onChangeText={(text) =>
+                        onChange(text.replace(/\D/g, "").slice(0, 8))
+                      }
+                      value={formatZipCode(safeValue)}
+                      onBlur={() => handleBlur(id)}
+                      keyboardType="numeric"
+                      controller={{ error: isError, success: isSuccess }}
+                    />
+                  );
+                }
+
+                if (semantic === "phone") {
+                  return (
+                    <InputText
+                      placeholder={config.placeholder || "(00) 00000-0000"}
+                      onChangeText={(text) =>
+                        onChange(
+                          text.replace(/[^\d]+/g, "").replace(/^55/, "").slice(0, 11)
+                        )
+                      }
+                      value={formatPhone(safeValue)}
+                      onBlur={() => handleBlur(id)}
+                      keyboardType="phone-pad"
+                      controller={{ error: isError, success: isSuccess }}
+                    />
+                  );
+                }
+
                 return (
                   <InputText
                     placeholder={config.placeholder || ""}
                     onChangeText={onChange}
                     value={safeValue}
                     onBlur={() => handleBlur(id)}
-                    controller={{
-                      error: isError,
-                      success: isSuccess,
-                    }}
+                    controller={{ error: isError, success: isSuccess }}
                   />
                 );
+              }
               case "number":
                 return (
                   <InputNumber

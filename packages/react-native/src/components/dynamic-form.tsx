@@ -1,33 +1,99 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, {
+  createContext,
   useCallback,
+  useContext,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 import { FormProvider, useForm, useWatch } from "react-hook-form";
-import { FlatList, Keyboard, StyleSheet, View } from "react-native";
+import { FlashList } from "@shopify/flash-list";
 import {
+  Keyboard,
+  type StyleProp,
+  StyleSheet,
+  View,
+  type ViewStyle,
+} from "react-native";
+import {
+  findFieldInGroups,
   findFirstErrorFieldId,
   getFieldStatus,
   getInitialValuesFromRegister,
   processFieldsForSubmission,
   collectErrorFieldsInfo,
-  type ErrorFieldInfo,
-  type DynamicFieldConfig,
-  type FormUpload,
   buildZodSchema,
   clearConditionCacheForField,
+  type DynamicFieldConfig,
+  type ErrorFieldInfo,
+  type FormStep,
+  type FormUpload,
 } from "@jvseen/dynamo-core";
 import { scrollToFirstError as scrollToFirstErrorUtil } from "../form-scroll.js";
+import { FormPerformanceSampler } from "../lib/performance-budget.js";
 import { DynamicField, type ComponentOverridesMap } from "./dynamic-field.js";
-import type { ActionsButtonProps } from "./form-footer.js";
-import { FormFooter } from "./form-footer.js";
+import { FormFooter, type ActionsButtonProps } from "./form-footer.js";
 import { FormHeader } from "./form-header.js";
+import { StepIndicator } from "./step-indicator.js";
 import { ValidationModal } from "./validation-modal.js";
 
-interface DynamicFormProps {
+// --- Context (composition) -------------------------------------------------
+
+export type DynamicFormContextValue = {
+  fields: DynamicFieldConfig[];
+  visibleFields: DynamicFieldConfig[];
+  steps?: FormStep[];
+  formId: string;
+  formName: string;
+  scrollEnabled: boolean;
+
+  isSubmitting: boolean;
+  isValidating: boolean;
+  setIsValidating: React.Dispatch<React.SetStateAction<boolean>>;
+
+  currentStep: number;
+  setCurrentStep: React.Dispatch<React.SetStateAction<number>>;
+  isMultiStep: boolean;
+  isFirstStep: boolean;
+  isLastStep: boolean;
+
+  methods: ReturnType<typeof useForm>;
+  allValues: Record<string, any>;
+  lastChangedField?: string;
+  lastBlurredField?: string;
+
+  fieldListRef: React.RefObject<FlashList<DynamicFieldConfig> | null>;
+  fieldPositionsRef: React.MutableRefObject<Map<string, number>>;
+  registerFieldPosition: (fieldId: string, y: number) => void;
+  getParentYPosition: (fieldId: string) => number | undefined;
+
+  handleFieldBlur: (fieldId: string) => void;
+  getFieldStatusCallback: (fieldId: string) => ReturnType<typeof getFieldStatus>;
+
+  handleNextStep: () => Promise<void>;
+  handleBackStep: () => void;
+  handleSubmitWithValidation: () => void | Promise<void>;
+};
+
+const DynamicFormCompositionContext = createContext<
+  DynamicFormContextValue | undefined
+>(undefined);
+
+export function useDynamicFormComposition() {
+  const ctx = useContext(DynamicFormCompositionContext);
+  if (!ctx) {
+    throw new Error(
+      "useDynamicFormComposition must be used within DynamicFormProvider"
+    );
+  }
+  return ctx;
+}
+
+// --- Provider props (same as web) ------------------------------------------
+
+export type DynamicFormProviderProps = {
   fields: DynamicFieldConfig[];
   formId: string;
   formName: string;
@@ -42,14 +108,13 @@ interface DynamicFormProps {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
-  components?: ComponentOverridesMap;
-  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
-  actionsButton?: ActionsButtonProps;
-  /** When true (default), renders the form header with the form name. Set to false to hide it. */
-  showHeader?: boolean;
-}
+  steps?: FormStep[];
+  children: React.ReactNode;
+};
 
-const DynamicFormCore: React.FC<DynamicFormProps> = ({
+// --- DynamicFormProvider ---------------------------------------------------
+
+export const DynamicFormProvider: React.FC<DynamicFormProviderProps> = ({
   fields,
   formId,
   formName,
@@ -61,12 +126,27 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
   onValidationError,
   onFormDataChange,
   onFormDirtyChange,
-  components,
-  actionsButton,
-  showHeader = true,
+  steps,
+  children,
 }) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isValidating, setIsValidating] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
+  const isMultiStep = !!(steps && steps.length > 1);
+  const isFirstStep = currentStep === 0;
+  const isLastStep =
+    !isMultiStep || currentStep === (steps?.length ?? 1) - 1;
+  const visibleFields = useMemo(() => {
+    if (!isMultiStep) return fields;
+    return fields.filter((f) => (f.config.step ?? 0) === currentStep);
+  }, [fields, isMultiStep, currentStep]);
+  const getStepFieldIds = useCallback(
+    (stepIndex: number) =>
+      fields
+        .filter((f) => (f.config.step ?? 0) === stepIndex)
+        .map((f) => f.id),
+    [fields]
+  );
 
   const initialSchema = useMemo(
     () => buildZodSchema(fields, initialValues),
@@ -81,36 +161,42 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
     defaultValues: initialValues,
   });
 
+  const perfSampler = useRef(new FormPerformanceSampler());
+
+  useEffect(() => {
+    perfSampler.current.startFrameTracking();
+    return () => perfSampler.current.stopFrameTracking();
+  }, []);
+
   const hasInitializedFromRegister = useRef(false);
-
-  const flatListRef = useRef<FlatList<DynamicFieldConfig>>(null);
+  const fieldListRef = useRef<FlashList<DynamicFieldConfig>>(null);
   const fieldPositionsRef = useRef<Map<string, number>>(new Map());
-  const containerHeightsRef = useRef<Map<string, number>>(new Map());
-  const headerHeightRef = useRef<number>(0);
-  const layoutMeasuredRef = useRef<Set<string>>(new Set());
 
-  const scrollToFirstError = useCallback(() => {
-    return scrollToFirstErrorUtil(
-      flatListRef,
-      fieldPositionsRef,
-      fields,
-      methods.formState.errors
-    );
-  }, [methods.formState.errors, fields]);
+  const allValues = useWatch({ control: methods.control });
+  const previousValues = useRef<Record<string, any>>({});
+  const [lastChangedField, setLastChangedField] = useState<string | undefined>();
+  const [lastBlurredField, setLastBlurredField] = useState<string | undefined>();
+  const conditionalFieldsAddedRef = useRef<Set<string>>(new Set());
+
+  const dynamicSchema = useMemo(
+    () => buildZodSchema(fields, allValues),
+    [fields, allValues]
+  );
+  const previousSchemaFieldsRef = useRef<Set<string>>(new Set());
 
   const ensureScrollToError = useCallback(
     async (
       firstErrorFieldId: string,
       errorFieldIds: string[]
     ): Promise<boolean> => {
-      if (!flatListRef.current || !firstErrorFieldId) {
+      if (!fieldListRef.current || !firstErrorFieldId) {
         return false;
       }
 
       let targetIndex: number | null = null;
 
-      for (let i = 0; i < fields.length; i++) {
-        const field = fields[i];
+      for (let i = 0; i < visibleFields.length; i++) {
+        const field = visibleFields[i];
 
         if (field.id === firstErrorFieldId) {
           targetIndex = i;
@@ -140,13 +226,13 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
           const tryScroll = () => {
             attempts++;
 
-            if (!flatListRef.current) {
+            if (!fieldListRef.current) {
               resolve(false);
               return;
             }
 
             try {
-              flatListRef.current.scrollToIndex({
+              fieldListRef.current.scrollToIndex({
                 index: targetIndex!,
                 animated: true,
                 viewPosition: 0.1,
@@ -178,10 +264,10 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       const scrollByOffset = (): boolean => {
         const fieldY = fieldPositionsRef.current.get(firstErrorFieldId);
 
-        if (fieldY !== undefined && flatListRef.current) {
+        if (fieldY !== undefined && fieldListRef.current) {
           try {
             const scrollOffset = Math.max(0, fieldY - 100);
-            flatListRef.current.scrollToOffset({
+            fieldListRef.current.scrollToOffset({
               offset: scrollOffset,
               animated: true,
             });
@@ -200,7 +286,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
 
       return await scrollByIndex();
     },
-    [fields]
+    [visibleFields]
   );
 
   useEffect(() => {
@@ -268,20 +354,6 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       hasInitializedFromRegister.current = false;
     }
   }, [registerSelected, fields, methods, onFormDataChange]);
-
-  const allValues = useWatch({ control: methods.control });
-  const previousValues = useRef<Record<string, any>>({});
-  const [lastChangedField, setLastChangedField] = useState<string | undefined>();
-  const [lastBlurredField, setLastBlurredField] = useState<string | undefined>();
-
-  const conditionalFieldsAddedRef = useRef<Set<string>>(new Set());
-
-  const dynamicSchema = useMemo(
-    () => buildZodSchema(fields, allValues),
-    [fields, allValues]
-  );
-
-  const previousSchemaFieldsRef = useRef<Set<string>>(new Set());
 
   useEffect(() => {
     const newResolver = zodResolver(dynamicSchema);
@@ -387,6 +459,7 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       });
 
       if (changedField) {
+        perfSampler.current.recordTypingEvent();
         setLastChangedField(changedField);
         Promise.resolve().then(() => setLastChangedField(undefined));
       }
@@ -421,6 +494,38 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
     [registerSelected]
   );
 
+  const handleNextStep = useCallback(async () => {
+    if (!isMultiStep || isLastStep) return;
+    const stepFieldIds = getStepFieldIds(currentStep);
+    const isValid = await methods.trigger(stepFieldIds as any);
+    if (!isValid) {
+      const errors = methods.formState.errors;
+      const errorFieldIds = Object.keys(errors).filter((id) =>
+        stepFieldIds.includes(id)
+      );
+      if (errorFieldIds.length > 0) {
+        const firstErr = findFirstErrorFieldId(visibleFields, errorFieldIds);
+        if (firstErr) {
+          await ensureScrollToError(firstErr, errorFieldIds);
+        }
+      }
+      return;
+    }
+    setCurrentStep((s) => s + 1);
+  }, [
+    isMultiStep,
+    isLastStep,
+    currentStep,
+    getStepFieldIds,
+    methods,
+    visibleFields,
+    ensureScrollToError,
+  ]);
+
+  const handleBackStep = useCallback(() => {
+    if (currentStep > 0) setCurrentStep((s) => s - 1);
+  }, [currentStep]);
+
   const onFormSubmit = async (_data: any) => {
     const formValues = methods.getValues();
 
@@ -450,7 +555,11 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       }
 
       setIsSubmitting(true);
+      const submitStart = Date.now();
       await onSubmit({ dados, uploads });
+      const submitMs = Date.now() - submitStart;
+      perfSampler.current.report(submitMs);
+      perfSampler.current.reset();
       setIsSubmitting(false);
     } catch (error) {
       setIsSubmitting(false);
@@ -481,6 +590,22 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
         const firstErrorFieldId = findFirstErrorFieldId(fields, errorFieldIds);
 
         if (firstErrorFieldId) {
+          if (isMultiStep) {
+            const errorField = findFieldInGroups(
+              fields,
+              firstErrorFieldId
+            );
+            if (errorField) {
+              const stepIndex = errorField.config.step ?? 0;
+              if (stepIndex !== currentStep) {
+                setCurrentStep(stepIndex);
+                await new Promise<void>((resolve) =>
+                  setTimeout(() => resolve(), 150)
+                );
+              }
+            }
+          }
+
           const scrollSuccess = await ensureScrollToError(
             firstErrorFieldId,
             errorFieldIds
@@ -513,6 +638,8 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
     ensureScrollToError,
     onValidationError,
     onSubmitError,
+    isMultiStep,
+    currentStep,
   ]);
 
   const registerFieldPosition = useCallback((fieldId: string, y: number) => {
@@ -523,34 +650,175 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
     return fieldPositionsRef.current.get(fieldId);
   }, []);
 
+  useEffect(() => {
+    fieldPositionsRef.current.clear();
+    if (isMultiStep && fieldListRef.current) {
+      requestAnimationFrame(() => {
+        fieldListRef.current?.scrollToOffset({ offset: 0, animated: true });
+      });
+    }
+  }, [currentStep, isMultiStep]);
+
+  const ctx = useMemo<DynamicFormContextValue>(
+    () => ({
+      fields,
+      visibleFields,
+      steps,
+      formId,
+      formName,
+      scrollEnabled,
+      isSubmitting,
+      isValidating,
+      setIsValidating,
+      currentStep,
+      setCurrentStep,
+      isMultiStep,
+      isFirstStep,
+      isLastStep,
+      methods,
+      allValues,
+      lastChangedField,
+      lastBlurredField,
+      fieldListRef,
+      fieldPositionsRef,
+      registerFieldPosition,
+      getParentYPosition,
+      handleFieldBlur,
+      getFieldStatusCallback,
+      handleNextStep,
+      handleBackStep,
+      handleSubmitWithValidation,
+    }),
+    [
+      fields,
+      visibleFields,
+      steps,
+      formId,
+      formName,
+      scrollEnabled,
+      isSubmitting,
+      isValidating,
+      currentStep,
+      isMultiStep,
+      isFirstStep,
+      isLastStep,
+      methods,
+      allValues,
+      lastChangedField,
+      lastBlurredField,
+      fieldPositionsRef,
+      registerFieldPosition,
+      getParentYPosition,
+      handleFieldBlur,
+      getFieldStatusCallback,
+      handleNextStep,
+      handleBackStep,
+      handleSubmitWithValidation,
+    ]
+  );
+
+  return (
+    <FormProvider {...methods}>
+      <DynamicFormCompositionContext.Provider value={ctx}>
+        <View style={rootStyles.formRoot}>{children}</View>
+      </DynamicFormCompositionContext.Provider>
+    </FormProvider>
+  );
+};
+
+const rootStyles = StyleSheet.create({
+  formRoot: { flex: 1, width: "100%" },
+});
+
+const listStyles = StyleSheet.create({
+  fieldsContainer: { flex: 1, minHeight: 0, width: "100%" },
+  fieldWrapper: { width: "100%", marginBottom: 24 },
+  footerWrapper: { width: "100%", paddingHorizontal: 16 },
+});
+
+// --- Compound subcomponents (same order as web) -----------------------------
+
+export const DynamicFormHeader: React.FC<{
+  formNameOverride?: string;
+}> = ({ formNameOverride }) => {
+  const { formName } = useDynamicFormComposition();
+  return <FormHeader formName={formNameOverride ?? formName} />;
+};
+
+export const DynamicFormSteps: React.FC<Record<string, never>> = () => {
+  const { isMultiStep, steps, currentStep } = useDynamicFormComposition();
+  if (!isMultiStep || !steps || steps.length < 2) {
+    return null;
+  }
+  return <StepIndicator steps={steps} currentStep={currentStep} />;
+};
+
+export const DynamicFormFields: React.FC<{
+  components?: ComponentOverridesMap;
+  /** Outer wrapper (scroll region). */
+  style?: StyleProp<ViewStyle>;
+  listStyle?: StyleProp<ViewStyle>;
+  contentContainerStyle?: StyleProp<ViewStyle>;
+  gap?: number;
+}> = ({
+  components,
+  style,
+  listStyle,
+  contentContainerStyle,
+  gap = 16,
+}) => {
+  const {
+    visibleFields,
+    scrollEnabled,
+    methods,
+    allValues,
+    lastChangedField,
+    lastBlurredField,
+    handleFieldBlur,
+    getFieldStatusCallback,
+    fieldListRef,
+    fieldPositionsRef,
+    registerFieldPosition,
+    getParentYPosition,
+    currentStep,
+  } = useDynamicFormComposition();
+  const { control } = methods;
+
+  const containerHeightsMap = useRef<Map<string, number>>(new Map());
+  const layoutSetRef = useRef<Set<string>>(new Set());
+
+  useEffect(() => {
+    containerHeightsMap.current.clear();
+  }, [visibleFields, currentStep]);
+
   const renderField = useCallback(
     ({ item: field, index }: { item: DynamicFieldConfig; index: number }) => {
       const fieldStatus = getFieldStatusCallback(field.id);
 
       const handleContainerLayout = (event: any) => {
         const { height } = event.nativeEvent.layout;
-        containerHeightsRef.current.set(field.id, height);
+        containerHeightsMap.current.set(field.id, height);
 
-        let accumulated = headerHeightRef.current;
+        let accumulated = 0;
         for (let i = 0; i < index; i++) {
-          const prevField = fields[i];
+          const prevField = visibleFields[i];
           const prevHeight =
-            containerHeightsRef.current.get(prevField.id) || 0;
+            containerHeightsMap.current.get(prevField.id) || 0;
           accumulated += prevHeight;
-          if (i > 0) accumulated += 16;
+          if (i > 0) accumulated += gap;
         }
 
         registerFieldPosition(field.id, accumulated);
-        layoutMeasuredRef.current.add(field.id);
+        layoutSetRef.current.add(field.id);
 
         if (field.type === "group") {
           registerFieldPosition(field.id, accumulated);
-          layoutMeasuredRef.current.add(field.id);
+          layoutSetRef.current.add(field.id);
         }
       };
 
       return (
-        <View style={styles.fieldWrapper} onLayout={handleContainerLayout}>
+        <View style={listStyles.fieldWrapper} onLayout={handleContainerLayout}>
           <DynamicField
             field={field}
             control={control}
@@ -579,129 +847,74 @@ const DynamicFormCore: React.FC<DynamicFormProps> = ({
       getFieldStatusCallback,
       registerFieldPosition,
       getParentYPosition,
-      fields,
+      visibleFields,
       components,
+      gap,
     ]
   );
 
-  const renderHeader = useCallback(() => {
-    if (!showHeader) return null;
-    return (
-      <FormHeader
-        formName={formName}
-        onLayout={(height) => {
-          headerHeightRef.current = height;
-        }}
-      />
-    );
-  }, [formName, showHeader]);
-
-  const renderFooter = useCallback(() => {
-    return (
-      <FormFooter
-        isSubmitting={isSubmitting}
-        onSubmit={handleSubmitWithValidation}
-        actionsButton={actionsButton}
-      />
-    );
-  }, [isSubmitting, handleSubmitWithValidation, actionsButton]);
-
   return (
-    <FormProvider {...methods}>
-      <View style={styles.container}>
-        <FlatList
-          ref={flatListRef}
-          data={fields}
-          keyExtractor={(item) => item.id}
-          renderItem={renderField}
-          ListHeaderComponent={showHeader ? renderHeader : null}
-          style={styles.list}
-          contentContainerStyle={{
-            gap: 16,
-            paddingBottom: 24,
-            paddingHorizontal: 16,
-          }}
+    <View style={[listStyles.fieldsContainer, style]}>
+      <FlashList<DynamicFieldConfig>
+        ref={fieldListRef as React.Ref<FlashList<DynamicFieldConfig>>}
+        data={visibleFields}
+        extraData={currentStep}
+        keyExtractor={(item: DynamicFieldConfig) => item.id}
+        renderItem={renderField}
+        estimatedItemSize={120}
+        drawDistance={600}
+        style={[{ flex: 1, width: "100%" }, listStyle]}
+        contentContainerStyle={{
+          ...({ gap } as any),
+          paddingBottom: 24,
+          paddingHorizontal: 16,
+          ...(contentContainerStyle as object),
+        }}
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         scrollEnabled={scrollEnabled}
-        onTouchStart={Keyboard.dismiss}
-        initialNumToRender={10}
-        windowSize={10}
-        maxToRenderPerBatch={10}
-        getItemLayout={(_data, index) => {
-          let height = headerHeightRef.current;
-
-          for (let i = 0; i < index; i++) {
-            const fieldId = fields[i]?.id;
-            if (fieldId) {
-              const fieldHeight =
-                containerHeightsRef.current.get(fieldId) || 100;
-              height += fieldHeight;
-              if (i > 0) height += 16;
-            }
-          }
-
-          const currentFieldId = fields[index]?.id;
-          const currentHeight = currentFieldId
-            ? containerHeightsRef.current.get(currentFieldId) || 100
-            : 100;
-
-          return {
-            length: currentHeight,
-            offset: height,
-            index,
-          };
-        }}
-        onScrollToIndexFailed={(info) => {
-          const wait = Math.max(300, info.averageItemLength * 15);
-
-          setTimeout(() => {
-            if (flatListRef.current) {
-              try {
-                flatListRef.current.scrollToIndex({
-                  index: info.index,
-                  animated: true,
-                  viewPosition: 0.1,
-                });
-              } catch {
-                const targetField = fields[info.index];
-                if (targetField) {
-                  const fieldY = fieldPositionsRef.current.get(targetField.id);
-                  if (fieldY !== undefined) {
-                    try {
-                      flatListRef.current?.scrollToOffset({
-                        offset: Math.max(0, fieldY - 100),
-                        animated: true,
-                      });
-                    } catch {
-                      console.warn("Failed to scroll to error field");
-                    }
-                  }
-                }
-              }
-            }
-          }, wait);
-        }}
-        />
-        <View style={styles.footerWrapper}>
-          {renderFooter()}
-        </View>
-      </View>
-
-      <ValidationModal
-        visible={isValidating}
-        onTimeout={() => setIsValidating(false)}
       />
-    </FormProvider>
+    </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: { flex: 1, width: "100%" },
-  list: { flex: 1, width: "100%" },
-  footerWrapper: { width: "100%", paddingHorizontal: 16 },
-  fieldWrapper: { width: "100%", marginBottom: 24 },
-});
+export const DynamicFormFooter: React.FC<{
+  components?: ActionsButtonProps;
+}> = ({ components }) => {
+  const {
+    isSubmitting,
+    isMultiStep,
+    isFirstStep,
+    isLastStep,
+    handleNextStep,
+    handleBackStep,
+    handleSubmitWithValidation,
+  } = useDynamicFormComposition();
+  return (
+    <View style={listStyles.footerWrapper}>
+      <FormFooter
+        isSubmitting={isSubmitting}
+        multiStep={isMultiStep}
+        isFirstStep={isFirstStep}
+        isLastStep={isLastStep}
+        onNext={handleNextStep}
+        onBack={handleBackStep}
+        onSubmit={handleSubmitWithValidation}
+        actionsButton={components}
+      />
+    </View>
+  );
+};
 
-export { DynamicFormCore };
+export const DynamicFormValidationOverlay: React.FC = () => {
+  const { isValidating, setIsValidating } = useDynamicFormComposition();
+  return (
+    <ValidationModal
+      visible={isValidating}
+      onTimeout={() => setIsValidating(false)}
+    />
+  );
+};
 
+/** @deprecated Use `DynamicFormFields` instead. */
+export const DynamicFormContents = DynamicFormFields;

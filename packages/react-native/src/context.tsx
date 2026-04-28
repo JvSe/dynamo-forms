@@ -6,9 +6,16 @@ import React, {
   useState,
 } from "react";
 import { View } from "react-native";
-import type { DynamicFieldConfig, FormUpload } from "@jvseen/dynamo-core";
+import type { DynamicFieldConfig, FormStep, FormUpload } from "@jvseen/dynamo-core";
 import type { ErrorFieldInfo } from "@jvseen/dynamo-core";
-import { DynamicFormCore } from "./components/dynamic-form.js";
+import {
+  DynamicFormProvider,
+  DynamicFormHeader,
+  DynamicFormSteps,
+  DynamicFormFields,
+  DynamicFormFooter,
+  DynamicFormValidationOverlay,
+} from "./components/dynamic-form.js";
 import type { ComponentOverridesMap } from "./components/dynamic-field.js";
 import type { ActionsButtonProps } from "./components/form-footer.js";
 
@@ -20,6 +27,7 @@ interface FormContextType {
 
 const FormContext = createContext<FormContextType | undefined>(undefined);
 
+/** Props for `DynamicFormProvider` (composition). Same shape as web; pass slot components as `children`. */
 export type DynamicFormProviderProps = PropsWithChildren & {
   fields: DynamicFieldConfig[];
   formId: string;
@@ -34,14 +42,36 @@ export type DynamicFormProviderProps = PropsWithChildren & {
   onValidationError?: (errors: ErrorFieldInfo[]) => void;
   onFormDataChange?: (data: Record<string, any>) => void;
   onFormDirtyChange?: (dirty: boolean) => void;
+  steps?: FormStep[];
+  scrollEnabled?: boolean;
+};
+
+/** Batteries-included form (same idea as web `DynamicFormDefault`). */
+export type DynamicFormDefaultProps = PropsWithChildren & {
+  fields: DynamicFieldConfig[];
+  formId: string;
+  formName: string;
+  initialValues?: Record<string, any>;
+  registerSelected?: Record<string, any> | null;
+  onSubmit: (data: {
+    dados: Record<string, any>;
+    uploads: FormUpload[];
+  }) => void | Promise<void>;
+  onSubmitError?: (error: Error) => void;
+  onValidationError?: (errors: ErrorFieldInfo[]) => void;
+  onFormDataChange?: (data: Record<string, any>) => void;
+  onFormDirtyChange?: (dirty: boolean) => void;
   components?: ComponentOverridesMap;
-  /** Custom components for submit and back buttons. Pass submit and/or back to override one or both. */
+  /** Same as web `footerComponents`. */
+  footerComponents?: ActionsButtonProps;
+  /** @deprecated Use `footerComponents` (web-style) or keep for backward compatibility. */
   actionsButton?: ActionsButtonProps;
   /** When true (default), renders the form header with the form name. Set to false to hide it. */
   showHeader?: boolean;
+  steps?: FormStep[];
 };
 
-export const DynamicForm = React.memo(
+export const DynamicFormDefault = React.memo(
   ({
     fields,
     formId,
@@ -54,11 +84,12 @@ export const DynamicForm = React.memo(
     onFormDataChange,
     onFormDirtyChange,
     components,
+    footerComponents,
     actionsButton,
-    showHeader,
-  }: DynamicFormProviderProps) => {
+    showHeader = true,
+    steps,
+  }: DynamicFormDefaultProps) => {
     const [scrollEnabled, setScrollEnabled] = useState(true);
-
     const handleToggleScroll = (v: boolean) => {
       setScrollEnabled(v);
     };
@@ -80,10 +111,12 @@ export const DynamicForm = React.memo(
       return null;
     }
 
+    const footer = footerComponents ?? actionsButton;
+
     return (
       <FormContext.Provider value={contextValue}>
         <View style={{ flex: 1, width: "100%" }}>
-          <DynamicFormCore
+          <DynamicFormProvider
             fields={fields}
             formId={formId}
             formName={formName}
@@ -95,10 +128,26 @@ export const DynamicForm = React.memo(
             onValidationError={onValidationError}
             onFormDataChange={onFormDataChange}
             onFormDirtyChange={onFormDirtyChange}
-            components={components}
-            actionsButton={actionsButton}
-            showHeader={showHeader}
-          />
+            steps={steps}
+          >
+            <View
+              style={{
+                flex: 1,
+                width: "100%",
+                flexDirection: "column",
+                minHeight: 0,
+              }}
+            >
+              {showHeader && <DynamicFormHeader />}
+              <DynamicFormSteps />
+              <DynamicFormFields
+                style={{ flex: 1, minHeight: 0, width: "100%" }}
+                components={components}
+              />
+              <DynamicFormFooter components={footer} />
+            </View>
+            <DynamicFormValidationOverlay />
+          </DynamicFormProvider>
         </View>
       </FormContext.Provider>
     );
@@ -108,7 +157,7 @@ export const DynamicForm = React.memo(
 export function useDynamicForm() {
   const context = useContext(FormContext);
   if (context === undefined) {
-    throw new Error("useDynamicForm must be used within DynamicForm");
+    throw new Error("useDynamicForm must be used within DynamicFormDefault");
   }
   return context;
 }

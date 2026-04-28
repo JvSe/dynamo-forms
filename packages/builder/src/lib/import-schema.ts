@@ -65,6 +65,7 @@ function normalizeField(raw: unknown, usedIds: Set<string>): DynamicFieldConfig 
   if (configObj.alignment != null && ["horizontal", "vertical"].includes(String(configObj.alignment)))
     config.alignment = configObj.alignment as "horizontal" | "vertical";
   if (configObj.step != null) config.step = ensureNumber(configObj.step, 0);
+  if (configObj.weight != null) config.weight = ensureNumber(configObj.weight, 0);
   if (configObj.conditions != null && isPlainObject(configObj.conditions)) config.conditions = configObj.conditions as any;
 
   if (Array.isArray(configObj.options)) {

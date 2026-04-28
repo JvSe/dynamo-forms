@@ -40,5 +40,15 @@ export type DynamicFieldConfig = {
     alignment?: "horizontal" | "vertical";
     /** Which step this field belongs to (0-based index). undefined = step 0. */
     step?: number;
+    /** Optional field weight used for score calculations. */
+    weight?: number;
+    /**
+     * Semantic input type for text fields — enables automatic masking/formatting.
+     * - "document": CPF (000.000.000-00) or CNPJ (00.000.000/0000-00)
+     * - "zipcode": CEP (00000-000)
+     * - "phone": Telefone ((00) 00000-0000)
+     * - "default": plain text, no mask
+     */
+    semanticType?: "document" | "zipcode" | "phone" | "default";
   };
 };

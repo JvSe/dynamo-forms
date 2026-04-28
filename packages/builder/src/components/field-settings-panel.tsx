@@ -123,6 +123,28 @@ export function FieldSettingsPanel({ field, allFields, onChange, onRemove }: Fie
           checked={field.config.required}
           onChange={(v) => updateConfig({ required: v })}
         />
+        <div className="dyn:mb-3">
+          <label className="dyn:block dyn:text-[13px] dyn:text-foreground dyn:mb-1.5">
+            Peso
+          </label>
+          <input
+            type="number"
+            step="0.1"
+            min={0}
+            value={field.config.weight ?? ""}
+            onChange={(e) => {
+              const raw = e.target.value;
+              if (raw === "") {
+                updateConfig({ weight: undefined });
+                return;
+              }
+              const parsed = Number(raw);
+              updateConfig({ weight: Number.isFinite(parsed) ? parsed : undefined });
+            }}
+            className={inputClass}
+            placeholder="Ex: 1, 2.5, 10"
+          />
+        </div>
         {["text", "textarea"].includes(field.type) && (
           <Toggle
             label="Max character"
