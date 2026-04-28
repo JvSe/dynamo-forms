@@ -6,7 +6,7 @@ import {
   type DynamicFieldConfig,
 } from "@jvseen/dynamo-core";
 import React, { memo, useEffect, useMemo } from "react";
-import { Control, Controller, FormState } from "react-hook-form";
+import { Control, Controller, FormState, useFormState } from "react-hook-form";
 import { StyleSheet, Text, View } from "react-native";
 import { formatDocument, formatPhone, formatZipCode } from "../lib/masks.js";
 
@@ -111,6 +111,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
 
   const shouldRender = ignoreConditions || shouldRenderFromConditions;
 
+  const { isSubmitted } = useFormState({ control });
+
   const shouldDebounce = ["text", "number", "textarea"].includes(type);
   const debouncedBlur = useDebounce((fieldId: string) => {
     onFieldBlur?.(fieldId);
@@ -124,9 +126,6 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
   const fieldYRef = React.useRef<number>(0);
 
   if (!shouldRender) return null;
-
-  const isError = !!formState?.errors[id];
-  const isSuccess = !!formState?.dirtyFields[id] && !isError;
 
   const shouldShowFieldStatus =
     fieldStatus && type !== "upload" && type !== "signature";
@@ -167,11 +166,16 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
         <Controller
           control={control}
           name={field.id}
-          render={({ field: { onChange, onBlur: rhfOnBlur, value } }) => {
+          render={({ field: { onChange, onBlur: rhfOnBlur, value }, fieldState }) => {
             const safeValue = value ?? "";
-            const errorMessage = formState?.errors[id]?.message as
-              | string
-              | undefined;
+            /** Não exibir validação (ex.: obrigatório) antes de toque no campo ou de submit. */
+            const shouldShowValidation = fieldState.isTouched || isSubmitted;
+            const showFieldError =
+              shouldShowValidation && !!fieldState.error;
+            const isSuccess = fieldState.isDirty && !fieldState.invalid;
+            const validationErrorMessage = shouldShowValidation
+              ? (fieldState.error?.message as string | undefined)
+              : undefined;
 
             const renderControl = () => {
               const Override = components?.[type];
@@ -186,8 +190,8 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       rhfOnBlur();
                       handleBlur(id);
                     }}
-                    error={isError}
-                    errorMessage={errorMessage}
+                    error={showFieldError}
+                    errorMessage={validationErrorMessage}
                     success={isSuccess}
                   />
                 );
@@ -207,7 +211,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         value={formatDocument(safeValue)}
                         onBlur={() => handleBlur(id)}
                         keyboardType="numeric"
-                        controller={{ error: isError, success: isSuccess }}
+                        controller={{ error: showFieldError, success: isSuccess }}
                       />
                     );
                   }
@@ -222,7 +226,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         value={formatZipCode(safeValue)}
                         onBlur={() => handleBlur(id)}
                         keyboardType="numeric"
-                        controller={{ error: isError, success: isSuccess }}
+                        controller={{ error: showFieldError, success: isSuccess }}
                       />
                     );
                   }
@@ -239,7 +243,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         value={formatPhone(safeValue)}
                         onBlur={() => handleBlur(id)}
                         keyboardType="phone-pad"
-                        controller={{ error: isError, success: isSuccess }}
+                        controller={{ error: showFieldError, success: isSuccess }}
                       />
                     );
                   }
@@ -250,7 +254,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       onChangeText={onChange}
                       value={safeValue}
                       onBlur={() => handleBlur(id)}
-                      controller={{ error: isError, success: isSuccess }}
+                      controller={{ error: showFieldError, success: isSuccess }}
                     />
                   );
                 }
@@ -262,7 +266,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       value={String(safeValue)}
                       onBlur={() => handleBlur(id)}
                       controller={{
-                        error: isError,
+                        error: showFieldError,
                         success: isSuccess,
                       }}
                     />
@@ -287,7 +291,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         setTimeout(() => onFieldBlur?.(id), 100);
                       }}
                       value={safeValue}
-                      error={isError}
+                      error={showFieldError}
                       success={isSuccess}
                     />
                   );
@@ -300,7 +304,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                       rows={config.rows || 3}
                       onBlur={() => handleBlur(id)}
                       controller={{
-                        error: isError,
+                        error: showFieldError,
                         success: isSuccess,
                       }}
                     />
@@ -314,7 +318,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         onChange(newValue);
                         setTimeout(() => onFieldBlur?.(id), 100);
                       }}
-                      error={isError}
+                      error={showFieldError}
                       success={isSuccess}
                     />
                   );
@@ -328,7 +332,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         onChange(newValue);
                         setTimeout(() => onFieldBlur?.(id), 100);
                       }}
-                      error={isError}
+                      error={showFieldError}
                       success={isSuccess}
                     />
                   );
@@ -351,7 +355,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                             : "datetime")
                       }
                       placeholder={config.placeholder}
-                      error={isError}
+                      error={showFieldError}
                       success={isSuccess}
                     />
                   );
@@ -418,7 +422,7 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                         onChange(base64Images);
                         setTimeout(() => onFieldBlur?.(id), 100);
                       }}
-                      error={isError}
+                      error={showFieldError}
                       success={isSuccess}
                     />
                   );
@@ -459,8 +463,10 @@ const DynamicFieldComponent: React.FC<DynamicFieldProps> = ({
                   <Text style={styles.fieldDescription}>{config.description}</Text>
                 )}
 
-                {errorMessage ? (
-                  <Text style={styles.fieldErrorText}>{errorMessage}</Text>
+                {validationErrorMessage ? (
+                  <Text style={styles.fieldErrorText}>
+                    {validationErrorMessage}
+                  </Text>
                 ) : null}
               </View>
             );
@@ -555,6 +561,12 @@ export const DynamicField = memo(
     if (
       prevProps.formState.dirtyFields[prevProps.field.id] !==
       nextProps.formState.dirtyFields[nextProps.field.id]
+    )
+      return false;
+
+    if (
+      prevProps.formState.touchedFields?.[prevProps.field.id] !==
+      nextProps.formState.touchedFields?.[nextProps.field.id]
     )
       return false;
 
